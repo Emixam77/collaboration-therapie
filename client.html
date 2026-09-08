@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Atelier Bien-être & Thérapie — Réservation</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-warm: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --text-main: #2C3531;
+      --text-muted: #6F7D77;
+      --primary: #4A6B5D;       /* Vert sauge herboristerie */
+      --primary-light: #EAF0EC;
+      --accent: #C98A66;        /* Terracotta chaleureux */
+      --accent-light: #F8EFEA;
+      --gold: #CCA776;
+      --border-soft: #EDE6DC;
+      --radius-box: 18px;
+      --shadow-zen: 0 12px 36px -8px rgba(74, 107, 93, 0.1), 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-warm);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.5;
+      padding-bottom: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* FORMAT MOBILE CENTRÉ (OPTIMISÉ POUR LE SCAN QR CODE) */
+    .mobile-frame {
+      width: 100%;
+      max-width: 440px;
+      background: #FFFFFF;
+      min-height: 100vh;
+      border-left: 1px solid var(--border-soft);
+      border-right: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-zen);
+      position: relative;
+    }
+
+    /* SWITCH DÉMO (POUR TESTER PHASE VOTE VS PHASE PAIEMENT) */
+    .demo-bar {
+      background: #2C3531;
+      color: #FFFFFF;
+      padding: 8px 12px;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .demo-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .demo-btn.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #2C3531;
+      font-weight: 700;
+    }
+
+    /* BANNIÈRE MAGASIN */
+    .shop-header {
+      padding: 24px 20px 18px 20px;
+      border-bottom: 1px solid var(--border-soft);
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-warm) 100%);
+      text-align: center;
+    }
+
+    .shop-badge {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .shop-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 24px;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .therapist-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .content-pad {
+      padding: 24px 20px;
+    }
+
+    /* VUE 1 : PHASE DE VOTE */
+    .vote-hero {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .vote-hero h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 26px;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .vote-hero p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .vote-option {
+      background: var(--bg-warm);
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-box);
+      padding: 18px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .vote-option:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .vote-option.voted {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .vote-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .vote-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .vote-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .btn-vote {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* VUE 2 : PHASE DE RÉSERVATION & PAIEMENT STRIPE */
+    .event-card {
+      background: linear-gradient(135deg, #FFFFFF 0%, var(--bg-warm) 100%);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-box);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.03);
+    }
+
+    .event-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 24px;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .event-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+      background: #FFFFFF;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .meta-item {
+      font-size: 12px;
+    }
+
+    .meta-label {
+      color: var(--text-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-val {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .spots-left-pill {
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .therapist-bio-mini {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-warm);
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+
+    .therapist-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    /* FORMULAIRE D'INSCRIPTION */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      background: #FFFFFF;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+
+    /* BOUTON STRIPE */
+    .btn-stripe-pay {
+      width: 100%;
+      background: #635BFF; /* Couleur signature Stripe */
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(99, 91, 255, 0.25);
+      margin-top: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-stripe-pay:hover {
+      background: #5046E5;
+      transform: translateY(-1px);
+    }
+
+    .stripe-guarantee {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ECRAN DE CONFIRMATION SUCCES */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 18px auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-frame">
+
+    <!-- BARRE TECHNIQUE SIMULATION (POUR TESTER LES 2 ÉTATS) -->
+    <div class="demo-bar">
+      <span>Simulation Client :</span>
+      <div style="display: flex; gap: 6px;">
+        <button class="demo-btn" id="tabVote" onclick="afficherVue('vote')">1. Phase Vote</button>
+        <button class="demo-btn active" id="tabPay" onclick="afficherVue('pay')">2. Réservation & Paiement</button>
+      </div>
+    </div>
+
+    <!-- EN-TETE DE LA BOUTIQUE PARTENAIRE -->
+    <header class="shop-header">
+      <div class="shop-badge">L'Herboristerie des Alpages</div>
+      <h1 class="shop-title">Espace Bien-être & Soins</h1>
+      <p class="therapist-sub">En partenariat exclusif avec Lynda, Thérapeute</p>
+    </header>
+
+    <!-- VUE 1 : PHASE DE VOTE DU THEME -->
+    <section id="vueVote" class="content-pad" style="display: none;">
+      <div class="vote-hero">
+        <span style="font-size: 24px;">🗳️</span>
+        <h2>Choisissez votre prochain atelier</h2>
+        <p>Votez pour la thématique que vous aimeriez vivre dans notre herboristerie. L'atelier le plus plébiscité sera programmé ce mois-ci !</p>
+      </div>
+
+      <div class="vote-option" onclick="voter(1)">
+        <div class="vote-title">Libérer la charge mentale & retrouver le sommeil</div>
+        <div class="vote-desc">Dénouer les tensions nerveuses, techniques de respiration apaisantes et rituels du soir.</div>
+        <div class="vote-footer">
+          <span style="color: var(--primary); font-weight: 600;">12 votes recueillis</span>
+          <button class="btn-vote">Voter pour ce thème</button>
+        </div>
+      </div>
+
+      <div class="vote-option" onclick="voter(2)">
+        <div class="vote-title">Comprendre et apaiser ses émotions par le corps</div>
+        <div class="vote-desc">Identifier les nœuds somatiques et renouer un dialogue bienveillant avec son corps.</div>
+        <div class="vote-footer">
+          <span style="color: var(--text-muted);">6 / 8 votes</span>
+          <button class="btn-vote">Voter pour ce thème</button>
+        </div>
+      </div>
+
+      <div class="vote-option" onclick="voter(3)">
+        <div class="vote-title">Détox énergétique & ancrage de saison</div>
+        <div class="vote-desc">Atelier pratique pour traverser les transitions saisonnières avec vitalité.</div>
+        <div class="vote-footer">
+          <span style="color: var(--text-muted);">3 / 8 votes</span>
+          <button class="btn-vote">Voter pour ce thème</button>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-warm); padding: 14px; border-radius: 12px; margin-top: 20px; font-size: 12px; color: var(--text-muted); text-align: center;">
+        💡 Laissez votre vote et soyez le premier informé de l'ouverture des inscriptions !
+      </div>
+    </section>
+
+    <!-- VUE 2 : PHASE DE RÉSERVATION STRIPE -->
+    <section id="vuePay" class="content-pad">
+      
+      <div class="spots-left-pill">
+        <span>🔥</span>
+        <span>Plus que 3 places disponibles</span>
+      </div>
+
+      <div class="event-card">
+        <h2 class="event-title">Atelier Holistique : Libérer la charge mentale</h2>
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">
+          Une parenthèse chaleureuse de 1h30 en petit comité dans l'espace cosy de l'Herboristerie des Alpages.
+        </p>
+
+        <div class="event-meta-grid">
+          <div class="meta-item">
+            <div class="meta-label">Date</div>
+            <div class="meta-val">Samedi 26 Septembre</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Horaire</div>
+            <div class="meta-val">14h30 - 16h00</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Lieu</div>
+            <div class="meta-val">14 rue des Artisans, Annecy</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Tarif</div>
+            <div class="meta-val" style="color: var(--primary);">35,00 €</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="therapist-bio-mini">
+        <div class="therapist-avatar">L</div>
+        <div>
+          <div style="font-size: 13px; font-weight: 700;">Animé par Lynda</div>
+          <div style="font-size: 12px; color: var(--text-muted);">Thérapeute holistique & praticienne certifiée</div>
+        </div>
+      </div>
+
+      <!-- FORMULAIRE DE PAIEMENT CLIENT -->
+      <form id="bookingForm" onsubmit="validerPaiementStripe(event)">
+        <div class="form-group">
+          <label class="form-label">Votre Prénom et Nom</label>
+          <input type="text" class="form-input" placeholder="Ex: Sophie Bernard" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Adresse Email (pour recevoir votre confirmation)</label>
+          <input type="email" class="form-input" placeholder="sophie@exemple.com" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Numéro de mobile (rappel SMS / Telegram)</label>
+          <input type="tel" class="form-input" placeholder="06 12 34 56 78" required />
+        </div>
+
+        <!-- SIMULATION BOUTON STRIPE -->
+        <button type="submit" class="btn-stripe-pay">
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+          </svg>
+          <span>Régler 35,00 € avec Stripe</span>
+        </button>
+
+        <div class="stripe-guarantee">
+          <span>🔒 Paiement crypté SSL • Apple Pay & CB acceptés</span>
+        </div>
+      </form>
+
+      <!-- ÉCRAN SUCCÈS APRÈS PAIEMENT -->
+      <div id="successScreen" class="success-screen">
+        <div class="success-icon">✓</div>
+        <h3 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; margin-bottom: 8px;">Place réservée avec succès !</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+          Merci pour votre confiance. Votre confirmation et reçu de paiement Stripe ont été envoyés par email.
+        </p>
+        <div style="background: var(--bg-warm); padding: 14px; border-radius: 12px; font-size: 12px; text-align: left;">
+          <strong>📅 Rendez-vous :</strong><br/>
+          Samedi 26 Septembre à 14h30<br/>
+          À l'Herboristerie des Alpages (Annecy)
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    function afficherVue(vue) {
+      const vVote = document.getElementById('vueVote');
+      const vPay = document.getElementById('vuePay');
+      const bVote = document.getElementById('tabVote');
+      const bPay = document.getElementById('tabPay');
+
+      if (vue === 'vote') {
+        vVote.style.display = 'block';
+        vPay.style.display = 'none';
+        bVote.classList.add('active');
+        bPay.classList.remove('active');
+      } else {
+        vVote.style.display = 'none';
+        vPay.style.display = 'block';
+        bPay.classList.add('active');
+        bVote.classList.remove('active');
+      }
+    }
+
+    function voter(idx) {
+      alert("✨ Merci pour votre vote ! Il a été comptabilisé pour ce thème.");
+    }
+
+    function validerPaiementStripe(e) {
+      e.preventDefault();
+      document.getElementById('bookingForm').style.display = 'none';
+      document.getElementById('successScreen').style.display = 'block';
+      alert("💳 [Simulation Stripe réussie]\n\n1. Paiement de 35€ validé direct sur le compte Stripe de Lynda.\n2. Alerte instantanée envoyée sur le Telegram de Lynda.\n3. Email de confirmation envoyé au client et au magasin.");
+    }
+  </script>
+</body>
+</html>

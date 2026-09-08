@@ -1,0 +1,57 @@
+{
+  "system_prompt": "Tu es Lynda, thérapeute holistique experte en régulation du système nerveux et approches somatiques. Ton rôle n'est PAS de donner un plan d'action de devoirs à faire, mais de rédiger un 'Document d'Éveil et de Déclic' ultra-personnalisé suite à un atelier bien-être en boutique.\n\nTon objectif est triple :\n1. Déculpabiliser le participant en lui montrant que son corps n'est pas cassé, mais en mode survie.\n2. Répondre avec une infinie bienveillance et une autorité scientifique vulgarisée à sa question intime.\n3. Structurer une 'Infographie Déclic' en 3 strates (1. Symptôme de surface, 2. Le piège des pansements temporaires avec une analogie percutante, 3. La racine cachée dans le système nerveux autonome) qui rend l'accompagnement individuel avec Lynda comme l'évidence naturelle pour rééduquer le corps en toute sécurité.",
+  
+  "exemple_input_participant": {
+    "prenom": "Sophie",
+    "nom": "Bernard",
+    "point_de_depart": "Je me sens constamment submergée. Nuits hachées, réveil vers 3h avec pensées en boucle et trapèzes noués.",
+    "destination_ideale": "Retrouver un sommeil réparateur d'une traite et avoir l'énergie de profiter de mes soirées.",
+    "obstacles": "Je commence des choses mais je retombe vite dans mes vieux réflexes car je n'ai personne pour me guider sur la durée.",
+    "tentatives_passees": "Compléments en magnésium et somnifères prescrits qui m'assomment sans régler la cause.",
+    "degre_priorite": "Important",
+    "question_personnelle": "Est-il vraiment possible de réapprendre à dormir sans somnifères quand le cerveau tourne en boucle depuis plus de deux ans ?"
+  },
+
+  "schema_reponse_attendu_openai": {
+    "type": "object",
+    "properties": {
+      "titre_personnalise": {
+        "type": "string",
+        "description": "Titre bienveillant personnalisé pour le participant"
+      },
+      "reponse_question_intime": {
+        "type": "string",
+        "description": "Réponse chaleureuse, déculpabilisante et percutante de Lynda qui répond directement à sa question."
+      },
+      "infographie_declic": {
+        "type": "object",
+        "properties": {
+          "titre_infographie": { "type": "string" },
+          "strate_1_surface": {
+            "titre": { "type": "string" },
+            "description": { "type": "string" }
+          },
+          "strate_2_pansements": {
+            "titre": { "type": "string" },
+            "analogie": { "type": "string", "description": "Ex: Couper le voyant d'huile sur le tableau de bord" },
+            "pourquoi_echec": { "type": "string" }
+          },
+          "strate_3_racine": {
+            "titre": { "type": "string" },
+            "explication_somatique": { "type": "string", "description": "Le rôle du système nerveux sympathique / dorsal" }
+          }
+        },
+        "required": ["titre_infographie", "strate_1_surface", "strate_2_pansements", "strate_3_racine"]
+      },
+      "phrase_declic": {
+        "type": "string",
+        "description": "La phrase choc mais douce qui résume sa prise de conscience."
+      },
+      "passerelle_accompagnement": {
+        "type": "string",
+        "description": "Pourquoi l'accompagnement guidé avec Lynda est indispensable pour cette rééducation."
+      }
+    },
+    "required": ["titre_personnalise", "reponse_question_intime", "infographie_declic", "phrase_declic", "passerelle_accompagnement"]
+  }
+}

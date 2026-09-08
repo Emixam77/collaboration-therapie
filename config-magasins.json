@@ -1,0 +1,116 @@
+{
+  "version": "1.0",
+  "therapeute": {
+    "nom": "Lynda",
+    "titre": "Thérapeute Holistique & Praticienne Bien-être",
+    "email": "lynda.therapie@example.com",
+    "googleCalendarEmbedUrl": "https://calendar.google.com/calendar/embed?src=lynda.therapie%40gmail.com&ctz=Europe%2FParis",
+    "telegramAlerts": true
+  },
+  "magasins": [
+    {
+      "id": "mag-01",
+      "slug": "herboristerie-des-alpages",
+      "nom": "L'Herboristerie des Alpages",
+      "responsable": "Marion V.",
+      "email": "contact@herboristerie-alpages.fr",
+      "adresse": "14 rue des Artisans, 74000 Annecy",
+      "identite": {
+        "couleurPrimaire": "#4A6B5D",
+        "couleurSecondaire": "#DDE7E1",
+        "couleurAccent": "#C98A66",
+        "fond": "#FBF9F5",
+        "badgeTexte": "Boutique Partenaire Nature & Soins"
+      },
+      "tarifSeanceFixeParLynda": 35,
+      "salleCapaciteMax": 10,
+      "themesProposes": [
+        {
+          "id": "th-1",
+          "titre": "Libérer la charge mentale & retrouver le sommeil",
+          "description": "Techniques douces de respiration, libération des tensions nerveuses et rituels du soir.",
+          "duree": "1h30",
+          "prix": 35,
+          "votesActuels": 12,
+          "seuilValidation": 8,
+          "statut": "valide"
+        },
+        {
+          "id": "th-2",
+          "titre": "Comprendre et apaiser ses émotions par le corps",
+          "description": "Identifier les nœuds somatiques et renouer un dialogue bienveillant avec son ressenti.",
+          "duree": "2h00",
+          "prix": 40,
+          "votesActuels": 6,
+          "seuilValidation": 8,
+          "statut": "en_cours"
+        },
+        {
+          "id": "th-3",
+          "titre": "Détox énergétique & ancrage de saison",
+          "description": "Atelier pratique pour traverser les changements de saison en pleine vitalité.",
+          "duree": "1h30",
+          "prix": 35,
+          "votesActuels": 3,
+          "seuilValidation": 8,
+          "statut": "en_cours"
+        }
+      ],
+      "evenementPlanifie": {
+        "themeId": "th-1",
+        "date": "Samedi 28 Septembre 2026",
+        "heure": "14h30 - 16h00",
+        "placesTotal": 10,
+        "placesReservees": 7,
+        "inscrits": [
+          {"nom": "Camille R.", "heure": "10:15", "statutPaiement": "Payé (Stripe)"},
+          {"nom": "Jean-Marc D.", "heure": "11:40", "statutPaiement": "Payé (Stripe)"},
+          {"nom": "Sophie B.", "heure": "14:02", "statutPaiement": "Payé (Stripe)"},
+          {"nom": "Hélène T.", "heure": "16:20", "statutPaiement": "Payé (Stripe)"},
+          {"nom": "Mathilde L.", "heure": "Hier", "statutPaiement": "Payé (Stripe)"},
+          {"nom": "Antoine G.", "heure": "Hier", "statutPaiement": "Payé (Stripe)"},
+          {"nom": "Claire F.", "heure": "Il y a 2j", "statutPaiement": "Payé (Stripe)"}
+        ]
+      }
+    },
+    {
+      "id": "mag-02",
+      "slug": "concept-store-harmonie",
+      "nom": "L'Atelier Harmonie & Thés",
+      "responsable": "Alexandre M.",
+      "email": "bonjour@harmonie-thes.com",
+      "adresse": "22 avenue des Cerisiers, 69002 Lyon",
+      "identite": {
+        "couleurPrimaire": "#5B6B78",
+        "couleurSecondaire": "#E6ECF0",
+        "couleurAccent": "#CCA776",
+        "fond": "#FAF8F5",
+        "badgeTexte": "Salon de Thé & Espace Sérénité"
+      },
+      "salleCapaciteMax": 8,
+      "themesProposes": [
+        {
+          "id": "th-201",
+          "titre": "Pleine conscience & dégustation méditative",
+          "description": "Ralentir le rythme quotidien grâce à la sensorialité et aux plantes infusées.",
+          "duree": "1h30",
+          "prix": 30,
+          "votesActuels": 9,
+          "seuilValidation": 6,
+          "statut": "valide"
+        },
+        {
+          "id": "th-202",
+          "titre": "Auto-massage des tempes et gestion du stress urbain",
+          "description": "Exercices simples à reproduire au bureau ou chez soi.",
+          "duree": "1h15",
+          "prix": 28,
+          "votesActuels": 4,
+          "seuilValidation": 6,
+          "statut": "en_cours"
+        }
+      ],
+      "evenementPlanifie": null
+    }
+  ]
+}

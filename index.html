@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espace Collaboratif — Lynda & Boutiques Partenaires</title>
+  
+  <!-- Polices Google : Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-warm: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F3EFEA;
+      --text-main: #2C3531;
+      --text-muted: #6C7D77;
+      --primary: #4A6B5D;       /* Vert sauge herboristerie */
+      --primary-light: #E8F0EC;
+      --accent: #C98A66;        /* Terracotta chaleureux */
+      --accent-light: #F8EFEA;
+      --gold-zen: #CCA776;
+      --border-soft: #EAE3D9;
+      --shadow-zen: 0 12px 32px -8px rgba(74, 107, 93, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
+      --radius-card: 22px;
+      --radius-pill: 9999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-warm);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    h1, h2, h3, .font-serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+    }
+
+    /* TOP BARRE AVEC SIMULATION DE ROLES ET CLOISONNEMENT */
+    .system-bar {
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-duo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .avatar-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .role-switcher {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .role-btn {
+      border: none;
+      background: transparent;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 9px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .role-btn.active {
+      background: #FFFFFF;
+      color: var(--text-main);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .container {
+      max-width: 1160px;
+      margin: 32px auto 0 auto;
+      padding: 0 24px;
+    }
+
+    /* VUE 1 : TOUR DE CONTROLE LINDA (SUPER-ADMIN MULTI-MAGASINS) */
+    .lynda-admin-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-card);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-zen);
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .sheet-sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #E6F4EA;
+      color: #137333;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .shop-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: 13px;
+    }
+
+    .shop-table th {
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-soft);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .shop-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: middle;
+    }
+
+    .btn-copy-url {
+      background: var(--bg-warm);
+      border: 1px solid var(--border-soft);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-copy-url:hover {
+      background: #FFFFFF;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* BANNIERE PRINCIPALE DE L'ESPACE */
+    .hero-zen {
+      background: linear-gradient(135deg, #FFFFFF 0%, var(--bg-subtle) 100%);
+      border: 1px solid var(--border-soft);
+      border-radius: 28px;
+      padding: 34px 38px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-zen);
+      position: relative;
+    }
+
+    .tag-zen {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+
+    .stepper-zen {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .step-item.done .step-number { background: var(--primary); color: white; }
+    .step-item.active .step-number { background: var(--accent); color: white; box-shadow: 0 0 0 3px var(--accent-light); }
+    .step-item.pending .step-number { background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border-soft); }
+
+    /* GRILLE 2 COLONNES */
+    .grid-duo {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+    }
+
+    .card-zen {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border-soft);
+      padding: 26px;
+      box-shadow: var(--shadow-zen);
+    }
+
+    .card-title {
+      font-size: 24px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* THEMES & VOTE */
+    .theme-card {
+      background: var(--bg-warm);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+
+    .theme-card.validated {
+      background: #FFFFFF;
+      border: 2px solid var(--primary);
+    }
+
+    .badge-status {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-valide { background: var(--primary-light); color: var(--primary); }
+    .badge-encours { background: var(--bg-subtle); color: var(--text-muted); }
+
+    .gauge-progress {
+      height: 8px;
+      background: var(--border-soft);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--gold-zen) 100%);
+      border-radius: var(--radius-pill);
+      transition: width 0.4s ease;
+    }
+
+    /* KIT MAGASIN & AFFICHE */
+    .poster-box {
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-warm) 100%);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .btn-zen-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(74, 107, 93, 0.25);
+    }
+
+    .btn-zen-primary:hover {
+      background: #3B574B;
+      transform: translateY(-1px);
+    }
+
+    .btn-zen-secondary {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      width: 100%;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .btn-zen-secondary:hover {
+      background: var(--bg-warm);
+      border-color: var(--text-muted);
+    }
+
+    /* MODAL AFFICHE A4 */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 53, 49, 0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 20px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-sheet {
+      background: white;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+      position: relative;
+    }
+
+    .a4-document {
+      border: 1px solid #E2D9CE;
+      border-radius: 12px;
+      padding: 36px 28px;
+      background: #FDFCFA;
+      text-align: center;
+      margin: 18px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BARRE SYSTEME -->
+  <header class="system-bar">
+    <div class="brand-duo">
+      <span class="avatar-pill">
+        <span class="avatar-icon">L</span>
+        Lynda (Thérapeute)
+      </span>
+      <span id="breadcrumbShop" style="font-size: 13px; color: var(--text-muted);">
+        ▸ <strong>Espace Partenaire :</strong> L'Herboristerie des Alpages
+      </span>
+    </div>
+
+    <!-- COMMUTATEUR DE RÔLES -->
+    <div class="role-switcher">
+      <button class="role-btn active" id="btnRoleLynda" onclick="switchRole('lynda')">
+        👑 Tour de Contrôle Lynda (Super-Admin)
+      </button>
+      <button class="role-btn" id="btnRoleShop" onclick="switchRole('shop')">
+        🏪 Espace Privé Magasin (Marion)
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- PANNEAU EXCLUSIF LINDA : GESTION MULTI-MAGASINS VIA GOOGLE SHEETS -->
+    <section id="lyndaAdminSection" class="lynda-admin-box">
+      <div class="admin-header">
+        <div>
+          <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); font-weight: 700;">
+            Tableau de Bord Privé Lynda
+          </span>
+          <h2 style="font-size: 26px; margin-top: 4px;">Carnet des Boutiques Partenaires</h2>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Seule Lynda a accès à cette vue d'ensemble. Les magasins sont synchronisés en direct depuis son fichier Google Sheet.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <a href="audit.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); color: var(--accent); padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none;">
+            <span>📋</span>
+            <span>Outil d'Audit Bilan (Axe 2) ↗</span>
+          </a>
+          <a href="javascript:alert('Ouverture de votre base Google Sheets maîtresse...\nChaque nouvelle ligne ajoutée crée instantanément une nouvelle boutique partenaire !')" class="sheet-sync-pill">
+            <span>📊</span>
+            <span>Ouvrir ma base Google Sheets</span>
+          </a>
+        </div>
+      </div>
+
+      <table class="shop-table">
+        <thead>
+          <tr>
+            <th>Magasin Partenaire</th>
+            <th>Responsable</th>
+            <th>Statut Atelier</th>
+            <th>Tarif fixé par Lynda (Google Sheet)</th>
+            <th>Inscrits / Jauge</th>
+            <th>Recettes Stripe</th>
+            <th>Lien Privé Magasin (Sans fuite de données)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>🌿 L'Herboristerie des Alpages</strong><br/>
+              <span style="font-size: 11px; color: var(--text-muted);">Annecy (74)</span>
+            </td>
+            <td>Marion V.</td>
+            <td><span class="badge-status badge-valide">Planifié (26 Sept)</span></td>
+            <td>
+              <strong style="color: var(--primary); font-size: 14px;">35 €</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Synchronisé Sheet</div>
+            </td>
+            <td><strong>7 / 10</strong> inscrits</td>
+            <td style="color: var(--primary); font-weight: 700;">245 €</td>
+            <td>
+              <button class="btn-copy-url" onclick="alert('Lien secret copié :\nhttps://app.lynda-therapie.com/espace/alpages?token=sec_7498a\n\nMarion ne verra strictement AUCUN autre magasin !')">
+                🔗 Copier lien privé de Marion
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>🍵 L'Atelier Harmonie & Thés</strong><br/>
+              <span style="font-size: 11px; color: var(--text-muted);">Lyon (69)</span>
+            </td>
+            <td>Alexandre M.</td>
+            <td><span class="badge-status badge-encours">Phase de Vote (9/6)</span></td>
+            <td>
+              <strong style="color: var(--primary); font-size: 14px;">30 €</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Synchronisé Sheet</div>
+            </td>
+            <td>En attente date</td>
+            <td style="color: var(--text-muted);">0 €</td>
+            <td>
+              <button class="btn-copy-url" onclick="alert('Lien secret copié pour Alexandre.')">
+                🔗 Copier lien privé d'Alexandre
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>🌸 Maison Sérénité Nature</strong><br/>
+              <span style="font-size: 11px; color: var(--text-muted);">Chambéry (73)</span>
+            </td>
+            <td>Émilie B.</td>
+            <td><span class="badge-status" style="background:#F4EFEB; color:#888;">Nouveau magasin</span></td>
+            <td>
+              <strong style="color: var(--primary); font-size: 14px;">40 €</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Synchronisé Sheet</div>
+            </td>
+            <td>Configuration</td>
+            <td style="color: var(--text-muted);">0 €</td>
+            <td>
+              <button class="btn-copy-url" onclick="alert('Lien secret généré pour Émilie.')">
+                🔗 Copier lien privé d'Émilie
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ESPACE PARTENAIRE D'UN MAGASIN (ICI MARION / HERBORISTERIE) -->
+    <div id="shopSpaceContainer">
+
+      <!-- BANNIERE MAGASIN -->
+      <section class="hero-zen">
+        <div class="tag-zen">
+          <span>🌿 Boutique Partenaire • L'Herboristerie des Alpages</span>
+        </div>
+        <h1 class="hero-title">Atelier Bien-être & Thérapie à l'Herboristerie</h1>
+        <p style="font-size: 14px; color: var(--text-muted); max-width: 700px;">
+          Espace partagé entre <strong>Marion (Gérante)</strong> et <strong>Lynda (Thérapeute)</strong>. Vous pouvez suivre les votes de vos clients, choisir la date dans le calendrier et imprimer votre kit événement.
+        </p>
+
+        <!-- STEPPER -->
+        <div class="stepper-zen">
+          <div class="step-item done">
+            <div class="step-number">✓</div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted);">Étape 1</div>
+              <strong style="font-size: 13px;">Vote clients</strong>
+            </div>
+          </div>
+          <div class="step-item done">
+            <div class="step-number">✓</div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted);">Étape 2</div>
+              <strong style="font-size: 13px;">Date validée</strong>
+            </div>
+          </div>
+          <div class="step-item active">
+            <div class="step-number">3</div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted);">Étape 3</div>
+              <strong style="font-size: 13px;">Réservations</strong>
+            </div>
+          </div>
+          <div class="step-item pending">
+            <div class="step-number">4</div>
+            <div>
+              <div style="font-size: 11px; color: var(--text-muted);">Étape 4</div>
+              <strong style="font-size: 13px;">Jour J</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GRILLE CONTENU -->
+      <div class="grid-duo">
+
+        <!-- COLONNE GAUCHE : THEMES ET CALENDRIER -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+
+          <!-- LES VOTES CLIENTS -->
+          <div class="card-zen">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 18px;">
+              <div>
+                <h3 class="card-title"><span>🌱</span> Les Thèmes soumis au vote</h3>
+                <p class="card-desc">Sondage proposé aux clients en magasin via QR code ou en caisse.</p>
+              </div>
+              <span class="badge-status badge-valide">Seuil : 8 votes</span>
+            </div>
+
+            <!-- THEME 1 GAGNANT -->
+            <div class="theme-card validated">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                <strong>Libérer la charge mentale & retrouver le sommeil</strong>
+                <span class="badge-status badge-valide">✨ Retenu</span>
+              </div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+                Techniques douces de respiration, libération des tensions nerveuses et rituels du soir.
+              </p>
+              <div class="gauge-progress">
+                <div class="gauge-fill" style="width: 100%;"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--primary); font-weight: 600;">
+                <span>12 votes clients recueillis</span>
+                <span>Programmé le 26 Septembre</span>
+              </div>
+            </div>
+
+            <!-- THEME 2 -->
+            <div class="theme-card">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                <strong>Comprendre et apaiser ses émotions par le corps</strong>
+                <span class="badge-status badge-encours">6 / 8 votes</span>
+              </div>
+              <div class="gauge-progress">
+                <div class="gauge-fill" style="width: 75%;"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+                <span>Encore 2 votes pour le prochain atelier</span>
+                <span>Durée : 2h00 • 40€</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CALENDRIER GOOGLE SYNCHRO -->
+          <div class="card-zen">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+              <div>
+                <h3 class="card-title"><span>🗓️</span> Calendrier Google de Lynda</h3>
+                <p class="card-desc">Disponibilités synchronisées en temps réel.</p>
+              </div>
+              <span class="badge-status badge-valide">● Synchro active</span>
+            </div>
+
+            <div style="background: var(--primary-light); padding: 16px; border-radius: 14px; border: 1px solid var(--border-soft);">
+              <div style="font-size: 12px; text-transform: uppercase; color: var(--primary); font-weight: 700; margin-bottom: 4px;">
+                Créneau validé pour l'atelier :
+              </div>
+              <div style="font-size: 17px; font-weight: 700; color: var(--text-main);">
+                Samedi 26 Septembre 2026 • 14h30 - 16h00
+              </div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                Lieu : Espace Soins, Herboristerie des Alpages
+              </div>
+            </div>
+
+            <!-- ENCADRÉ TARIF GOOGLE SHEET -->
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #FFFFFF; border: 1.5px dashed var(--border-soft); border-radius: 12px; padding: 12px 16px; margin-top: 14px;">
+              <div>
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
+                  Tarif de la séance (Fixé par Lynda)
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted);">
+                  Défini directement dans le Google Sheet maître de Lynda.
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 20px; font-weight: 800; color: var(--primary);">35,00 €</span>
+                <div style="font-size: 10px; color: var(--text-muted);">par participant</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLONNE DROITE : KIT MAGASIN & PAGE CLIENT -->
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+
+          <!-- KIT MAGASIN -->
+          <div class="card-zen">
+            <h3 class="card-title" style="margin-bottom: 6px;"><span>🖨️</span> Kit Événement en 1 Clic</h3>
+            <p class="card-desc" style="margin-bottom: 18px;">Tout est prêt pour promouvoir l'atelier auprès de vos clients.</p>
+
+            <div class="poster-box">
+              <div style="font-size: 32px; margin-bottom: 8px;">📄</div>
+              <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Affiche A4 avec QR Code</div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+                À poser en caisse pour que vos clients scannent et paient directement en ligne.
+              </p>
+
+              <button class="btn-zen-primary" onclick="ouvrirModalAffiche()">
+                <span>🖨️</span>
+                <span>Imprimer l'Affiche A4</span>
+              </button>
+
+              <!-- BOUTON VERS LA PAGE CLIENT -->
+              <a href="client.html" target="_blank" class="btn-zen-secondary">
+                <span>📱</span>
+                <span>Voir la Page Client (Scan QR Code) ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- INSCRIPTIONS & PAIEMENTS STRIPE -->
+          <div class="card-zen">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 class="card-title"><span>💳</span> Inscriptions (7 / 10)</h3>
+              <span class="badge-status badge-valide">Paiements Stripe reçus</span>
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <div class="gauge-progress">
+                <div class="gauge-fill" style="width: 70%; background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);"></div>
+              </div>
+              <div style="font-size: 12px; color: var(--accent); font-weight: 700;">
+                Plus que 3 places disponibles !
+              </div>
+            </div>
+
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase;">
+              Participants enregistrés (Émargement J-1) :
+            </div>
+
+            <div style="max-height: 180px; overflow-y: auto; font-size: 13px;">
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between;">
+                <span>👤 Camille R.</span>
+                <span style="color: #2F68D6; font-weight: 600; font-size: 11px;">Payé 35€</span>
+              </div>
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between;">
+                <span>👤 Jean-Marc D.</span>
+                <span style="color: #2F68D6; font-weight: 600; font-size: 11px;">Payé 35€</span>
+              </div>
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between;">
+                <span>👤 Sophie B.</span>
+                <span style="color: #2F68D6; font-weight: 600; font-size: 11px;">Payé 35€</span>
+              </div>
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between;">
+                <span>👤 Hélène T.</span>
+                <span style="color: #2F68D6; font-weight: 600; font-size: 11px;">Payé 35€</span>
+              </div>
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border-soft); display: flex; justify-content: space-between;">
+                <span>👤 Mathilde L.</span>
+                <span style="color: #2F68D6; font-weight: 600; font-size: 11px;">Payé 35€</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL AFFICHE A4 -->
+  <div class="modal-overlay" id="modalAffiche">
+    <div class="modal-sheet">
+      <button style="position: absolute; top: 16px; right: 16px; border: none; background: #eee; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;" onclick="fermerModalAffiche()">✕</button>
+      
+      <div class="a4-document">
+        <div style="font-size: 12px; font-weight: 700; color: var(--primary); letter-spacing: 0.15em; text-transform: uppercase;">
+          L'HERBORISTERIE DES ALPAGES
+        </div>
+        <p style="font-size: 12px; color: #888; text-transform: uppercase; margin: 4px 0 10px 0;">Vous invite à son atelier bien-être</p>
+        <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; margin-bottom: 6px;">
+          Libérer la charge mentale & retrouver le sommeil
+        </h2>
+        <div style="font-size: 13px; color: var(--accent); font-weight: 600; margin-bottom: 16px;">
+          Animé par Lynda, Thérapeute & Praticienne Holistique
+        </div>
+
+        <div style="background: white; border: 1px solid #EAE3D9; border-radius: 10px; padding: 12px; font-size: 13px; margin-bottom: 16px;">
+          <strong>Samedi 26 Septembre</strong> • 14h30 à 16h00 • 35€ / pers.
+        </div>
+
+        <div style="background: #F4EFEB; display: inline-block; padding: 12px; border-radius: 8px;">
+          <svg style="width: 120px; height: 120px;" viewBox="0 0 100 100">
+            <rect width="100" height="100" fill="#ffffff"/>
+            <path d="M10,10 h30 v30 h-30 z M15,15 v20 h20 v-20 z M60,10 h30 v30 h-30 z M65,15 v20 h20 v-20 z M10,60 h30 v30 h-30 z M15,65 v20 h20 v-20 z M45,15 h10 v10 h-10 z M45,45 h10 v10 h-10 z M25,45 h10 v10 h-10 z M65,45 h20 v10 h-20 z M45,65 h15 v20 h-15 z M70,70 h15 v15 h-15 z" fill="#4A6B5D"/>
+          </svg>
+          <div style="font-size: 12px; font-weight: 700; margin-top: 6px;">Scannez pour réserver</div>
+          <div style="font-size: 10px; color: #666;">Paiement direct sécurisé Stripe</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn-zen-secondary" style="width: auto;" onclick="fermerModalAffiche()">Fermer</button>
+        <button class="btn-zen-primary" style="width: auto;" onclick="window.print()">🖨️ Imprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchRole(role) {
+      const btnL = document.getElementById('btnRoleLynda');
+      const btnS = document.getElementById('btnRoleShop');
+      const adminSec = document.getElementById('lyndaAdminSection');
+      const breadcrumb = document.getElementById('breadcrumbShop');
+
+      if (role === 'lynda') {
+        btnL.classList.add('active');
+        btnS.classList.remove('active');
+        adminSec.style.display = 'block';
+        breadcrumb.innerHTML = '▸ <strong>Vue Super-Admin :</strong> Toutes vos boutiques';
+      } else {
+        btnS.classList.add('active');
+        btnL.classList.remove('active');
+        adminSec.style.display = 'none'; // Cloisonnement strict : Marion ne voit pas la liste des autres boutiques !
+        breadcrumb.innerHTML = '▸ <strong>Espace Privé :</strong> L\'Herboristerie des Alpages (Marion)';
+      }
+    }
+
+    function ouvrirModalAffiche() {
+      document.getElementById('modalAffiche').classList.add('active');
+    }
+
+    function fermerModalAffiche() {
+      document.getElementById('modalAffiche').classList.remove('active');
+    }
+  </script>
+</body>
+</html>

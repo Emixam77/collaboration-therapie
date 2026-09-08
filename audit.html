@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bilan Bien-être Personnel — Lynda Thérapeute</title>
+  
+  <!-- Polices Google : Cormorant Garamond (Élégance bienveillante) & Plus Jakarta Sans (Clarté douce) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-warm: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F3EFEA;
+      --text-main: #2C3531;
+      --text-muted: #6E7E78;
+      --primary: #4A6B5D;       /* Vert sauge profond */
+      --primary-light: #EBF1ED;
+      --accent: #C98A66;        /* Terracotta doux */
+      --accent-light: #F9EFEA;
+      --gold: #CCA776;
+      --border-soft: #EBE4DA;
+      --shadow-zen: 0 16px 40px -10px rgba(74, 107, 93, 0.09), 0 4px 14px rgba(0, 0, 0, 0.03);
+      --radius-box: 20px;
+      --radius-pill: 9999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-warm);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      padding: 30px 16px 80px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    h1, h2, h3, h4, .font-serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+    }
+
+    .carnet-container {
+      width: 100%;
+      max-width: 640px;
+      background: #FFFFFF;
+      border-radius: 28px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-zen);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* EN-TETE CARNET DE SANCTUAIRE */
+    .carnet-header {
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-warm) 100%);
+      padding: 36px 32px 28px 32px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-soft);
+      position: relative;
+    }
+
+    .badge-confidential {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+
+    .carnet-title {
+      font-size: 32px;
+      line-height: 1.2;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .carnet-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* PROGRESSION DOUCE */
+    .progress-track {
+      background: var(--bg-subtle);
+      height: 4px;
+      width: 100%;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+      width: 16%;
+      transition: width 0.4s ease;
+    }
+
+    /* CONTENU DU FORMULAIRE */
+    .form-body {
+      padding: 36px 32px;
+    }
+
+    .step-box {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .step-box.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-num-pill {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .step-question-title {
+      font-size: 24px;
+      line-height: 1.25;
+      color: var(--text-main);
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* CHAMPS DE SAISIE REPOSANTS */
+    .textarea-zen, .input-zen {
+      width: 100%;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-main);
+      background: var(--bg-warm);
+      outline: none;
+      transition: all 0.2s ease;
+      line-height: 1.5;
+    }
+
+    .textarea-zen {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .textarea-zen:focus, .input-zen:focus {
+      border-color: var(--primary);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+
+    /* CARTES D'OPTIONS (POUR LA QUESTION 5) */
+    .priority-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .priority-card {
+      border: 1.5px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 16px 20px;
+      background: var(--bg-warm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .priority-card:hover {
+      border-color: var(--primary);
+      background: #FFFFFF;
+    }
+
+    .priority-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 4px 12px rgba(74, 107, 93, 0.1);
+    }
+
+    .priority-card-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .priority-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .radio-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .priority-card.selected .radio-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+    }
+
+    .priority-card.selected .radio-circle::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    /* BOUTONS DE NAVIGATION */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .btn-zen-prev {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 12px;
+    }
+
+    .btn-zen-next {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 26px;
+      border-radius: var(--radius-pill);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(74, 107, 93, 0.25);
+      transition: all 0.2s ease;
+      margin-left: auto;
+    }
+
+    .btn-zen-next:hover {
+      background: #3B574B;
+      transform: translateY(-1px);
+    }
+
+    /* ECRAN RESULTAT : LA SYNTHESE ET LE PLAN D'ACTION */
+    .synthesis-screen {
+      display: none;
+      padding: 36px 32px;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .synthesis-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+
+    .synthesis-hero-title {
+      font-size: 32px;
+      line-height: 1.15;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .personal-answer-box {
+      background: var(--bg-warm);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+      padding: 20px;
+      margin: 24px 0;
+      font-size: 14px;
+    }
+
+    .personal-answer-header {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .plan-box {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-soft);
+      border-radius: var(--radius-box);
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.03);
+    }
+
+    .plan-step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .plan-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .plan-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .plan-step-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .plan-step-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .cta-call-box {
+      background: linear-gradient(135deg, var(--primary) 0%, #354F45 100%);
+      color: white;
+      border-radius: var(--radius-box);
+      padding: 28px;
+      text-align: center;
+      margin-top: 28px;
+      box-shadow: 0 10px 24px rgba(74, 107, 93, 0.3);
+    }
+
+    .cta-call-box h3 {
+      font-size: 26px;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .cta-call-box p {
+      font-size: 13px;
+      color: #E2EFE8;
+      max-width: 440px;
+      margin: 0 auto 18px auto;
+    }
+
+    .btn-reserve-call {
+      background: #FFFFFF;
+      color: var(--primary);
+      border: none;
+      padding: 13px 26px;
+      border-radius: var(--radius-pill);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+    }
+
+    .btn-reserve-call:hover {
+      background: var(--bg-warm);
+      transform: translateY(-1px);
+    }
+
+    /* NOTIF TECHNIQUE SIMULATION GOOGLE SHEETS */
+    .sheet-log-card {
+      background: #F0F6F2;
+      border: 1px dashed var(--primary);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 12px;
+      color: var(--text-main);
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="carnet-container">
+
+    <!-- EN-TÊTE -->
+    <div class="carnet-header">
+      <div class="badge-confidential">
+        <span>🔒</span>
+        <span>Espace Intime & Confidentiel</span>
+      </div>
+      <h1 class="carnet-title">Votre Bilan Bien-être Personnel</h1>
+      <p class="carnet-subtitle">
+        Prenez 3 minutes pour faire le point avec bienveillance. Lynda vous délivre une réponse personnalisée et votre plan d'action immédiat.
+      </p>
+    </div>
+
+    <!-- PROGRESSION -->
+    <div class="progress-track">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- CORPS DU FORMULAIRE -->
+    <form id="auditForm" onsubmit="soumettreBilan(event)" class="form-body">
+
+      <!-- ÉTAPE 1 : SITUATION ACTUELLE (POINT A) -->
+      <div class="step-box active" id="step1">
+        <div class="step-num-pill">Question 1 sur 6 • Le Point de départ</div>
+        <h2 class="step-question-title">Où en êtes-vous aujourd'hui ?</h2>
+        <p class="step-desc">Qu'est-ce qui pèse le plus lourd sur votre quotidien en ce moment (charge mentale, sommeil perturbé, tensions dans le corps, fatigue nerveuse) ?</p>
+        
+        <textarea id="repSituation" class="textarea-zen" placeholder="Partagez librement ce que vous ressentez ces dernières semaines..." required>Je me sens constamment submergée par le travail et la famille. Mes nuits sont hachées, je me réveille vers 3h du matin avec des pensées en boucle et des tensions dans les trapèzes.</textarea>
+
+        <div class="nav-buttons">
+          <div></div>
+          <button type="button" class="btn-zen-next" onclick="allerEtape(2)">
+            Continuer <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 2 : DESTINATION IDÉALE (POINT B) -->
+      <div class="step-box" id="step2">
+        <div class="step-num-pill">Question 2 sur 6 • La Destination idéale</div>
+        <h2 class="step-question-title">Si tout était possible, comment aimeriez-vous vous sentir dans 3 à 6 mois ?</h2>
+        <p class="step-desc">Visualisez votre état idéal de sérénité, de légèreté et d'énergie au quotidien.</p>
+        
+        <textarea id="repDestination" class="textarea-zen" placeholder="Décrivez votre équilibre souhaité..." required>J'aimerais retrouver un sommeil réparateur d'une traite, me sentir apaisée et avoir l'énergie de profiter de mes soirées sans cette angoisse diffuse.</textarea>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn-zen-prev" onclick="allerEtape(1)">← Retour</button>
+          <button type="button" class="btn-zen-next" onclick="allerEtape(3)">
+            Continuer <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 3 : LES OBSTACLES -->
+      <div class="step-box" id="step3">
+        <div class="step-num-pill">Question 3 sur 6 • Les Freins</div>
+        <h2 class="step-question-title">Qu'est-ce qui vous a empêché d'y arriver jusqu'à présent ?</h2>
+        <p class="step-desc">Selon vous, quels ont été vos principaux obstacles (le manque de temps, la sensation d'être seul(e), le manque de méthode pérenne) ?</p>
+        
+        <textarea id="repObstacles" class="textarea-zen" placeholder="Ce qui bloque selon vous..." required>Je commence des choses (applications de méditation, tisanes) mais dès que le stress monte, je retombe dans mes vieux réflexes car je n'ai personne pour me guider sur la durée.</textarea>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn-zen-prev" onclick="allerEtape(2)">← Retour</button>
+          <button type="button" class="btn-zen-next" onclick="allerEtape(4)">
+            Continuer <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 4 : TENTATIVES PASSÉES -->
+      <div class="step-box" id="step4">
+        <div class="step-num-pill">Question 4 sur 6 • Le Rétroviseur</div>
+        <h2 class="step-question-title">Qu'avez-vous déjà essayé par le passé qui n'a pas fonctionné ?</h2>
+        <p class="step-desc">Les approches, traitements ou méthodes qui n'ont pas donné les résultats escomptés ou qui n'ont pas duré.</p>
+        
+        <textarea id="repPasses" class="textarea-zen" placeholder="Ce qui n'a pas marché..." required>Des compléments en magnésium et des somnifères prescrits qui m'assomment sans régler la cause de mon agitation mentale.</textarea>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn-zen-prev" onclick="allerEtape(3)">← Retour</button>
+          <button type="button" class="btn-zen-next" onclick="allerEtape(5)">
+            Continuer <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 5 : OPTION D'ACCOMPAGNEMENT & PRIORITÉ -->
+      <div class="step-box" id="step5">
+        <div class="step-num-pill">Question 5 sur 6 • Votre Engagement</div>
+        <h2 class="step-question-title">Est-ce que le fait d'être accompagné(e) peut être une option envisageable pour vous ?</h2>
+        <p class="step-desc">Et si oui, à quel degré de priorité l'envisageriez-vous aujourd'hui ?</p>
+        
+        <div class="priority-options">
+          <div class="priority-card" onclick="choisirPriorite('Curieux(se)', this)">
+            <div>
+              <div class="priority-card-title">Curieux(se)</div>
+              <div class="priority-card-desc">Je souhaite simplement explorer les possibilités et comprendre votre démarche.</div>
+            </div>
+            <div class="radio-circle"></div>
+          </div>
+
+          <div class="priority-card selected" onclick="choisirPriorite('Important', this)">
+            <div>
+              <div class="priority-card-title">Important</div>
+              <div class="priority-card-desc">C'est un réel besoin actuel, je souhaite activement trouver une solution sérieuse.</div>
+            </div>
+            <div class="radio-circle"></div>
+          </div>
+
+          <div class="priority-card" onclick="choisirPriorite('Urgent et vital', this)">
+            <div>
+              <div class="priority-card-title">Urgent et vital</div>
+              <div class="priority-card-desc">Ma situation actuelle n'est plus tenable, je veux démarrer au plus vite.</div>
+            </div>
+            <div class="radio-circle"></div>
+          </div>
+        </div>
+
+        <input type="hidden" id="repPriorite" value="Important" />
+
+        <div class="nav-buttons">
+          <button type="button" class="btn-zen-prev" onclick="allerEtape(4)">← Retour</button>
+          <button type="button" class="btn-zen-next" onclick="allerEtape(6)">
+            Continuer <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 6 : QUESTION PERSONNELLE & COORDONNÉES -->
+      <div class="step-box" id="step6">
+        <div class="step-num-pill">Question 6 sur 6 • Votre Question Personnelle</div>
+        <h2 class="step-question-title">Quelle est la question la plus intime ou spécifique que vous souhaitez poser à Lynda ?</h2>
+        <p class="step-desc">Une situation particulière, une peur ou un détail de votre histoire dont vous aimeriez lui parler.</p>
+        
+        <textarea id="repQuestionPerso" class="textarea-zen" placeholder="Votre question personnelle pour Lynda..." required style="min-height: 90px; margin-bottom: 20px;">Est-il vraiment possible de réapprendre à dormir sans somnifères quand le cerveau tourne en boucle depuis plus de deux ans ?</textarea>
+
+        <div style="background: var(--bg-warm); padding: 18px; border-radius: 16px; border: 1px solid var(--border-soft); margin-top: 10px;">
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 10px;">
+            Vos coordonnées (pour recevoir votre synthèse & plan d'action)
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <input type="text" id="nomClient" class="input-zen" placeholder="Votre Prénom" value="Sophie Bernard" required />
+            <input type="tel" id="telClient" class="input-zen" placeholder="Téléphone" value="06 12 34 56 78" required />
+          </div>
+          <input type="email" id="emailClient" class="input-zen" placeholder="Adresse Email" value="sophie.bernard@example.com" required />
+        </div>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn-zen-prev" onclick="allerEtape(5)">← Retour</button>
+          <button type="submit" class="btn-zen-next" style="background: var(--accent);">
+            <span>✨</span> Découvrir ma Synthèse & Plan d'Action
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- ÉCRAN DE RESTITUTION : LE DOCUMENT D'ÉVEIL & INFOGRAPHIE DÉCLIC -->
+    <div id="synthesisScreen" class="synthesis-screen">
+      
+      <div class="synthesis-badge">💡 Révélation Somatique & Déclic</div>
+      <h2 class="synthesis-hero-title">Votre Document d'Éveil Personnel, <span id="synPrenom">Sophie</span>.</h2>
+      
+      <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px;">
+        Avant de chercher des solutions au hasard, il est indispensable de comprendre ce que votre corps essaie réellement de vous dire. Voici la vérité sur le mécanisme invisible qui vous maintient éveillée.
+      </p>
+
+      <!-- RÉPONSE SPÉCIFIQUE À LA QUESTION PERSONNELLE -->
+      <div class="personal-answer-box">
+        <div class="personal-answer-header">L'Éveil sur votre question intime :</div>
+        <p style="font-style: italic; color: #1F2623; margin-bottom: 8px;" id="synQuestionRappel">
+          « Est-il vraiment possible de réapprendre à dormir sans somnifères quand le cerveau tourne en boucle depuis deux ans ? »
+        </p>
+        <p style="font-size: 13.5px; color: #354F45; line-height: 1.5;" id="synReponseLynda">
+          <strong>La réponse est un oui absolu.</strong> Mais pour y parvenir, vous devez cesser de vous battre contre vos pensées. Vos insomnies à 3h du matin ne sont pas un défaut de fabrication de votre cerveau : c'est un réflexe biologique archaïque. Votre système nerveux est persuadé qu'il y a un prédateur à la porte de votre caverne.
+        </p>
+      </div>
+
+      <!-- L'INFOGRAPHIE DÉCLIC : L'ICEBERG NERVEUX -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--border-soft); border-radius: var(--radius-box); padding: 26px; margin: 26px 0; box-shadow: 0 8px 24px rgba(74, 107, 93, 0.05);">
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+          <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 700;">
+            Infographie Somatique
+          </span>
+          <h3 style="font-size: 22px; color: var(--text-main); margin-top: 2px;">
+            L'Iceberg de votre Épuisement Invisible
+          </h3>
+          <p style="font-size: 12px; color: var(--text-muted);">
+            Comprendre en 3 strates pourquoi rien n'a marché jusqu'ici.
+          </p>
+        </div>
+
+        <!-- STRATE 1 : LE SYMPTOME DE SURFACE -->
+        <div style="background: var(--bg-warm); border: 1px solid var(--border-soft); border-radius: 14px; padding: 16px; margin-bottom: 12px; position: relative;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="font-size: 13px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <span>🌊</span> 1. La Surface (Ce que vous ressentez)
+            </strong>
+            <span style="font-size: 10px; background: #FFFFFF; padding: 2px 8px; border-radius: 999px; font-weight: 700; color: var(--text-muted);">Le Symptôme</span>
+          </div>
+          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+            Réveil brutal à 3h du matin, trapèzes contractés, cerveau qui mouline en accéléré, impression de fatigue au lever.
+          </p>
+        </div>
+
+        <!-- STRATE 2 : LE PIÈGE DES PANSEMENTS -->
+        <div style="background: #FFF8F5; border: 1px dashed var(--accent); border-radius: 14px; padding: 16px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="font-size: 13px; color: #B35E3B; display: flex; align-items: center; gap: 8px;">
+              <span>⚠️</span> 2. Le Piège des Pansements (Ce qui ne marche pas)
+            </strong>
+            <span style="font-size: 10px; background: #FFFFFF; padding: 2px 8px; border-radius: 999px; font-weight: 700; color: #B35E3B;">L'Illusion</span>
+          </div>
+          <p style="font-size: 12px; color: #73402B; line-height: 1.4;">
+            Tisanes, magnésium, forcer la méditation, somnifères chimiques. <em>C'est comme couper le câble du voyant d'huile sur le tableau de bord : le voyant s'éteint, mais le moteur continue de surchauffer.</em>
+          </p>
+        </div>
+
+        <!-- STRATE 3 : LA VRAIE RACINE CACHÉE -->
+        <div style="background: var(--primary-light); border: 1.5px solid var(--primary); border-radius: 14px; padding: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <strong style="font-size: 14px; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+              <span>🌱</span> 3. La Racine Cachée (La Vraie Cause)
+            </strong>
+            <span style="font-size: 10px; background: var(--primary); color: white; padding: 2px 8px; border-radius: 999px; font-weight: 700;">Le Cœur du Sujet</span>
+          </div>
+          <p style="font-size: 12.5px; color: #2D4239; line-height: 1.5;">
+            Votre <strong>système nerveux autonome</strong> est bloqué en « mode survie sympathique ». Tant que le corps ne reçoit pas les signaux somatiques neuro-chimiques de sécurité absolue, aucun rituel intellectuel ne permettra de réenclencher le frein naturel vagal.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- LE MESSAGE D'ÉVEIL & CONCLUSION -->
+      <div style="background: var(--bg-warm); border-radius: 16px; padding: 20px; font-size: 13.5px; line-height: 1.6; color: var(--text-main); margin-bottom: 24px;">
+        <strong style="color: var(--primary);">La prise de conscience :</strong><br/>
+        Vous n'avez pas besoin de « plus de volonté ». Vous avez besoin d'apprendre à votre corps le langage somatique de la décompression. C'est une rééducation subtile qui ne s'improvise pas seul(e) face à un écran.
+      </div>
+
+      <!-- APPEL À L'ACTION NATUREL : PASSERELLE VERS LINDA -->
+      <div class="cta-call-box">
+        <h3>Prête à rééduquer votre système en profondeur ?</h3>
+        <p>
+          Pour comprendre comment appliquer cette prise de conscience à votre quotidien et découvrir le cadre d'accompagnement sur mesure de Lynda, échangez directement avec elle lors d'un appel offert de 15 minutes.
+        </p>
+        <button class="btn-reserve-call" onclick="alert('Réservation de l\'appel offert de 15 min avec Lynda...')">
+          <span>📞</span> Réserver mon échange offert de 15 min avec Lynda
+        </button>
+      </div>
+
+      <!-- BOUTONS D'ACTION (IMPRIMER / ENVOYER) -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+        <button onclick="window.print()" style="background: transparent; border: 1px solid var(--border-soft); padding: 8px 16px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text-muted);">
+          🖨️ Sauvegarder cette fiche d'éveil (PDF)
+        </button>
+        <span style="font-size: 11px; color: var(--text-muted);">
+          Fiche synchronisée avec la base Google Sheets maîtresse.
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 6;
+
+    function updateProgress(step) {
+      const pct = Math.round((step / totalSteps) * 100);
+      document.getElementById('progressBar').style.width = pct + '%';
+    }
+
+    function allerEtape(step) {
+      // Masquer l'étape courante
+      document.getElementById(`step${currentStep}`).classList.remove('active');
+      // Afficher la nouvelle
+      document.getElementById(`step${step}`).classList.add('active');
+      currentStep = step;
+      updateProgress(step);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function choisirPriorite(priorite, elem) {
+      document.querySelectorAll('.priority-card').forEach(c => c.classList.remove('selected'));
+      elem.classList.add('selected');
+      document.getElementById('repPriorite').value = priorite;
+    }
+
+    function soumettreBilan(e) {
+      e.preventDefault();
+      
+      const nom = document.getElementById('nomClient').value || "Sophie";
+      const prenom = nom.split(' ')[0];
+      const questionPerso = document.getElementById('repQuestionPerso').value;
+
+      document.getElementById('synPrenom').innerText = prenom;
+      document.getElementById('synQuestionRappel').innerText = `« ${questionPerso} »`;
+
+      // Masquer le formulaire et afficher l'écran de synthèse
+      document.getElementById('auditForm').style.display = 'none';
+      document.getElementById('synthesisScreen').style.display = 'block';
+      document.getElementById('progressBar').style.width = '100%';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
