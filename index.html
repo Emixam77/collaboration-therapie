@@ -452,15 +452,23 @@
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center;">
+          <button onclick="syncDepuisGoogleSheet(true)" id="btnRefreshSheet" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid var(--border-soft); color: var(--text-main); padding: 6px 12px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; cursor: pointer;">
+            <span id="refreshIcon">🔄</span> Actualiser Google Sheet
+          </button>
           <a href="audit.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); color: var(--accent); padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none;">
             <span>📋</span>
             <span>Outil d'Audit Bilan (Axe 2) ↗</span>
           </a>
-          <a href="javascript:alert('Ouverture de votre base Google Sheets maîtresse...\nChaque nouvelle ligne ajoutée crée instantanément une nouvelle boutique partenaire !')" class="sheet-sync-pill">
+          <a href="https://docs.google.com/spreadsheets/d/1fhH67dRN6gjUNl8MVV9DCJRFsat_PYJIqgHczQRO3W4/edit#gid=0" target="_blank" class="sheet-sync-pill">
             <span>📊</span>
-            <span>Ouvrir ma base Google Sheets</span>
+            <span>Ouvrir ma base Google Sheets ↗</span>
           </a>
         </div>
+      </div>
+
+      <div id="liveSyncAlert" style="font-size: 12px; color: #137333; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #137333;"></span>
+        <span>Synchronisation en direct avec l'onglet <strong>Système Atelier</strong> de votre Google Sheet</span>
       </div>
 
       <table class="shop-table">
@@ -472,65 +480,14 @@
             <th>Tarif fixé par Lynda (Google Sheet)</th>
             <th>Inscrits / Jauge</th>
             <th>Recettes Stripe</th>
-            <th>Lien Privé Magasin (Sans fuite de données)</th>
+            <th>Lien Privé Magasin</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="shopTableBody">
+          <!-- Chargé dynamiquement depuis Google Sheets -->
           <tr>
-            <td>
-              <strong>🌿 L'Herboristerie des Alpages</strong><br/>
-              <span style="font-size: 11px; color: var(--text-muted);">Annecy (74)</span>
-            </td>
-            <td>Marion V.</td>
-            <td><span class="badge-status badge-valide">Planifié (26 Sept)</span></td>
-            <td>
-              <strong style="color: var(--primary); font-size: 14px;">35 €</strong>
-              <div style="font-size: 10px; color: var(--text-muted);">Synchronisé Sheet</div>
-            </td>
-            <td><strong>7 / 10</strong> inscrits</td>
-            <td style="color: var(--primary); font-weight: 700;">245 €</td>
-            <td>
-              <button class="btn-copy-url" onclick="alert('Lien secret copié :\nhttps://app.lynda-therapie.com/espace/alpages?token=sec_7498a\n\nMarion ne verra strictement AUCUN autre magasin !')">
-                🔗 Copier lien privé de Marion
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>🍵 L'Atelier Harmonie & Thés</strong><br/>
-              <span style="font-size: 11px; color: var(--text-muted);">Lyon (69)</span>
-            </td>
-            <td>Alexandre M.</td>
-            <td><span class="badge-status badge-encours">Phase de Vote (9/6)</span></td>
-            <td>
-              <strong style="color: var(--primary); font-size: 14px;">30 €</strong>
-              <div style="font-size: 10px; color: var(--text-muted);">Synchronisé Sheet</div>
-            </td>
-            <td>En attente date</td>
-            <td style="color: var(--text-muted);">0 €</td>
-            <td>
-              <button class="btn-copy-url" onclick="alert('Lien secret copié pour Alexandre.')">
-                🔗 Copier lien privé d'Alexandre
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>🌸 Maison Sérénité Nature</strong><br/>
-              <span style="font-size: 11px; color: var(--text-muted);">Chambéry (73)</span>
-            </td>
-            <td>Émilie B.</td>
-            <td><span class="badge-status" style="background:#F4EFEB; color:#888;">Nouveau magasin</span></td>
-            <td>
-              <strong style="color: var(--primary); font-size: 14px;">40 €</strong>
-              <div style="font-size: 10px; color: var(--text-muted);">Synchronisé Sheet</div>
-            </td>
-            <td>Configuration</td>
-            <td style="color: var(--text-muted);">0 €</td>
-            <td>
-              <button class="btn-copy-url" onclick="alert('Lien secret généré pour Émilie.')">
-                🔗 Copier lien privé d'Émilie
-              </button>
+            <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">
+              ⏳ Chargement en direct depuis votre Google Sheet...
             </td>
           </tr>
         </tbody>
@@ -816,6 +773,123 @@
     function fermerModalAffiche() {
       document.getElementById('modalAffiche').classList.remove('active');
     }
+
+    // SYNCHRONISATION EN DIRECT AVEC LE GOOGLE SHEET (ONGLET SYSTÈME ATELIER)
+    const GOOGLE_SHEET_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1fhH67dRN6gjUNl8MVV9DCJRFsat_PYJIqgHczQRO3W4/gviz/tq?tqx=out:json&sheet=Syst%C3%A8me%20Atelier";
+    let boutiquesEnLigne = [];
+
+    async function syncDepuisGoogleSheet(afficherNotification = false) {
+      const btn = document.getElementById('btnRefreshSheet');
+      const icon = document.getElementById('refreshIcon');
+      if (icon) icon.style.display = 'inline-block';
+      if (btn) btn.style.opacity = '0.7';
+
+      try {
+        const res = await fetch(GOOGLE_SHEET_GVIZ_URL + '&_nocache=' + Date.now());
+        const text = await res.text();
+        const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+        const data = JSON.parse(jsonStr);
+        const rows = data.table?.rows || [];
+
+        boutiquesEnLigne = rows.map(r => {
+          const getVal = idx => (r.c && r.c[idx] && r.c[idx].v !== undefined) ? r.c[idx].v : '';
+          return {
+            id: String(getVal(0) || 'mag-00'),
+            nom: String(getVal(1) || 'Magasin Partenaire'),
+            ville: String(getVal(2) || ''),
+            responsable: String(getVal(3) || ''),
+            tarif: Number(getVal(4) || 35),
+            capacite: Number(getVal(5) || 10),
+            theme1Titre: String(getVal(6) || ''),
+            theme1Desc: String(getVal(7) || ''),
+            theme1Tarif: Number(getVal(8) || getVal(4) || 35),
+            theme2Titre: String(getVal(9) || ''),
+            theme2Desc: String(getVal(10) || ''),
+            theme2Tarif: Number(getVal(11) || getVal(4) || 35),
+            theme3Titre: String(getVal(12) || ''),
+            theme3Desc: String(getVal(13) || ''),
+            theme3Tarif: Number(getVal(14) || getVal(4) || 35),
+            statut: String(getVal(15) || 'Phase de Vote'),
+            dateHeure: String(getVal(16) || 'À définir'),
+            places: String(getVal(17) || '0 / ' + (getVal(5) || 10)),
+            recettes: Number(getVal(18) || 0),
+            lienPrive: String(getVal(19) || '')
+          };
+        });
+
+        rendreTableauAdmin(boutiquesEnLigne);
+
+        if (afficherNotification) {
+          alert(`✅ Google Sheet synchronisé en direct !\n\n${boutiquesEnLigne.length} boutique(s) active(s) trouvée(s) dans votre feuille.`);
+        }
+      } catch (err) {
+        console.error('Erreur chargement Google Sheet :', err);
+        document.getElementById('shopTableBody').innerHTML = `
+          <tr><td colspan="7" style="text-align: center; color: #B35E3B; padding: 18px;">
+            ⚠️ Impossible de lire Google Sheet en direct. Vérifiez votre connexion.
+          </td></tr>`;
+      } finally {
+        if (btn) btn.style.opacity = '1';
+      }
+    }
+
+    function rendreTableauAdmin(magasins) {
+      const tbody = document.getElementById('shopTableBody');
+      if (!tbody) return;
+
+      if (magasins.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 28px; color: var(--text-muted);">
+              📭 Aucune boutique active dans votre Google Sheet.<br/>
+              <span style="font-size: 11px;">Ajoutez une ligne dans l'onglet <strong>Système Atelier</strong> pour faire apparaître un partenaire.</span>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = magasins.map(m => {
+        const estValide = m.statut.toLowerCase().includes('planifié') || m.statut.toLowerCase().includes('valide');
+        const badgeClass = estValide ? 'badge-valide' : 'badge-encours';
+        return `
+          <tr>
+            <td>
+              <strong>🌿 ${m.nom}</strong><br/>
+              <span style="font-size: 11px; color: var(--text-muted);">${m.ville}</span>
+            </td>
+            <td>${m.responsable}</td>
+            <td>
+              <span class="badge-status ${badgeClass}">${m.statut}</span>
+            </td>
+            <td>
+              <strong style="color: var(--primary); font-size: 14px;">${m.tarif} €</strong>
+              <div style="font-size: 10px; color: var(--text-muted);">Google Sheet (Temps Réel)</div>
+            </td>
+            <td><strong>${m.places}</strong></td>
+            <td style="color: var(--primary); font-weight: 700;">${m.recettes} €</td>
+            <td>
+              <button class="btn-copy-url" onclick="copierLienMagasin('${m.id}', '${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}')">
+                🔗 Copier lien de ${m.responsable.split(' ')[0]}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function copierLienMagasin(id, nomMagasin, nomResp) {
+      const url = `${window.location.origin}/?magasin=${id}`;
+      navigator.clipboard.writeText(url).then(() => {
+        alert(`Lien privé copié pour ${nomResp} (${nomMagasin}) :\n${url}\n\nCe lien isole complètement cette boutique des autres !`);
+      }).catch(() => {
+        prompt(`Lien privé pour ${nomResp} :`, url);
+      });
+    }
+
+    // Chargement automatique au démarrage
+    window.addEventListener('DOMContentLoaded', () => {
+      syncDepuisGoogleSheet(false);
+    });
   </script>
 </body>
 </html>

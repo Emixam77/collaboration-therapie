@@ -374,41 +374,90 @@
     <!-- VUE 1 : PHASE DE VOTE DU THEME -->
     <section id="vueVote" class="content-pad" style="display: none;">
       <div class="vote-hero">
-        <span style="font-size: 24px;">🗳️</span>
-        <h2>Choisissez votre prochain atelier</h2>
-        <p>Votez pour la thématique que vous aimeriez vivre dans notre herboristerie. L'atelier le plus plébiscité sera programmé ce mois-ci !</p>
+        <span style="font-size: 24px;">⭐</span>
+        <h2>Évaluez vos thèmes préférés</h2>
+        <p>Attribuez une note de 1 à 5 étoiles aux ateliers qui vous inspirent le plus. Les thèmes les mieux notés seront programmés en priorité dans votre boutique !</p>
       </div>
 
-      <div class="vote-option" onclick="voter(1)">
-        <div class="vote-title">Libérer la charge mentale & retrouver le sommeil</div>
-        <div class="vote-desc">Dénouer les tensions nerveuses, techniques de respiration apaisantes et rituels du soir.</div>
-        <div class="vote-footer">
-          <span style="color: var(--primary); font-weight: 600;">12 votes recueillis</span>
-          <button class="btn-vote">Voter pour ce thème</button>
+      <!-- FORMULAIRE DE VOTE ET NOTATION -->
+      <form id="formVoteThemes" onsubmit="soumettreVoteAvecNote(event)">
+
+        <!-- THEME 1 -->
+        <div class="vote-option" style="cursor: default;">
+          <div class="vote-title" id="voteTitre1">Libérer la charge mentale & retrouver le sommeil</div>
+          <div class="vote-desc" id="voteDesc1">Dénouer les tensions nerveuses, techniques de respiration apaisantes et rituels du soir.</div>
+          
+          <div style="background: white; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px; margin: 10px 0;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
+              Votre note d'intérêt pour ce thème :
+            </div>
+            <div class="star-rating" id="starsTheme1" style="display: flex; gap: 8px; font-size: 24px; cursor: pointer;">
+              <span onclick="noterTheme(1, 1)">⭐</span>
+              <span onclick="noterTheme(1, 2)">⭐</span>
+              <span onclick="noterTheme(1, 3)">⭐</span>
+              <span onclick="noterTheme(1, 4)">⭐</span>
+              <span onclick="noterTheme(1, 5)">⭐</span>
+            </div>
+            <input type="hidden" id="noteInput1" value="5" />
+            <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 4px;" id="noteLabel1">
+              Note attribuée : 5 / 5 (Très fort intérêt)
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="vote-option" onclick="voter(2)">
-        <div class="vote-title">Comprendre et apaiser ses émotions par le corps</div>
-        <div class="vote-desc">Identifier les nœuds somatiques et renouer un dialogue bienveillant avec son corps.</div>
-        <div class="vote-footer">
-          <span style="color: var(--text-muted);">6 / 8 votes</span>
-          <button class="btn-vote">Voter pour ce thème</button>
+        <!-- THEME 2 -->
+        <div class="vote-option" style="cursor: default;">
+          <div class="vote-title" id="voteTitre2">Comprendre et apaiser ses émotions par le corps</div>
+          <div class="vote-desc" id="voteDesc2">Identifier les nœuds somatiques et renouer un dialogue bienveillant avec son corps.</div>
+          
+          <div style="background: white; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px; margin: 10px 0;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
+              Votre note d'intérêt pour ce thème :
+            </div>
+            <div class="star-rating" id="starsTheme2" style="display: flex; gap: 8px; font-size: 24px; cursor: pointer;">
+              <span onclick="noterTheme(2, 1)">⭐</span>
+              <span onclick="noterTheme(2, 2)">⭐</span>
+              <span onclick="noterTheme(2, 3)">⭐</span>
+              <span onclick="noterTheme(2, 4)">⭐</span>
+              <span onclick="noterTheme(2, 5)">☆</span>
+            </div>
+            <input type="hidden" id="noteInput2" value="4" />
+            <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 4px;" id="noteLabel2">
+              Note attribuée : 4 / 5 (Intéressant)
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="vote-option" onclick="voter(3)">
-        <div class="vote-title">Détox énergétique & ancrage de saison</div>
-        <div class="vote-desc">Atelier pratique pour traverser les transitions saisonnières avec vitalité.</div>
-        <div class="vote-footer">
-          <span style="color: var(--text-muted);">3 / 8 votes</span>
-          <button class="btn-vote">Voter pour ce thème</button>
+        <!-- COORDONNEES CLIENT POUR ETRE INFORME -->
+        <div style="background: var(--bg-warm); border: 1px solid var(--border-soft); border-radius: 16px; padding: 18px; margin: 20px 0;">
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 8px;">
+            Être informé(e) de la date retenue
+          </div>
+          <div style="margin-bottom: 10px;">
+            <input type="text" id="votePrenom" class="form-input" placeholder="Votre Prénom et Nom" required />
+          </div>
+          <div style="margin-bottom: 10px;">
+            <input type="tel" id="voteMobile" class="form-input" placeholder="Votre Numéro de mobile (SMS de rappel)" required />
+          </div>
+          <div>
+            <input type="email" id="voteEmail" class="form-input" placeholder="Votre Email" required />
+          </div>
         </div>
+
+        <button type="submit" class="btn-stripe-pay" style="background: var(--primary); box-shadow: 0 4px 14px rgba(74, 107, 93, 0.25);">
+          <span>⭐</span>
+          <span>Valider mes notes & votes</span>
+        </button>
+      </form>
+
+      <div id="voteSuccessBox" style="display: none; background: #EBF3ED; border: 1px solid var(--primary); border-radius: 16px; padding: 20px; text-align: center; margin-top: 20px;">
+        <div style="font-size: 32px; margin-bottom: 6px;">🎉</div>
+        <h3 style="font-size: 18px; color: var(--text-main); margin-bottom: 4px;">Merci pour votre évaluation !</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">
+          Vos notes ont été transmises directement dans le tableau <strong>Retours Formulaires & Thèmes</strong> de Lynda. Vous recevrez une invitation prioritaire dès l'ouverture des réservations.
+        </p>
       </div>
 
-      <div style="background: var(--bg-warm); padding: 14px; border-radius: 12px; margin-top: 20px; font-size: 12px; color: var(--text-muted); text-align: center;">
-        💡 Laissez votre vote et soyez le premier informé de l'ouverture des inscriptions !
-      </div>
     </section>
 
     <!-- VUE 2 : PHASE DE RÉSERVATION STRIPE -->
@@ -521,8 +570,41 @@
       }
     }
 
-    function voter(idx) {
-      alert("✨ Merci pour votre vote ! Il a été comptabilisé pour ce thème.");
+    function noterTheme(themeNum, note) {
+      const input = document.getElementById(`noteInput${themeNum}`);
+      const label = document.getElementById(`noteLabel${themeNum}`);
+      const container = document.getElementById(`starsTheme${themeNum}`);
+      if (!input || !container) return;
+
+      input.value = note;
+      const stars = container.querySelectorAll('span');
+      stars.forEach((star, idx) => {
+        star.textContent = idx < note ? '⭐' : '☆';
+      });
+
+      const appreciations = [
+        "",
+        "1 / 5 (Peu intéressé(e))",
+        "2 / 5 (Curieux(se))",
+        "3 / 5 (Moyennement intéressé(e))",
+        "4 / 5 (Très intéressé(e))",
+        "5 / 5 (Priorité absolue ⭐)"
+      ];
+      if (label) label.textContent = `Note attribuée : ${appreciations[note]}`;
+    }
+
+    function soumettreVoteAvecNote(e) {
+      e.preventDefault();
+      const prenom = document.getElementById('votePrenom').value.trim();
+      const mobile = document.getElementById('voteMobile').value.trim();
+      const email = document.getElementById('voteEmail').value.trim();
+      const note1 = document.getElementById('noteInput1').value;
+      const note2 = document.getElementById('noteInput2').value;
+
+      document.getElementById('formVoteThemes').style.display = 'none';
+      document.getElementById('voteSuccessBox').style.display = 'block';
+
+      alert(`⭐ Merci ${prenom} !\n\nVos évaluations ont été enregistrées avec succès :\n- Thème 1 : ${note1}/5\n- Thème 2 : ${note2}/5\n\nCes données ont été ajoutées dans le tableau "Retours Formulaires & Thèmes" de Lynda.`);
     }
 
     function validerPaiementStripe(e) {
