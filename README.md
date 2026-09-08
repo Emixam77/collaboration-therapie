@@ -19,4 +19,4 @@ Plateforme collaborative éco-systémique et outil de bilan d'éveil pour les at
 
 ## 📊 Google Sheets Dashboard
 - **Feuille Maîtresse** : `Système Atelier` dans le classeur de contrôle.
-- **Lien Direct** : [Google Sheet Système Atelier](https://docs.google.com/spreadsheets/d/1fhH67dRN6gjUNl8MVV9DCJRFsat_PYJIqgHczQRO3W4/edit#gid=0)
+- **Lien Direct** : [Google Sheet Système Atelier](https://docs.google.com/spreadsheets/d/1TprsCw9JAqZjLwCYvo7c4QQ1FsLv5lVSwZLsvmcNSwQ/edit#gid=0)
