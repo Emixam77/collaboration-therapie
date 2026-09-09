@@ -366,8 +366,8 @@
 
     <!-- EN-TETE DE LA BOUTIQUE PARTENAIRE -->
     <header class="shop-header">
-      <div class="shop-badge">L'Herboristerie des Alpages</div>
-      <h1 class="shop-title">Espace Bien-être & Soins</h1>
+      <div class="shop-badge" id="clientShopBadge">L'Herboristerie des Alpages</div>
+      <h1 class="shop-title" id="clientShopTitle">Espace Bien-être & Soins</h1>
       <p class="therapist-sub">En partenariat exclusif avec Lynda, Thérapeute</p>
     </header>
 
@@ -376,55 +376,16 @@
       <div class="vote-hero">
         <span style="font-size: 24px;">⭐</span>
         <h2>Évaluez vos thèmes préférés</h2>
-        <p>Attribuez une note de 1 à 5 étoiles aux ateliers qui vous inspirent le plus. Les thèmes les mieux notés seront programmés en priorité dans votre boutique !</p>
+        <p id="clientVoteIntro">Attribuez une note de 1 à 5 étoiles aux ateliers qui vous inspirent le plus. Les thèmes les mieux notés seront programmés en priorité dans votre boutique !</p>
       </div>
 
       <!-- FORMULAIRE DE VOTE ET NOTATION -->
       <form id="formVoteThemes" onsubmit="soumettreVoteAvecNote(event)">
 
-        <!-- THEME 1 -->
-        <div class="vote-option" style="cursor: default;">
-          <div class="vote-title" id="voteTitre1">Libérer la charge mentale & retrouver le sommeil</div>
-          <div class="vote-desc" id="voteDesc1">Dénouer les tensions nerveuses, techniques de respiration apaisantes et rituels du soir.</div>
-          
-          <div style="background: white; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px; margin: 10px 0;">
-            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
-              Votre note d'intérêt pour ce thème :
-            </div>
-            <div class="star-rating" id="starsTheme1" style="display: flex; gap: 8px; font-size: 24px; cursor: pointer;">
-              <span onclick="noterTheme(1, 1)">⭐</span>
-              <span onclick="noterTheme(1, 2)">⭐</span>
-              <span onclick="noterTheme(1, 3)">⭐</span>
-              <span onclick="noterTheme(1, 4)">⭐</span>
-              <span onclick="noterTheme(1, 5)">⭐</span>
-            </div>
-            <input type="hidden" id="noteInput1" value="5" />
-            <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 4px;" id="noteLabel1">
-              Note attribuée : 5 / 5 (Très fort intérêt)
-            </div>
-          </div>
-        </div>
-
-        <!-- THEME 2 -->
-        <div class="vote-option" style="cursor: default;">
-          <div class="vote-title" id="voteTitre2">Comprendre et apaiser ses émotions par le corps</div>
-          <div class="vote-desc" id="voteDesc2">Identifier les nœuds somatiques et renouer un dialogue bienveillant avec son corps.</div>
-          
-          <div style="background: white; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px; margin: 10px 0;">
-            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
-              Votre note d'intérêt pour ce thème :
-            </div>
-            <div class="star-rating" id="starsTheme2" style="display: flex; gap: 8px; font-size: 24px; cursor: pointer;">
-              <span onclick="noterTheme(2, 1)">⭐</span>
-              <span onclick="noterTheme(2, 2)">⭐</span>
-              <span onclick="noterTheme(2, 3)">⭐</span>
-              <span onclick="noterTheme(2, 4)">⭐</span>
-              <span onclick="noterTheme(2, 5)">☆</span>
-            </div>
-            <input type="hidden" id="noteInput2" value="4" />
-            <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 4px;" id="noteLabel2">
-              Note attribuée : 4 / 5 (Intéressant)
-            </div>
+        <!-- CONTENEUR DES THÈMES DYNAMIQUES DU MAGASIN -->
+        <div id="clientThemesList">
+          <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
+            ⏳ Chargement des thèmes de votre boutique...
           </div>
         </div>
 
@@ -453,7 +414,7 @@
       <div id="voteSuccessBox" style="display: none; background: #EBF3ED; border: 1px solid var(--primary); border-radius: 16px; padding: 20px; text-align: center; margin-top: 20px;">
         <div style="font-size: 32px; margin-bottom: 6px;">🎉</div>
         <h3 style="font-size: 18px; color: var(--text-main); margin-bottom: 4px;">Merci pour votre évaluation !</h3>
-        <p style="font-size: 13px; color: var(--text-muted);">
+        <p style="font-size: 13px; color: var(--text-muted);" id="voteSuccessMsg">
           Vos notes ont été transmises directement dans le tableau <strong>Retours Formulaires & Thèmes</strong> de Lynda. Vous recevrez une invitation prioritaire dès l'ouverture des réservations.
         </p>
       </div>
@@ -463,33 +424,33 @@
     <!-- VUE 2 : PHASE DE RÉSERVATION STRIPE -->
     <section id="vuePay" class="content-pad">
       
-      <div class="spots-left-pill">
+      <div class="spots-left-pill" id="clientSpotsPill">
         <span>🔥</span>
-        <span>Plus que 3 places disponibles</span>
+        <span id="clientSpotsText">Places limitées en petit comité</span>
       </div>
 
       <div class="event-card">
-        <h2 class="event-title">Atelier Holistique : Libérer la charge mentale</h2>
-        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;">
-          Une parenthèse chaleureuse de 1h30 en petit comité dans l'espace cosy de l'Herboristerie des Alpages.
+        <h2 class="event-title" id="clientEventTitle">Atelier Holistique : Libérer la charge mentale</h2>
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.4;" id="clientEventDesc">
+          Une parenthèse chaleureuse de 1h30 en petit comité dans l'espace cosy de la boutique.
         </p>
 
         <div class="event-meta-grid">
           <div class="meta-item">
             <div class="meta-label">Date</div>
-            <div class="meta-val">Samedi 26 Septembre</div>
+            <div class="meta-val" id="clientMetaDate">Samedi 26 Septembre</div>
           </div>
           <div class="meta-item">
             <div class="meta-label">Horaire</div>
-            <div class="meta-val">14h30 - 16h00</div>
+            <div class="meta-val" id="clientMetaHoraire">14h30 - 16h00</div>
           </div>
           <div class="meta-item">
             <div class="meta-label">Lieu</div>
-            <div class="meta-val">14 rue des Artisans, Annecy</div>
+            <div class="meta-val" id="clientMetaLieu">Boutique Partenaire</div>
           </div>
           <div class="meta-item">
             <div class="meta-label">Tarif</div>
-            <div class="meta-val" style="color: var(--primary);">35,00 €</div>
+            <div class="meta-val" id="clientMetaTarif" style="color: var(--primary);">35,00 €</div>
           </div>
         </div>
       </div>
@@ -506,25 +467,25 @@
       <form id="bookingForm" onsubmit="validerPaiementStripe(event)">
         <div class="form-group">
           <label class="form-label">Votre Prénom et Nom</label>
-          <input type="text" class="form-input" placeholder="Ex: Sophie Bernard" required />
+          <input type="text" class="form-input" id="payClientNom" placeholder="Ex: Sophie Bernard" required />
         </div>
 
         <div class="form-group">
           <label class="form-label">Adresse Email (pour recevoir votre confirmation)</label>
-          <input type="email" class="form-input" placeholder="sophie@exemple.com" required />
+          <input type="email" class="form-input" id="payClientEmail" placeholder="sophie@exemple.com" required />
         </div>
 
         <div class="form-group">
           <label class="form-label">Numéro de mobile (rappel SMS / Telegram)</label>
-          <input type="tel" class="form-input" placeholder="06 12 34 56 78" required />
+          <input type="tel" class="form-input" id="payClientMobile" placeholder="06 12 34 56 78" required />
         </div>
 
-        <!-- SIMULATION BOUTON STRIPE -->
+        <!-- BOUTON STRIPE DYNAMIQUE -->
         <button type="submit" class="btn-stripe-pay">
           <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
           </svg>
-          <span>Régler 35,00 € avec Stripe</span>
+          <span id="btnStripeLabel">Régler 35,00 € avec Stripe</span>
         </button>
 
         <div class="stripe-guarantee">
@@ -539,10 +500,10 @@
         <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
           Merci pour votre confiance. Votre confirmation et reçu de paiement Stripe ont été envoyés par email.
         </p>
-        <div style="background: var(--bg-warm); padding: 14px; border-radius: 12px; font-size: 12px; text-align: left;">
+        <div style="background: var(--bg-warm); padding: 14px; border-radius: 12px; font-size: 12px; text-align: left;" id="clientSuccessDetails">
           <strong>📅 Rendez-vous :</strong><br/>
           Samedi 26 Septembre à 14h30<br/>
-          À l'Herboristerie des Alpages (Annecy)
+          À la boutique partenaire
         </div>
       </div>
 
@@ -551,6 +512,10 @@
   </div>
 
   <script>
+    const GOOGLE_SHEET_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1TprsCw9JAqZjLwCYvo7c4QQ1FsLv5lVSwZLsvmcNSwQ/gviz/tq?tqx=out:json&sheet=Syst%C3%A8me%20Atelier";
+    let boutiqueCourante = null;
+    let notesThemes = {};
+
     function afficherVue(vue) {
       const vVote = document.getElementById('vueVote');
       const vPay = document.getElementById('vuePay');
@@ -570,6 +535,144 @@
       }
     }
 
+    async function initialiserPageClient() {
+      const params = new URLSearchParams(window.location.search);
+      const magParam = params.get('magasin');
+
+      try {
+        const res = await fetch(GOOGLE_SHEET_GVIZ_URL + '&_nocache=' + Date.now());
+        const text = await res.text();
+        const jsonStr = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+        const data = JSON.parse(jsonStr);
+        const rows = data.table?.rows || [];
+
+        const boutiques = rows.map((r, idx) => {
+          const getVal = colIdx => (r.c && r.c[colIdx] && r.c[colIdx].v !== undefined) ? r.c[colIdx].v : '';
+          const nom = String(getVal(1) || '').trim();
+          if (!nom) return null;
+          return {
+            id: String(getVal(0) || `mag-${idx + 1}`),
+            nom: nom,
+            ville: String(getVal(2) || ''),
+            responsable: String(getVal(3) || ''),
+            tarif: Number(getVal(4) || 35),
+            capacite: Number(getVal(5) || 10),
+            theme1Titre: String(getVal(6) || ''),
+            theme1Desc: String(getVal(7) || ''),
+            theme1Tarif: Number(getVal(8) || getVal(4) || 35),
+            theme2Titre: String(getVal(9) || ''),
+            theme2Desc: String(getVal(10) || ''),
+            theme2Tarif: Number(getVal(11) || getVal(4) || 35),
+            theme3Titre: String(getVal(12) || ''),
+            theme3Desc: String(getVal(13) || ''),
+            theme3Tarif: Number(getVal(14) || getVal(4) || 35),
+            statut: String(getVal(15) || 'Phase de Vote'),
+            dateHeure: String(getVal(16) || 'Date en cours de fixation'),
+            places: String(getVal(17) || '0 / 10')
+          };
+        }).filter(Boolean);
+
+        if (magParam) {
+          boutiqueCourante = boutiques.find(b => 
+            b.id.toLowerCase() === magParam.toLowerCase() ||
+            b.nom.toLowerCase().includes(magParam.toLowerCase())
+          );
+        }
+
+        if (!boutiqueCourante && boutiques.length > 0) {
+          boutiqueCourante = boutiques[0];
+        }
+
+        if (boutiqueCourante) {
+          appliquerDonneesBoutique(boutiqueCourante);
+        }
+      } catch (err) {
+        console.error('Erreur chargement Google Sheet client :', err);
+      }
+    }
+
+    function appliquerDonneesBoutique(b) {
+      document.title = `Atelier Bien-être & Thérapie — ${b.nom}`;
+
+      // 1. En-tête
+      const badge = document.getElementById('clientShopBadge');
+      if (badge) badge.textContent = `${b.nom} • ${b.ville}`;
+
+      const title = document.getElementById('clientShopTitle');
+      if (title) title.textContent = `Atelier Bien-être & Soins`;
+
+      // 2. Thèmes pour le vote
+      const themesList = document.getElementById('clientThemesList');
+      if (themesList) {
+        const liste = [];
+        if (b.theme1Titre) liste.push({ num: 1, titre: b.theme1Titre, desc: b.theme1Desc, tarif: b.theme1Tarif });
+        if (b.theme2Titre) liste.push({ num: 2, titre: b.theme2Titre, desc: b.theme2Desc, tarif: b.theme2Tarif });
+        if (b.theme3Titre) liste.push({ num: 3, titre: b.theme3Titre, desc: b.theme3Desc, tarif: b.theme3Tarif });
+
+        themesList.innerHTML = liste.map((t, idx) => {
+          notesThemes[t.num] = 5; // Note par défaut
+          return `
+            <div class="vote-option" style="cursor: default;">
+              <div class="vote-title">🌱 Thème ${idx + 1} : ${t.titre}</div>
+              <div class="vote-desc">${t.desc || "Atelier bienveillant animé par Lynda."}</div>
+              
+              <div style="background: white; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px; margin: 10px 0;">
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
+                  Votre note d'intérêt pour ce thème :
+                </div>
+                <div class="star-rating" id="starsTheme${t.num}" style="display: flex; gap: 8px; font-size: 24px; cursor: pointer;">
+                  <span onclick="noterTheme(${t.num}, 1)">⭐</span>
+                  <span onclick="noterTheme(${t.num}, 2)">⭐</span>
+                  <span onclick="noterTheme(${t.num}, 3)">⭐</span>
+                  <span onclick="noterTheme(${t.num}, 4)">⭐</span>
+                  <span onclick="noterTheme(${t.num}, 5)">⭐</span>
+                </div>
+                <input type="hidden" id="noteInput${t.num}" value="5" />
+                <div style="font-size: 11px; color: var(--primary); font-weight: 600; margin-top: 4px;" id="noteLabel${t.num}">
+                  Note attribuée : 5 / 5 (Priorité absolue ⭐)
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 3. Vue Réservation & Paiement
+      const evTitle = document.getElementById('clientEventTitle');
+      if (evTitle) evTitle.textContent = `Atelier : ${b.theme1Titre || 'Atelier Bien-être & Soins'}`;
+
+      const evDesc = document.getElementById('clientEventDesc');
+      if (evDesc) evDesc.textContent = `Une parenthèse ressourçante de 1h30 animée par Lynda dans l'espace cosy de ${b.nom}.`;
+
+      const mDate = document.getElementById('clientMetaDate');
+      if (mDate) mDate.textContent = b.dateHeure;
+
+      const mLieu = document.getElementById('clientMetaLieu');
+      if (mLieu) mLieu.textContent = `${b.nom} (${b.ville})`;
+
+      const mTarif = document.getElementById('clientMetaTarif');
+      if (mTarif) mTarif.textContent = `${b.tarif},00 €`;
+
+      const btnStripe = document.getElementById('btnStripeLabel');
+      if (btnStripe) btnStripe.textContent = `Régler ${b.tarif},00 € avec Stripe`;
+
+      const rdvDetails = document.getElementById('clientSuccessDetails');
+      if (rdvDetails) {
+        rdvDetails.innerHTML = `
+          <strong>📅 Rendez-vous :</strong><br/>
+          ${b.dateHeure}<br/>
+          À <strong>${b.nom}</strong> (${b.ville})
+        `;
+      }
+
+      // Si le statut est "Phase de Vote", on affiche l'onglet vote en premier !
+      if (b.statut.toLowerCase().includes('vote')) {
+        afficherVue('vote');
+      } else {
+        afficherVue('pay');
+      }
+    }
+
     function noterTheme(themeNum, note) {
       const input = document.getElementById(`noteInput${themeNum}`);
       const label = document.getElementById(`noteLabel${themeNum}`);
@@ -577,6 +680,7 @@
       if (!input || !container) return;
 
       input.value = note;
+      notesThemes[themeNum] = note;
       const stars = container.querySelectorAll('span');
       stars.forEach((star, idx) => {
         star.textContent = idx < note ? '⭐' : '☆';
@@ -596,23 +700,29 @@
     function soumettreVoteAvecNote(e) {
       e.preventDefault();
       const prenom = document.getElementById('votePrenom').value.trim();
-      const mobile = document.getElementById('voteMobile').value.trim();
-      const email = document.getElementById('voteEmail').value.trim();
-      const note1 = document.getElementById('noteInput1').value;
-      const note2 = document.getElementById('noteInput2').value;
+      const shopNom = boutiqueCourante ? boutiqueCourante.nom : 'la boutique';
 
       document.getElementById('formVoteThemes').style.display = 'none';
       document.getElementById('voteSuccessBox').style.display = 'block';
 
-      alert(`⭐ Merci ${prenom} !\n\nVos évaluations ont été enregistrées avec succès :\n- Thème 1 : ${note1}/5\n- Thème 2 : ${note2}/5\n\nCes données ont été ajoutées dans le tableau "Retours Formulaires & Thèmes" de Lynda.`);
+      const recapNotes = Object.keys(notesThemes).map(k => `Thème ${k} : ${notesThemes[k]}/5`).join(', ');
+
+      alert(`⭐ Merci ${prenom} !\n\nVos évaluations pour ${shopNom} ont été enregistrées avec succès :\n${recapNotes}\n\nCes données ont été ajoutées dans le tableau "Retours Formulaires & Thèmes" de Lynda.`);
     }
 
     function validerPaiementStripe(e) {
       e.preventDefault();
+      const clientNom = document.getElementById('payClientNom').value.trim();
+      const tarif = boutiqueCourante ? boutiqueCourante.tarif : 35;
+      const shopNom = boutiqueCourante ? boutiqueCourante.nom : 'la boutique';
+
       document.getElementById('bookingForm').style.display = 'none';
       document.getElementById('successScreen').style.display = 'block';
-      alert("💳 [Simulation Stripe réussie]\n\n1. Paiement de 35€ validé direct sur le compte Stripe de Lynda.\n2. Alerte instantanée envoyée sur le Telegram de Lynda.\n3. Email de confirmation envoyé au client et au magasin.");
+
+      alert(`💳 [Simulation Stripe réussie]\n\n1. Paiement de ${tarif}€ validé directement sur le compte Stripe de Lynda.\n2. Réservation confirmée pour ${clientNom} à ${shopNom}.\n3. Alerte instantanée envoyée sur le Telegram de Lynda.`);
     }
+
+    window.addEventListener('DOMContentLoaded', initialiserPageClient);
   </script>
 </body>
 </html>
