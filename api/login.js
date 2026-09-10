@@ -75,7 +75,11 @@ export default async function handler(req, res) {
         const responsable = String(getVal(3) || 'Gérant·e');
         const formule = String(getVal(22) || 'Atelier Lynda (Standard)'); // Colonne W
         const statutAbonnement = String(getVal(23) || 'Actif');          // Colonne X
-        const dateEcheance = String(getVal(24) || '-');                 // Colonne Y
+        const rawDate = getVal(24) || '-';                              // Colonne Y
+        const dateMatch = String(rawDate).match(/Date\((\d+),(\d+),(\d+)\)/);
+        const dateEcheance = dateMatch
+          ? `${String(dateMatch[3]).padStart(2, '0')}/${String(Number(dateMatch[2]) + 1).padStart(2, '0')}/${dateMatch[1]}`
+          : String(rawDate);
         const compteEncaissement = String(getVal(25) || 'Non configuré'); // Colonne Z
 
         return res.status(200).json({
