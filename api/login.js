@@ -73,6 +73,10 @@ export default async function handler(req, res) {
         const nom = String(getVal(1) || 'Magasin Partenaire');
         const ville = String(getVal(2) || '');
         const responsable = String(getVal(3) || 'Gérant·e');
+        const formule = String(getVal(22) || 'Atelier Lynda (Standard)'); // Colonne W
+        const statutAbonnement = String(getVal(23) || 'Actif');          // Colonne X
+        const dateEcheance = String(getVal(24) || '-');                 // Colonne Y
+        const compteEncaissement = String(getVal(25) || 'Non configuré'); // Colonne Z
 
         return res.status(200).json({
           ok: true,
@@ -81,6 +85,10 @@ export default async function handler(req, res) {
           shopNom: nom,
           ville: ville,
           responsable: responsable,
+          formule: formule,
+          statutAbonnement: statutAbonnement,
+          dateEcheance: dateEcheance,
+          compteEncaissement: compteEncaissement,
           message: `Connexion réussie pour ${nom}`
         });
       }

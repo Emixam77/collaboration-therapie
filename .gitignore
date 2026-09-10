@@ -5,4 +5,5 @@ node_modules/
 .env*
 create_lynda_*.js
 update_*.js
+update_*.cjs
 scratch/

@@ -878,12 +878,37 @@
         <span>Synchronisation en direct avec l'onglet <strong>Système Atelier</strong> de votre Google Sheet</span>
       </div>
 
+      <!-- INDICATEURS FINANCIERS SOUS-LOCATION / ABONNEMENTS -->
+      <div class="sub-kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 18px;">
+        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid var(--accent); border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
+          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Revenus Récurrents (MRR)</div>
+          <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;" id="kpiMrrValeur">98 € / mois</div>
+          <div style="font-size: 11px; color: #137333; font-weight: 600;">✨ Sous-locations actives</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid var(--primary); border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
+          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Licences Magasins Actives</div>
+          <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;" id="kpiLicencesActives">2 boutiques</div>
+          <div style="font-size: 11px; color: var(--text-muted);">49€ / mois par boutique</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid #D97706; border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
+          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Périodes d'essai 14j</div>
+          <div style="font-size: 22px; font-weight: 800; color: #D97706; margin: 4px 0;" id="kpiEssais">1 boutique</div>
+          <div style="font-size: 11px; color: var(--text-muted);">En phase de découverte</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid #DC2626; border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
+          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Abonnements en pause</div>
+          <div style="font-size: 22px; font-weight: 800; color: #DC2626; margin: 4px 0;" id="kpiSuspendus">1 boutique</div>
+          <div style="font-size: 11px; color: var(--text-muted);">Accès protégé / suspendu</div>
+        </div>
+      </div>
+
       <table class="shop-table">
         <thead>
           <tr>
             <th>Magasin Partenaire</th>
             <th>Responsable</th>
             <th>Statut Atelier</th>
+            <th>Formule & Abonnement</th>
             <th>Tarif fixé (€)</th>
             <th>Inscrits / Jauge</th>
             <th>Accès Partenaire (Google Sheet)</th>
@@ -893,7 +918,7 @@
         <tbody id="shopTableBody">
           <!-- Chargé dynamiquement depuis Google Sheets -->
           <tr>
-            <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">
+            <td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">
               ⏳ Chargement en direct depuis votre Google Sheet...
             </td>
           </tr>
@@ -910,6 +935,35 @@
 
     <!-- ESPACE PARTENAIRE D'UN MAGASIN (SYNCHRONISÉ DYNAMIQUEMENT) -->
     <div id="shopSpaceContainer">
+
+      <!-- ECRAN SUSPENDU EN CAS DE LICENCE EN PAUSE -->
+      <div id="shopSuspendedCard" style="display: none; background: #FFFDF9; border: 2px dashed #E2B93B; border-radius: 20px; padding: 40px 24px; text-align: center; max-width: 680px; margin: 30px auto; box-shadow: var(--shadow-soft);">
+        <div style="font-size: 48px; margin-bottom: 14px;">⏸️</div>
+        <h2 style="font-size: 22px; font-weight: 800; color: #92400E; margin-bottom: 8px;">Votre Espace Atelier est Momentanément en Pause</h2>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;" id="shopSuspendedMsg">
+          Votre licence mensuelle à la plateforme est arrivée à échéance le <strong>31 Août 2026</strong>.<br/>
+          Vos réservations publiques sont momentanément désactivées pour protéger votre organisation.
+        </p>
+        <div style="background: white; border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: left; font-size: 13px;">
+          <strong style="color: var(--text-main);">🔒 Vos données restent précieusement conservées :</strong>
+          <div style="color: var(--text-muted); margin-top: 6px; line-height: 1.6;">
+            ✓ L'historique de vos ateliers et vos thèmes restent sauvegardés.<br/>
+            ✓ Les coordonnées de vos participants sont conservées en sécurité.<br/>
+            ✓ Réactivation instantanée dès le renouvellement.
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn-copy-url" style="background: var(--primary); color: white; border-color: var(--primary); padding: 12px 20px; font-size: 14px;" onclick="alert('Simulation : Redirection vers le paiement sécurisé Stripe pour régulariser votre abonnement (49 € / mois). Dès confirmation, votre espace est réactivé instantanément !')">
+            💳 Réactiver ma licence (49 € / mois)
+          </button>
+          <a href="https://wa.me/?text=Bonjour%20Lynda%2C%20je%20souhaite%20renouveler%20ma%20licence%20d%27ateliers." target="_blank" class="btn-copy-url" style="background: white; border-color: var(--border-soft); padding: 12px 20px; font-size: 14px; text-decoration: none;">
+            💬 Écrire à Lynda sur WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- CONTENU NORMAL DU MAGASIN (SI ACTIF OU ESSAI) -->
+      <div id="shopNormalContent">
 
       <!-- BANNIERE MAGASIN -->
       <section class="hero-zen">
@@ -954,11 +1008,70 @@
         </div>
       </section>
 
+      <!-- BANDEAU SOUS-LOCATION / ENCAISSEMENT DIRECT POUR BOUTIQUES AUTONOMES -->
+      <div id="shopAutonomousBanner" style="display: none; background: #EBF3EE; border: 1px solid #C4DEC8; border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 28px;">💳</span>
+            <div>
+              <strong style="color: var(--primary); font-size: 15px;" id="shopAutoTitreAbo">Licence Magasin Active (49 € / mois)</strong>
+              <div style="font-size: 12.5px; color: var(--text-muted);" id="shopAutoDescAbo">
+                Vos recettes d'ateliers sont versées directement sur votre compte bancaire (IBAN FR76 •••• 4892) — 0% de commission.
+              </div>
+            </div>
+          </div>
+          <button class="btn-copy-url" style="background: white; border-color: var(--primary); color: var(--primary); padding: 8px 14px; font-size: 12px;" onclick="document.getElementById('shopAutoCreatorBox').scrollIntoView({ behavior: 'smooth' })">
+            ➕ Créer / Programmer un atelier
+          </button>
+        </div>
+      </div>
+
       <!-- GRILLE CONTENU -->
       <div class="grid-duo">
 
         <!-- COLONNE GAUCHE : THEMES ET CALENDRIER -->
         <div style="display: flex; flex-direction: column; gap: 24px;">
+
+          <!-- CREATEUR D'ATELIER EN AUTONOMIE (POUR MAGASINS AUTONOMES) -->
+          <div class="card-zen" id="shopAutoCreatorBox" style="display: none; border-color: var(--primary); background: #FCFAF7;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center;">
+              <div>
+                <h3 class="card-title"><span>✨</span> Programmer un Atelier dans ma Boutique</h3>
+                <p class="card-desc">Vous organisez votre atelier en toute autonomie. Dès validation, vos affiches et réservations se mettent à jour.</p>
+              </div>
+              <span class="badge-status badge-valide">Mode Autonome</span>
+            </div>
+
+            <form onsubmit="enregistrerAtelierAutonome(event)" style="display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Intitulé de votre atelier</label>
+                <input type="text" id="autoInputTitre" class="auth-input" style="background: white;" value="Dégustation Thés Rares & Méditation sensorielle" required />
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Date & Heure</label>
+                  <input type="text" id="autoInputDate" class="auth-input" style="background: white;" value="Samedi 26 Septembre 2026 • 15h00" required />
+                </div>
+                <div>
+                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Tarif / place (€)</label>
+                  <input type="number" id="autoInputTarif" class="auth-input" style="background: white;" value="35" min="5" required />
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Nombre de places (Jauge)</label>
+                  <input type="number" id="autoInputPlaces" class="auth-input" style="background: white;" value="8" min="2" max="50" required />
+                </div>
+                <div>
+                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Intervenant</label>
+                  <input type="text" id="autoInputAnimateur" class="auth-input" style="background: white;" value="Équipe Magasin" />
+                </div>
+              </div>
+              <button type="submit" class="btn-submit-auth" style="margin-top: 4px; padding: 11px;">
+                🚀 Publier l'atelier dans mon calendrier et sur mes affiches
+              </button>
+            </form>
+          </div>
 
           <!-- LES VOTES CLIENTS / THEMES -->
           <div class="card-zen">
@@ -1075,6 +1188,8 @@
         </div>
 
       </div>
+
+      </div> <!-- /shopNormalContent -->
 
     </div>
 
@@ -1401,10 +1516,29 @@
               recettes: Number(getVal(18) || 0),
               lienPrive: String(getVal(19) || ''),
               username: String(getVal(20) || ''), // Colonne U (Identifiant Magasin)
-              password: String(getVal(21) || '')  // Colonne V (Mot de passe)
+              password: String(getVal(21) || ''), // Colonne V (Mot de passe)
+              formule: String(getVal(22) || 'Atelier Lynda (Standard)'), // Colonne W
+              statutAbonnement: String(getVal(23) || 'Actif'),          // Colonne X
+              dateEcheance: String(getVal(24) || '-'),                 // Colonne Y
+              compteEncaissement: String(getVal(25) || 'Non configuré') // Colonne Z
             };
           })
           .filter(Boolean);
+
+        // Calcul des KPIs d'abonnements en direct
+        const nbActifs = boutiquesEnLigne.filter(b => (b.formule || '').includes('Autonome') && (b.statutAbonnement || '').toLowerCase().includes('actif')).length;
+        const nbEssais = boutiquesEnLigne.filter(b => (b.statutAbonnement || '').toLowerCase().includes('essai')).length;
+        const nbSuspendus = boutiquesEnLigne.filter(b => (b.statutAbonnement || '').toLowerCase().includes('suspendu')).length;
+        const mrr = nbActifs * 49;
+
+        const elMrr = document.getElementById('kpiMrrValeur');
+        if (elMrr) elMrr.textContent = `${mrr} € / mois`;
+        const elActifs = document.getElementById('kpiLicencesActives');
+        if (elActifs) elActifs.textContent = `${nbActifs} boutique${nbActifs > 1 ? 's' : ''}`;
+        const elEssais = document.getElementById('kpiEssais');
+        if (elEssais) elEssais.textContent = `${nbEssais} boutique${nbEssais > 1 ? 's' : ''}`;
+        const elSusp = document.getElementById('kpiSuspendus');
+        if (elSusp) elSusp.textContent = `${nbSuspendus} boutique${nbSuspendus > 1 ? 's' : ''}`;
 
         rendreTableauAdmin(boutiquesEnLigne);
 
@@ -1436,6 +1570,47 @@
     function afficherBoutique(m, scroller = false) {
       boutiqueActive = m;
 
+      // 0. Vérification du statut d'abonnement (Suspendu vs Actif)
+      const suspCard = document.getElementById('shopSuspendedCard');
+      const normCont = document.getElementById('shopNormalContent');
+      const autoBanner = document.getElementById('shopAutonomousBanner');
+      const autoCreator = document.getElementById('shopAutoCreatorBox');
+
+      const statutAbo = (m.statutAbonnement || '').toLowerCase();
+      const estSuspendu = statutAbo.includes('suspendu');
+      const estAutonome = (m.formule || '').toLowerCase().includes('autonome');
+
+      if (estSuspendu) {
+        if (suspCard) {
+          suspCard.style.display = 'block';
+          const msg = document.getElementById('shopSuspendedMsg');
+          if (msg) {
+            msg.innerHTML = `L'abonnement de la boutique <strong>${m.nom}</strong> s'est terminé le <strong>${m.dateEcheance || '31 Août 2026'}</strong>.<br/>Vos réservations publiques sont momentanément désactivées pour protéger votre organisation.`;
+          }
+        }
+        if (normCont) normCont.style.display = 'none';
+        if (scroller) document.getElementById('shopSpaceContainer')?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      } else {
+        if (suspCard) suspCard.style.display = 'none';
+        if (normCont) normCont.style.display = 'block';
+      }
+
+      // Mode Autonome vs Standard Lynda
+      if (estAutonome) {
+        if (autoBanner) {
+          autoBanner.style.display = 'block';
+          const tit = document.getElementById('shopAutoTitreAbo');
+          if (tit) tit.textContent = `🟢 ${m.formule} (${m.statutAbonnement || 'Actif'}) • Prochaine facture : ${m.dateEcheance}`;
+          const desc = document.getElementById('shopAutoDescAbo');
+          if (desc) desc.textContent = `Compte de versement : ${m.compteEncaissement || 'Stripe Magasin'} — 0% de commission sur vos ateliers.`;
+        }
+        if (autoCreator) autoCreator.style.display = 'block';
+      } else {
+        if (autoBanner) autoBanner.style.display = 'none';
+        if (autoCreator) autoCreator.style.display = 'none';
+      }
+
       // 1. En-tête & Bannière
       const breadcrumb = document.getElementById('breadcrumbShop');
       if (breadcrumb) {
@@ -1446,11 +1621,15 @@
       if (tagNom) tagNom.textContent = `${m.nom} • ${m.ville}`;
 
       const heroTitle = document.getElementById('shopHeroTitle');
-      if (heroTitle) heroTitle.textContent = `Atelier Bien-être & Thérapie • ${m.nom}`;
+      if (heroTitle) heroTitle.textContent = estAutonome ? `Espace Ateliers Autonomes • ${m.nom}` : `Atelier Bien-être & Thérapie • ${m.nom}`;
 
       const heroDesc = document.getElementById('shopHeroDesc');
       if (heroDesc) {
-        heroDesc.innerHTML = `Espace partagé entre <strong>${m.responsable} (Gérant·e)</strong> et <strong>Lynda (Thérapeute)</strong>. Vous pouvez suivre les votes de vos clients, choisir la date dans le calendrier et imprimer votre kit événement.`;
+        if (estAutonome) {
+          heroDesc.innerHTML = `Espace Atelier Autonome géré par <strong>${m.responsable} (Gérant·e)</strong>. Vous organisez vos sessions en toute indépendance et encaissez directement les réservations de vos clients.`;
+        } else {
+          heroDesc.innerHTML = `Espace partagé entre <strong>${m.responsable} (Gérant·e)</strong> et <strong>Lynda (Thérapeute)</strong>. Vous pouvez suivre les votes de vos clients, choisir la date dans le calendrier et imprimer votre kit événement.`;
+        }
       }
 
       // 2. Stepper dynamique
@@ -1619,6 +1798,20 @@
         const estValide = m.statut.toLowerCase().includes('planifié') || m.statut.toLowerCase().includes('valide');
         const badgeClass = estValide ? 'badge-valide' : 'badge-encours';
 
+        const statutAbo = (m.statutAbonnement || 'Actif').toLowerCase();
+        let aboBadge = '<span class="badge-status badge-valide">🟢 Actif</span>';
+        if (statutAbo.includes('suspendu')) {
+          aboBadge = '<span class="badge-status" style="background:#FEE2E2; color:#DC2626; font-weight:700;">🔴 Suspendu</span>';
+        } else if (statutAbo.includes('essai')) {
+          aboBadge = '<span class="badge-status badge-encours">🟠 Essai 14j</span>';
+        } else if ((m.formule || '').includes('Standard')) {
+          aboBadge = '<span class="badge-status badge-valide">🌿 Standard Lynda</span>';
+        }
+
+        const echeanceInfo = m.dateEcheance && m.dateEcheance !== '-'
+          ? `<div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">Échéance : <strong>${m.dateEcheance}</strong></div>`
+          : '';
+
         return `
           <tr>
             <td>
@@ -1630,6 +1823,11 @@
               <span class="badge-status ${badgeClass}">${m.statut}</span>
             </td>
             <td>
+              ${aboBadge}
+              <div style="font-size: 11.5px; font-weight: 600; color: var(--text-main); margin-top: 2px;">${m.formule || 'Atelier Lynda'}</div>
+              ${echeanceInfo}
+            </td>
+            <td>
               <strong style="color: var(--primary); font-size: 14px;">${m.tarif} €</strong>
             </td>
             <td><strong>${m.places}</strong></td>
@@ -1638,7 +1836,7 @@
                 👤 Identifiant : <strong><code>${m.username || 'Non défini'}</code></strong><br/>
                 🔑 Mot de passe : <strong><code>${m.password || '••••••••'}</code></strong>
               </div>
-              <button class="btn-copy-url" style="background: #FFFFFF; font-size: 10.5px; padding: 4px 8px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}')">
+              <button class="btn-copy-url" style="background: #FFFFFF; font-size: 10.5px; padding: 4px 8px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}', '${m.formule}')">
                 ✉️ Copier message WhatsApp / SMS
               </button>
             </td>
@@ -1662,6 +1860,17 @@
         cardsMobile.innerHTML = magasins.map(m => {
           const estValide = m.statut.toLowerCase().includes('planifié') || m.statut.toLowerCase().includes('valide');
           const badgeClass = estValide ? 'badge-valide' : 'badge-encours';
+
+          const statutAbo = (m.statutAbonnement || 'Actif').toLowerCase();
+          let aboBadge = '<span class="badge-status badge-valide">🟢 Actif</span>';
+          if (statutAbo.includes('suspendu')) {
+            aboBadge = '<span class="badge-status" style="background:#FEE2E2; color:#DC2626; font-weight:700;">🔴 Suspendu</span>';
+          } else if (statutAbo.includes('essai')) {
+            aboBadge = '<span class="badge-status badge-encours">🟠 Essai 14j</span>';
+          } else if ((m.formule || '').includes('Standard')) {
+            aboBadge = '<span class="badge-status badge-valide">🌿 Standard Lynda</span>';
+          }
+
           return `
             <div class="shop-mobile-card">
               <div class="shop-mobile-top">
@@ -1674,9 +1883,14 @@
                 <span class="badge-status ${badgeClass}">${m.statut}</span>
               </div>
 
+              <div style="display: flex; justify-content: space-between; align-items: center; background: #FAF8F5; border-radius: 8px; padding: 6px 10px; margin: 6px 0; font-size: 11.5px;">
+                <span>Licence : <strong>${m.formule || 'Atelier Lynda'}</strong></span>
+                ${aboBadge}
+              </div>
+
               <div class="shop-mobile-metrics">
                 <div>
-                  <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Tarif Lynda</span><br/>
+                  <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Tarif Magasin</span><br/>
                   <strong style="color: var(--primary); font-size: 16px;">${m.tarif} €</strong>
                 </div>
                 <div>
@@ -1690,7 +1904,7 @@
               </div>
 
               <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
-                <button class="btn-copy-url" style="flex: 1; justify-content: center; padding: 10px; font-size: 11.5px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}')">
+                <button class="btn-copy-url" style="flex: 1; justify-content: center; padding: 10px; font-size: 11.5px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}', '${m.formule}')">
                   ✉️ Copier accès (SMS/WhatsApp)
                 </button>
                 <button class="btn-copy-url" style="background: white; border-color: var(--primary); color: var(--primary); padding: 10px; font-size: 11.5px;" onclick="afficherBoutiqueParId('${m.id}', true)">
@@ -1704,6 +1918,23 @@
           `;
         }).join('');
       }
+    }
+
+    function enregistrerAtelierAutonome(e) {
+      e.preventDefault();
+      const tit = document.getElementById('autoInputTitre').value;
+      const date = document.getElementById('autoInputDate').value;
+      const tarif = document.getElementById('autoInputTarif').value;
+      const places = document.getElementById('autoInputPlaces').value;
+
+      if (boutiqueActive) {
+        boutiqueActive.theme1Titre = tit;
+        boutiqueActive.dateHeure = date;
+        boutiqueActive.tarif = tarif;
+        boutiqueActive.places = `0 / ${places}`;
+        afficherBoutique(boutiqueActive);
+      }
+      alert(`🎉 Félicitations !\n\nVotre atelier autonome :\n« ${tit} »\n📅 ${date}\n💰 ${tarif} € / place (jauge : ${places} pers.)\n\nest enregistré et prêt à accueillir des inscriptions !`);
     }
 
     function afficherBoutiqueParId(id, scroller = false) {
