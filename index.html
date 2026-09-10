@@ -410,6 +410,179 @@
       margin: 18px 0;
     }
 
+    /* ÉCRAN DE CONNEXION SÉCURISÉ PILOTÉ PAR GOOGLE SHEET */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 53, 49, 0.65);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .auth-overlay.active {
+      display: flex;
+    }
+
+    .auth-card {
+      background: #FFFFFF;
+      border-radius: 28px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 24px 60px -12px rgba(44, 53, 49, 0.25);
+      border: 1px solid var(--border-soft);
+      position: relative;
+    }
+
+    .auth-pill {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+    }
+
+    .auth-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 28px;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .auth-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .auth-field {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .auth-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .input-with-icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 16px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 13px 44px 13px 42px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-soft);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+      background: #FFFFFF;
+    }
+
+    .auth-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .btn-toggle-eye {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+    }
+
+    .auth-error-box {
+      background: #FDF2E9;
+      border: 1px solid #E0B49A;
+      color: #9C411E;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .auth-demo-hint {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-soft);
+      text-align: center;
+    }
+
+    .auth-badges-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .auth-quick-fill {
+      background: var(--bg-warm);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .auth-quick-fill:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-logout {
+      background: #FFFFFF;
+      border: 1px solid #EAE3D9;
+      color: #9C411E;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+      background: #FDF2E9;
+      border-color: #E0B49A;
+    }
+
     /* ========================================================
        VERSION MOBILE INTÉGRALE (RESPONSIVE TOUCH-FIRST)
        ======================================================== */
@@ -570,6 +743,66 @@
 </head>
 <body>
 
+  <!-- ÉCRAN DE CONNEXION SÉCURISÉ PILOTÉ PAR GOOGLE SHEET -->
+  <div id="authModalOverlay" class="auth-overlay active">
+    <div class="auth-card">
+      <div style="text-align: center;">
+        <span class="auth-pill">🌿 Ateliers Bien-être avec Lynda</span>
+        <h2 class="auth-title">Espace Partenaires Sécurisé</h2>
+        <p class="auth-sub" id="authSubText">
+          Connectez-vous avec vos identifiants attribués par Lynda dans son Google Sheet pour accéder à votre espace boutique.
+        </p>
+      </div>
+
+      <form id="authLoginForm" onsubmit="soumettreConnexion(event)">
+        <div class="auth-field">
+          <label class="auth-label">Nom d'utilisateur</label>
+          <div class="input-with-icon">
+            <span class="input-icon">👤</span>
+            <input type="text" id="authInputUser" class="auth-input" placeholder="Ex: alpages74, pierres17, lynda..." required autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label class="auth-label">Mot de passe</label>
+          <div class="input-with-icon">
+            <span class="input-icon">🔑</span>
+            <input type="password" id="authInputPass" class="auth-input" placeholder="Votre mot de passe secret" required autocomplete="current-password" />
+            <button type="button" class="btn-toggle-eye" onclick="toggleAffichagePass()" title="Afficher/masquer le mot de passe">👁️</button>
+          </div>
+        </div>
+
+        <div id="authErrorMsg" class="auth-error-box" style="display: none;"></div>
+
+        <button type="submit" id="btnSubmitLogin" class="btn-zen-primary" style="margin-top: 8px;">
+          <span>🔒</span>
+          <span id="btnSubmitLoginText">Se connecter à mon espace</span>
+        </button>
+      </form>
+
+      <!-- ACCÈS RAPIDE DÉMO / AIDE -->
+      <div class="auth-demo-hint">
+        <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">
+          💡 Identifiants configurés dans le Google Sheet :
+        </div>
+        <div class="auth-badges-grid">
+          <button type="button" class="auth-quick-fill" onclick="preRemplir('alpages74', 'Sauge2026!')">
+            🌿 Marion (Annecy)
+          </button>
+          <button type="button" class="auth-quick-fill" onclick="preRemplir('pierres17', 'Quartz17!')">
+            💎 Maëva (La Rochelle)
+          </button>
+          <button type="button" class="auth-quick-fill" onclick="preRemplir('harmonie69', 'TheZen2026!')">
+            🍵 Alexandre (Lyon)
+          </button>
+          <button type="button" class="auth-quick-fill" style="background: var(--primary-light); color: var(--primary); font-weight: 700;" onclick="preRemplir('lynda', 'LyndaZen2026!')">
+            👑 Super-Admin Lynda
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- TOP BARRE SYSTEME -->
   <header class="system-bar">
     <div class="brand-duo">
@@ -578,18 +811,31 @@
         Lynda (Thérapeute)
       </span>
       <span id="breadcrumbShop" style="font-size: 13px; color: var(--text-muted);">
-        ▸ <strong>Espace Partenaire :</strong> L'Herboristerie des Alpages
+        ▸ <strong>Espace Collaboratif</strong>
       </span>
     </div>
 
-    <!-- COMMUTATEUR DE RÔLES -->
-    <div class="role-switcher">
-      <button class="role-btn active" id="btnRoleLynda" onclick="switchRole('lynda')">
-        👑 Tour de Contrôle Lynda (Super-Admin)
-      </button>
-      <button class="role-btn" id="btnRoleShop" onclick="switchRole('shop')">
-        🏪 Espace Privé Magasin (Marion)
-      </button>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <!-- STATUT UTILISATEUR CONNECTÉ -->
+      <div id="authStatusBlock" style="display: none; align-items: center; gap: 8px;">
+        <span id="userConnectedBadge" style="font-size: 12px; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 5px 12px; border-radius: var(--radius-pill);">
+          🔒 Connecté
+        </span>
+        <button onclick="deconnexion()" class="btn-logout" title="Fermer ma session">
+          <span>🚪</span>
+          <span>Déconnexion</span>
+        </button>
+      </div>
+
+      <!-- COMMUTATEUR DE RÔLES (RÉSERVÉ À LYNDA SUPER-ADMIN) -->
+      <div class="role-switcher" id="adminRoleSwitcher" style="display: none;">
+        <button class="role-btn active" id="btnRoleLynda" onclick="switchRole('lynda')">
+          👑 Tour de Contrôle Lynda
+        </button>
+        <button class="role-btn" id="btnRoleShop" onclick="switchRole('shop')">
+          🏪 Aperçu Boutique
+        </button>
+      </div>
     </div>
   </header>
 
@@ -604,7 +850,7 @@
           </span>
           <h2 style="font-size: 26px; margin-top: 4px;">Carnet des Boutiques Partenaires</h2>
           <p style="font-size: 13px; color: var(--text-muted);">
-            Seule Lynda a accès à cette vue d'ensemble. Les magasins sont synchronisés en direct depuis son fichier Google Sheet.
+            Seule Lynda a accès à cette vue d'ensemble. Les magasins et leurs identifiants sont synchronisés en direct depuis son fichier Google Sheet.
           </p>
         </div>
 
@@ -634,10 +880,10 @@
             <th>Magasin Partenaire</th>
             <th>Responsable</th>
             <th>Statut Atelier</th>
-            <th>Tarif fixé par Lynda (Google Sheet)</th>
+            <th>Tarif fixé (€)</th>
             <th>Inscrits / Jauge</th>
-            <th>Recettes Stripe</th>
-            <th>Lien Privé Magasin</th>
+            <th>Accès Partenaire (Google Sheet)</th>
+            <th>Actions & Lien</th>
           </tr>
         </thead>
         <tbody id="shopTableBody">
@@ -865,42 +1111,227 @@
     </div>
   </div>
 
-      <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button class="btn-zen-secondary" style="width: auto;" onclick="fermerModalAffiche()">Fermer</button>
-        <button class="btn-zen-primary" style="width: auto;" onclick="window.print()">🖨️ Imprimer</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     // SYNCHRONISATION EN DIRECT AVEC LE GOOGLE SHEET (ONGLET SYSTÈME ATELIER)
     const GOOGLE_SHEET_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1TprsCw9JAqZjLwCYvo7c4QQ1FsLv5lVSwZLsvmcNSwQ/gviz/tq?tqx=out:json&sheet=Syst%C3%A8me%20Atelier";
     let boutiquesEnLigne = [];
     let boutiqueActive = null;
-    let estModeMagasinPrive = false;
+    let sessionUtilisateur = null; // { role: 'admin' | 'shop', shopId, shopNom, responsable, nom }
 
-    function switchRole(role) {
-      if (estModeMagasinPrive) {
-        // En mode lien privé magasin, le partenaire ne peut pas accéder au super-admin
+    // ==========================================
+    // 1. GESTION DE L'AUTHENTIFICATION & SESSIONS
+    // ==========================================
+
+    function verifierSessionExistante() {
+      try {
+        const sauv = sessionStorage.getItem('lynda_collab_session');
+        if (sauv) {
+          sessionUtilisateur = JSON.parse(sauv);
+          appliquerSession(sessionUtilisateur);
+          return true;
+        }
+      } catch (e) {
+        console.error('Erreur lecture session :', e);
+      }
+      afficherModalConnexion();
+      return false;
+    }
+
+    function afficherModalConnexion() {
+      const modal = document.getElementById('authModalOverlay');
+      if (!modal) return;
+      modal.classList.add('active');
+
+      // Si paramètre ?magasin=... dans l'URL, personnaliser l'accueil
+      const params = new URLSearchParams(window.location.search);
+      const paramMag = params.get('magasin');
+      if (paramMag && boutiquesEnLigne.length > 0) {
+        const trouve = boutiquesEnLigne.find(b => 
+          b.id.toLowerCase() === paramMag.toLowerCase() ||
+          b.nom.toLowerCase().includes(paramMag.toLowerCase())
+        );
+        if (trouve) {
+          const sub = document.getElementById('authSubText');
+          if (sub) {
+            sub.innerHTML = `Bienvenue <strong>${trouve.responsable}</strong> (${trouve.nom}).<br/>Veuillez entrer vos identifiants fournis par Lynda pour accéder à votre espace boutique.`;
+          }
+          if (trouve.username) {
+            document.getElementById('authInputUser').value = trouve.username;
+            document.getElementById('authInputPass').focus();
+          }
+        }
+      }
+    }
+
+    function fermerModalConnexion() {
+      const modal = document.getElementById('authModalOverlay');
+      if (modal) modal.classList.remove('active');
+    }
+
+    async function soumettreConnexion(e) {
+      e.preventDefault();
+      const u = document.getElementById('authInputUser').value.trim();
+      const p = document.getElementById('authInputPass').value.trim();
+      const errBox = document.getElementById('authErrorMsg');
+      const btnTxt = document.getElementById('btnSubmitLoginText');
+
+      if (errBox) errBox.style.display = 'none';
+      if (btnTxt) btnTxt.textContent = "Vérification en cours...";
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          sessionUtilisateur = data;
+          sessionStorage.setItem('lynda_collab_session', JSON.stringify(data));
+          fermerModalConnexion();
+          appliquerSession(data);
+        } else {
+          if (errBox) {
+            errBox.textContent = data.error || "Identifiant ou mot de passe incorrect.";
+            errBox.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        console.error('Erreur appel api login :', err);
+        // Secours direct via Google Sheet si hors-ligne ou serveur Vercel local
+        verifierConnexionDirecteSecours(u, p);
+      } finally {
+        if (btnTxt) btnTxt.textContent = "Se connecter à mon espace";
+      }
+    }
+
+    function verifierConnexionDirecteSecours(u, p) {
+      const errBox = document.getElementById('authErrorMsg');
+      const lowerU = u.toLowerCase();
+
+      // Vérification secours Lynda
+      if (lowerU === 'lynda' && p === 'LyndaZen2026!') {
+        const data = { ok: true, role: 'admin', nom: 'Lynda' };
+        sessionUtilisateur = data;
+        sessionStorage.setItem('lynda_collab_session', JSON.stringify(data));
+        fermerModalConnexion();
+        appliquerSession(data);
         return;
       }
+
+      // Vérification secours Magasins
+      const trouve = boutiquesEnLigne.find(b => 
+        (b.username && b.username.toLowerCase() === lowerU && b.password === p)
+      );
+
+      if (trouve) {
+        const data = {
+          ok: true,
+          role: 'shop',
+          shopId: trouve.id,
+          shopNom: trouve.nom,
+          ville: trouve.ville,
+          responsable: trouve.responsable
+        };
+        sessionUtilisateur = data;
+        sessionStorage.setItem('lynda_collab_session', JSON.stringify(data));
+        fermerModalConnexion();
+        appliquerSession(data);
+      } else {
+        if (errBox) {
+          errBox.textContent = "Identifiant ou mot de passe incorrect. Vérifiez vos identifiants auprès de Lynda.";
+          errBox.style.display = 'block';
+        }
+      }
+    }
+
+    function appliquerSession(session) {
+      const statusBlock = document.getElementById('authStatusBlock');
+      const userBadge = document.getElementById('userConnectedBadge');
+      const adminSwitcher = document.getElementById('adminRoleSwitcher');
+      const adminSec = document.getElementById('lyndaAdminSection');
+
+      if (statusBlock) statusBlock.style.display = 'flex';
+
+      if (session.role === 'admin') {
+        // Mode Super-Admin Lynda
+        if (userBadge) userBadge.innerHTML = `👑 Lynda (Super-Admin)`;
+        if (adminSwitcher) adminSwitcher.style.display = 'flex';
+        if (adminSec) adminSec.style.display = 'block';
+        switchRole('lynda');
+      } else {
+        // Mode Magasin Partenaire Privé (Cloisonnement strict)
+        if (userBadge) userBadge.innerHTML = `🔒 ${session.shopNom} (${session.responsable})`;
+        if (adminSwitcher) adminSwitcher.style.display = 'none';
+        if (adminSec) adminSec.style.display = 'none';
+
+        const mag = boutiquesEnLigne.find(b => b.id === session.shopId) || {
+          id: session.shopId,
+          nom: session.shopNom,
+          ville: session.ville,
+          responsable: session.responsable,
+          tarif: 35, capacite: 10, statut: 'Phase de Vote', places: '0 / 10', recettes: 0
+        };
+        afficherBoutique(mag);
+      }
+    }
+
+    function deconnexion() {
+      if (confirm("Voulez-vous vraiment vous déconnecter de votre espace ?")) {
+        sessionStorage.removeItem('lynda_collab_session');
+        sessionUtilisateur = null;
+        document.getElementById('authStatusBlock').style.display = 'none';
+        document.getElementById('adminRoleSwitcher').style.display = 'none';
+        document.getElementById('lyndaAdminSection').style.display = 'none';
+        document.getElementById('authInputPass').value = '';
+        const errBox = document.getElementById('authErrorMsg');
+        if (errBox) errBox.style.display = 'none';
+        afficherModalConnexion();
+      }
+    }
+
+    function toggleAffichagePass() {
+      const passInp = document.getElementById('authInputPass');
+      if (passInp) {
+        passInp.type = passInp.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    function preRemplir(u, p) {
+      const userInp = document.getElementById('authInputUser');
+      const passInp = document.getElementById('authInputPass');
+      const errBox = document.getElementById('authErrorMsg');
+      if (userInp) userInp.value = u;
+      if (passInp) passInp.value = p;
+      if (errBox) errBox.style.display = 'none';
+    }
+
+    // ==========================================
+    // 2. NAVIGATION ET RÔLES
+    // ==========================================
+
+    function switchRole(role) {
+      // Si connecté en tant que magasin, impossible d'accéder au super-admin
+      if (sessionUtilisateur && sessionUtilisateur.role === 'shop') return;
+
       const btnL = document.getElementById('btnRoleLynda');
       const btnS = document.getElementById('btnRoleShop');
       const adminSec = document.getElementById('lyndaAdminSection');
       const breadcrumb = document.getElementById('breadcrumbShop');
 
       if (role === 'lynda') {
-        btnL.classList.add('active');
-        btnS.classList.remove('active');
-        adminSec.style.display = 'block';
-        breadcrumb.innerHTML = '▸ <strong>Vue Super-Admin :</strong> Toutes vos boutiques';
+        if (btnL) btnL.classList.add('active');
+        if (btnS) btnS.classList.remove('active');
+        if (adminSec) adminSec.style.display = 'block';
+        if (breadcrumb) breadcrumb.innerHTML = '▸ <strong>Vue Super-Admin :</strong> Toutes vos boutiques';
       } else {
-        btnS.classList.add('active');
-        btnL.classList.remove('active');
-        adminSec.style.display = 'none';
+        if (btnS) btnS.classList.add('active');
+        if (btnL) btnL.classList.remove('active');
+        if (adminSec) adminSec.style.display = 'none';
         const nom = boutiqueActive ? boutiqueActive.nom : "Boutique Partenaire";
         const resp = boutiqueActive ? boutiqueActive.responsable : "Gérant·e";
-        breadcrumb.innerHTML = `▸ <strong>Espace Privé :</strong> ${nom} (${resp})`;
+        if (breadcrumb) breadcrumb.innerHTML = `▸ <strong>Espace Privé :</strong> ${nom} (${resp})`;
       }
     }
 
@@ -917,6 +1348,10 @@
     function fermerModalAffiche() {
       document.getElementById('modalAffiche').classList.remove('active');
     }
+
+    // ==========================================
+    // 3. SYNCHRONISATION GOOGLE SHEETS
+    // ==========================================
 
     async function syncDepuisGoogleSheet(afficherNotification = false) {
       const btn = document.getElementById('btnRefreshSheet');
@@ -960,60 +1395,22 @@
               dateHeure: String(getVal(16) || 'En attente choix date'),
               places: String(getVal(17) || `0 / ${getVal(5) || 10}`),
               recettes: Number(getVal(18) || 0),
-              lienPrive: String(getVal(19) || '')
+              lienPrive: String(getVal(19) || ''),
+              username: String(getVal(20) || ''), // Colonne U (Identifiant Magasin)
+              password: String(getVal(21) || '')  // Colonne V (Mot de passe)
             };
           })
           .filter(Boolean);
 
         rendreTableauAdmin(boutiquesEnLigne);
 
-        // Analyse du paramètre d'URL pour prise en compte immédiate du lien partenaire
-        const params = new URLSearchParams(window.location.search);
-        const paramMag = params.get('magasin');
-
-        if (paramMag) {
-          // LIEN PRIVÉ DU MAGASIN PARTENAIRE DÉTECTÉ
-          estModeMagasinPrive = true;
-          const trouve = boutiquesEnLigne.find(b => 
-            b.id.toLowerCase() === paramMag.toLowerCase() ||
-            b.nom.toLowerCase().includes(paramMag.toLowerCase())
-          );
-
-          if (trouve) {
-            boutiqueActive = trouve;
-          } else if (boutiquesEnLigne.length > 0) {
-            boutiqueActive = boutiquesEnLigne[0];
-          }
-
-          // Cloisonnement strict : on masque l'accès Super-Admin Lynda
-          const adminSec = document.getElementById('lyndaAdminSection');
-          if (adminSec) adminSec.style.display = 'none';
-
-          const btnLynda = document.getElementById('btnRoleLynda');
-          if (btnLynda) btnLynda.style.display = 'none';
-
-          const btnShop = document.getElementById('btnRoleShop');
-          if (btnShop) {
-            btnShop.classList.add('active');
-            btnShop.innerHTML = `🔒 Espace Privé : ${boutiqueActive.nom} (${boutiqueActive.responsable})`;
-            btnShop.style.pointerEvents = 'none';
-          }
-
-          document.title = `Espace Collaboratif — ${boutiqueActive.nom} & Lynda`;
-        } else {
-          // VUE SUPER-ADMIN LYNDA
-          estModeMagasinPrive = false;
-          const adminSec = document.getElementById('lyndaAdminSection');
-          if (adminSec) adminSec.style.display = 'block';
-
-          if (!boutiqueActive && boutiquesEnLigne.length > 0) {
-            boutiqueActive = boutiquesEnLigne[0];
-          }
-        }
-
-        if (boutiqueActive) {
+        if (!boutiqueActive && boutiquesEnLigne.length > 0) {
+          boutiqueActive = boutiquesEnLigne[0];
           afficherBoutique(boutiqueActive);
         }
+
+        // Vérification de la session
+        verifierSessionExistante();
 
         if (afficherNotification) {
           alert(`✅ Google Sheet synchronisé en direct !\n\n${boutiquesEnLigne.length} boutique(s) active(s) trouvée(s) dans votre feuille.`);
@@ -1217,7 +1614,6 @@
       tbody.innerHTML = magasins.map(m => {
         const estValide = m.statut.toLowerCase().includes('planifié') || m.statut.toLowerCase().includes('valide');
         const badgeClass = estValide ? 'badge-valide' : 'badge-encours';
-        const lien = m.lienPrive || `${window.location.origin}/?magasin=${m.id}`;
 
         return `
           <tr>
@@ -1231,14 +1627,21 @@
             </td>
             <td>
               <strong style="color: var(--primary); font-size: 14px;">${m.tarif} €</strong>
-              <div style="font-size: 10px; color: var(--text-muted);">Google Sheet (Temps Réel)</div>
             </td>
             <td><strong>${m.places}</strong></td>
-            <td style="color: var(--primary); font-weight: 700;">${m.recettes} €</td>
+            <td>
+              <div style="font-size: 12px; margin-bottom: 4px;">
+                👤 Identifiant : <strong><code>${m.username || 'Non défini'}</code></strong><br/>
+                🔑 Mot de passe : <strong><code>${m.password || '••••••••'}</code></strong>
+              </div>
+              <button class="btn-copy-url" style="background: #FFFFFF; font-size: 10.5px; padding: 4px 8px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}')">
+                ✉️ Copier message WhatsApp / SMS
+              </button>
+            </td>
             <td>
               <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                 <button class="btn-copy-url" onclick="copierLienMagasin('${m.id}', '${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}')">
-                  🔗 Copier lien privé
+                  🔗 Copier lien
                 </button>
                 <button class="btn-copy-url" style="background: #FFFFFF; border-color: var(--primary); color: var(--primary);" onclick="afficherBoutiqueParId('${m.id}', true)">
                   👁️ Voir l'espace
@@ -1261,7 +1664,7 @@
                 <div>
                   <strong style="font-size: 16px; color: var(--text-main);">🌿 ${m.nom}</strong>
                   <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
-                    📍 ${m.ville} • Responsable : <strong>${m.responsable}</strong> (ID : <code>${m.id}</code>)
+                    📍 ${m.ville} • Responsable : <strong>${m.responsable}</strong>
                   </div>
                 </div>
                 <span class="badge-status ${badgeClass}">${m.statut}</span>
@@ -1278,15 +1681,19 @@
                 </div>
               </div>
 
-              <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
-                <button class="btn-copy-url" style="flex: 1; justify-content: center; padding: 11px; font-size: 12px;" onclick="copierLienMagasin('${m.id}', '${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}')">
-                  🔗 Copier lien privé
+              <div style="background: #FFFFFF; border: 1px dashed var(--border-soft); border-radius: 10px; padding: 8px 10px; margin: 8px 0; font-size: 12px;">
+                👤 User : <strong><code>${m.username || 'Non défini'}</code></strong> • 🔑 Pass : <strong><code>${m.password || '••••••'}</code></strong>
+              </div>
+
+              <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <button class="btn-copy-url" style="flex: 1; justify-content: center; padding: 10px; font-size: 11.5px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}')">
+                  ✉️ Copier accès (SMS/WhatsApp)
                 </button>
-                <button class="btn-copy-url" style="background: white; border-color: var(--primary); color: var(--primary); padding: 11px; font-size: 12px;" onclick="afficherBoutiqueParId('${m.id}', true)">
-                  👁️ Voir l'espace
+                <button class="btn-copy-url" style="background: white; border-color: var(--primary); color: var(--primary); padding: 10px; font-size: 11.5px;" onclick="afficherBoutiqueParId('${m.id}', true)">
+                  👁️ Voir
                 </button>
-                <a href="client.html?magasin=${encodeURIComponent(m.id)}" target="_blank" class="btn-copy-url" style="background: var(--primary-light); border-color: var(--primary); color: var(--primary); padding: 11px; text-decoration: none;">
-                  📱 Page Client
+                <a href="client.html?magasin=${encodeURIComponent(m.id)}" target="_blank" class="btn-copy-url" style="background: var(--primary-light); border-color: var(--primary); color: var(--primary); padding: 10px; text-decoration: none; font-size: 11.5px;">
+                  📱 Client
                 </a>
               </div>
             </div>
@@ -1302,16 +1709,25 @@
       }
     }
 
+    function copierMessageAcces(nom, resp, user, pass) {
+      const msg = `Bonjour ${resp.split(' ')[0]} !\nVoici vos accès personnels pour l'espace partenaire de votre boutique ${nom} (Ateliers Bien-être & Thérapie avec Lynda) :\n\n👉 Lien de connexion : ${window.location.origin}\n👤 Identifiant : ${user}\n🔑 Mot de passe : ${pass}\n\nUne fois connecté(e), vous pourrez suivre les votes de vos clients, planifier les dates et imprimer votre kit événement.\n\nÀ très vite !`;
+      navigator.clipboard.writeText(msg).then(() => {
+        alert(`✅ Message complet copié dans votre presse-papier !\n\nVous pouvez le coller directement dans WhatsApp, par SMS ou email pour ${resp} (${nom}).`);
+      }).catch(() => {
+        prompt(`Message d'accès pour ${resp} (${nom}) :`, msg);
+      });
+    }
+
     function copierLienMagasin(id, nomMagasin, nomResp) {
       const url = `${window.location.origin}/?magasin=${encodeURIComponent(id)}`;
       navigator.clipboard.writeText(url).then(() => {
-        alert(`✅ Lien privé officiel copié pour ${nomResp} (${nomMagasin}) :\n\n${url}\n\nEn envoyant ce lien au magasin :\n1. Il arrive directement sur sa boutique sans voir les autres.\n2. Tous ses thèmes, dates et tarifs sont synchronisés depuis votre Google Sheet.`);
+        alert(`✅ Lien privé officiel copié pour ${nomResp} (${nomMagasin}) :\n\n${url}`);
       }).catch(() => {
         prompt(`Lien privé pour ${nomResp} (${nomMagasin}) :`, url);
       });
     }
 
-    // Chargement automatique au démarrage
+    // Démarrage automatique
     window.addEventListener('DOMContentLoaded', () => {
       syncDepuisGoogleSheet(false);
     });

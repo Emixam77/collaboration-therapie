@@ -3,3 +3,6 @@ node_modules/
 *.pem
 *service_account*.json
 .env*
+create_lynda_*.js
+update_*.js
+scratch/
