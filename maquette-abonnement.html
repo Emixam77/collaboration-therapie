@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maquette Interactive — Espace Sous-Location & Abonnements Ateliers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #2D5A43;
+      --primary-dark: #1B3B2B;
+      --primary-light: #EBF3EE;
+      --accent: #C26D53;
+      --accent-light: #FDF3F0;
+      --bg: #FAF8F5;
+      --surface: #FFFFFF;
+      --surface-soft: #F4EFEB;
+      --text-main: #2C302E;
+      --text-muted: #626865;
+      --border: #E5DED6;
+      --success: #1E824C;
+      --warning: #D97706;
+      --danger: #DC2626;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-md: 0 6px 20px rgba(0,0,0,0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding-bottom: 70px;
+      line-height: 1.5;
+    }
+
+    /* BARRE DE SIMULATION EN HAUT (SWITCHER DE ROLE) */
+    .simu-banner {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #182820;
+      color: #FFFFFF;
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    }
+    .simu-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .simu-badge {
+      background: var(--accent);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .simu-buttons {
+      display: flex;
+      gap: 6px;
+      background: rgba(255,255,255,0.1);
+      padding: 4px;
+      border-radius: 30px;
+    }
+    .simu-btn {
+      background: transparent;
+      border: none;
+      color: #D1DED6;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .simu-btn:hover {
+      color: #FFFFFF;
+      background: rgba(255,255,255,0.15);
+    }
+    .simu-btn.active {
+      background: #FFFFFF;
+      color: var(--primary-dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 24px 18px;
+    }
+
+    /* HEADER COMMUN */
+    .top-header {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    .brand-subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge-success { background: #E6F6ED; color: var(--success); }
+    .badge-warning { background: #FEF3C7; color: var(--warning); }
+    .badge-danger { background: #FEE2E2; color: var(--danger); }
+    .badge-primary { background: var(--primary-light); color: var(--primary); }
+
+    /* KPI STATS CARDS */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--primary);
+    }
+    .kpi-card.accent::before { background: var(--accent); }
+    .kpi-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .kpi-hint {
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    /* CARD BLOCK STANDARD */
+    .content-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* BOUTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: white;
+      border-color: var(--border);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: var(--surface-soft);
+      border-color: #C5BCB3;
+    }
+    .btn-accent {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-accent:hover {
+      background: #A85A42;
+    }
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 11.5px;
+    }
+
+    /* TABLEAU GESTION ABONNEMENTS */
+    .table-container {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+    }
+    th {
+      background: var(--surface-soft);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tr:hover td {
+      background: #FAF8F5;
+    }
+
+    /* PRICING GRID */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 18px;
+    }
+    .pricing-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .pricing-card.featured {
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px rgba(45,90,67,0.12);
+    }
+    .pricing-ribbon {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .pricing-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .pricing-price {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 12px 0;
+    }
+    .pricing-price span {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .pricing-features {
+      list-style: none;
+      margin: 16px 0 24px 0;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+    }
+    .pricing-features li span {
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    /* FORMULAIRE CREATION ATELIER */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .form-input, .form-select, .form-textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13.5px;
+      outline: none;
+      transition: border 0.2s ease;
+      background: white;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    /* SIMULATION SUSPENDU */
+    .locked-card {
+      background: #FFFDF9;
+      border: 2px dashed #E2B93B;
+      border-radius: var(--radius-lg);
+      padding: 40px 24px;
+      text-align: center;
+      max-width: 680px;
+      margin: 30px auto;
+      box-shadow: var(--shadow-sm);
+    }
+    .locked-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .locked-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #92400E;
+      margin-bottom: 8px;
+    }
+    .locked-desc {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* AFFICHAGE CONDITIONNEL SELON ROLE */
+    .view-section {
+      display: none;
+    }
+    .view-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* FOOTER / NAVIGATION */
+    .bottom-bar {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. BARRE DE SIMULATION EN TÊTE (CONTRÔLEUR DE RÔLES) -->
+  <div class="simu-banner">
+    <div class="simu-title">
+      <span>✨ SIMULATEUR SOUS-LOCATION</span>
+      <span class="simu-badge">Prototype Live</span>
+    </div>
+    <div class="simu-buttons">
+      <button class="simu-btn active" onclick="basculerVue('lynda')">
+        👑 <span>Vue Lynda (Super-Admin)</span>
+      </button>
+      <button class="simu-btn" onclick="basculerVue('magasin-actif')">
+        🌿 <span>Vue Magasin Autonome (Actif)</span>
+      </button>
+      <button class="simu-btn" onclick="basculerVue('magasin-suspendu')">
+        🔒 <span>Vue Magasin (Suspendu)</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ================================================================= -->
+    <!-- SECTION 1 : VUE SUPER-ADMIN LYNDA (GESTION DES ABONNEMENTS) -->
+    <!-- ================================================================= -->
+    <div id="vue-lynda" class="view-section active">
+      
+      <!-- En-tête Lynda -->
+      <div class="top-header">
+        <div>
+          <h1 class="brand-title">Gestionnaire des Licences & Abonnements</h1>
+          <p class="brand-subtitle">Pilotez la sous-location de votre système d'ateliers bien-être pour les boutiques partenaires.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="index.html" class="btn btn-outline">
+            ⬅️ Retour au tableau principal
+          </a>
+          <button class="btn btn-primary" onclick="simulerAjoutBoutique()">
+            ➕ Ajouter une boutique sous licence
+          </button>
+        </div>
+      </div>
+
+      <!-- Indicateurs financiers MRR -->
+      <div class="kpi-grid">
+        <div class="kpi-card accent">
+          <span class="kpi-title">Revenu Récurrent Mensuel (MRR)</span>
+          <span class="kpi-value" id="lyndaMrr">392 € <small style="font-size: 14px; font-weight: 500; color: var(--text-muted);">/ mois</small></span>
+          <span class="kpi-hint">✨ 100% passif (aucun atelier à animer soi-même)</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Boutiques sous Licence Autonome</span>
+          <span class="kpi-value">8 magasins</span>
+          <span style="font-size: 12px; color: var(--text-muted);">6 actives • 2 en période d'essai 14j</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Ateliers Organisés en Autonomie</span>
+          <span class="kpi-value">14 sessions</span>
+          <span style="font-size: 12px; color: var(--text-muted);">112 clients accueillis ce mois</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-title">Volume Ventes Billetterie Magasins</span>
+          <span class="kpi-value">4 480 €</span>
+          <span class="kpi-hint">💳 Encaissés directement par les gérants</span>
+        </div>
+      </div>
+
+      <!-- Tableau des Boutiques et Statuts d'Abonnement -->
+      <div class="content-card">
+        <div class="card-header-flex">
+          <div>
+            <h2 class="card-title">🏪 Répertoire des Magasins & Licences en cours</h2>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px;">
+              Les modifications de statuts (Actif / Suspendu) prennent effet instantanément.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-outline btn-sm" onclick="alert('Synchronisation avec le Google Sheet effectuée !')">
+              🔄 Synchroniser Sheet
+            </button>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Boutique & Ville</th>
+                <th>Responsable</th>
+                <th>Formule</th>
+                <th>Tarif / mois</th>
+                <th>Statut Licence</th>
+                <th>Prochaine Facture</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="tableBoutiquesAbonnements">
+              <tr>
+                <td>
+                  <strong>L'Atelier Harmonie & Thés</strong><br/>
+                  <span style="font-size: 11px; color: var(--text-muted);">Lyon (69) • ID: mag-02</span>
+                </td>
+                <td>Alexandre M.</td>
+                <td><span class="badge badge-primary">Licence Pro Autonome</span></td>
+                <td><strong>49,00 €</strong></td>
+                <td>
+                  <select class="form-select" style="padding: 4px 8px; font-size: 12px; font-weight: 600;" onchange="changerStatut(this, 'mag-02')">
+                    <option value="actif" selected>🟢 Actif</option>
+                    <option value="essai">🟠 Essai (14j)</option>
+                    <option value="suspendu">🔴 Suspendu</option>
+                  </select>
+                </td>
+                <td>01 Octobre 2026</td>
+                <td style="text-align: right;">
+                  <button class="btn btn-outline btn-sm" onclick="basculerVue('magasin-actif')">
+                    👁️ Voir son espace
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Univers Pierres</strong><br/>
+                  <span style="font-size: 11px; color: var(--text-muted);">La Rochelle (17) • ID: mag-03</span>
+                </td>
+                <td>Maëva</td>
+                <td><span class="badge badge-primary">Licence Pro Autonome</span></td>
+                <td><strong>49,00 €</strong></td>
+                <td>
+                  <select class="form-select" style="padding: 4px 8px; font-size: 12px; font-weight: 600;" onchange="changerStatut(this, 'mag-03')">
+                    <option value="actif">🟢 Actif</option>
+                    <option value="essai" selected>🟠 Essai (14j)</option>
+                    <option value="suspendu">🔴 Suspendu</option>
+                  </select>
+                </td>
+                <td>18 Septembre 2026</td>
+                <td style="text-align: right;">
+                  <button class="btn btn-outline btn-sm" onclick="basculerVue('magasin-actif')">
+                    👁️ Voir son espace
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Nature & Sens</strong><br/>
+                  <span style="font-size: 11px; color: var(--text-muted);">Grenoble (38) • ID: mag-04</span>
+                </td>
+                <td>Thomas B.</td>
+                <td><span class="badge badge-danger">Licence Suspendue</span></td>
+                <td><strong>49,00 €</strong></td>
+                <td>
+                  <select class="form-select" style="padding: 4px 8px; font-size: 12px; font-weight: 600;" onchange="changerStatut(this, 'mag-04')">
+                    <option value="actif">🟢 Actif</option>
+                    <option value="essai">🟠 Essai (14j)</option>
+                    <option value="suspendu" selected>🔴 Suspendu</option>
+                  </select>
+                </td>
+                <td><span style="color: var(--danger); font-weight: 700;">Échue (31/08)</span></td>
+                <td style="text-align: right;">
+                  <button class="btn btn-accent btn-sm" onclick="basculerVue('magasin-suspendu')">
+                    🔒 Tester vue suspendue
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>L'Herboristerie des Alpages</strong><br/>
+                  <span style="font-size: 11px; color: var(--text-muted);">Annecy (74) • ID: mag-01</span>
+                </td>
+                <td>Marion V.</td>
+                <td><span class="badge badge-success">Formule Standard Lynda</span></td>
+                <td><em>0 € (Co-animation)</em></td>
+                <td>
+                  <span class="badge badge-success">Animé par Lynda</span>
+                </td>
+                <td>Partage Recettes</td>
+                <td style="text-align: right;">
+                  <a href="index.html" class="btn btn-outline btn-sm">
+                    🌿 Vue Standard
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Grille des Offres Proposées par Lynda -->
+      <div class="content-card">
+        <h2 class="card-title">💡 Les Formules d'Abonnement Prêtes à Proposer</h2>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+          Vous pouvez choisir quelle formule attribuer à chaque gérant selon ses besoins.
+        </p>
+
+        <div class="pricing-grid">
+          <!-- Formule 1 -->
+          <div class="pricing-card">
+            <div class="pricing-name">Formule Découverte</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Pour les boutiques qui débutent</div>
+            <div class="pricing-price">29 € <span>/ mois + 5%</span></div>
+            <ul class="pricing-features">
+              <li><span>✓</span> 1 atelier autonome par mois</li>
+              <li><span>✓</span> Affiches A4 avec QR Code personnalisées</li>
+              <li><span>✓</span> Page de vote des thèmes clients</li>
+              <li><span>✓</span> Encaissement direct sur leur compte</li>
+            </ul>
+            <button class="btn btn-outline" onclick="copierLienAbonnement('29')">
+              🔗 Copier lien d'adhésion
+            </button>
+          </div>
+
+          <!-- Formule 2 (Featured) -->
+          <div class="pricing-card featured">
+            <span class="pricing-ribbon">⭐ Recommandée</span>
+            <div class="pricing-name">Licence Pro Illimitée</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Autonomie totale pour le magasin</div>
+            <div class="pricing-price">49 € <span>/ mois fixe</span></div>
+            <ul class="pricing-features">
+              <li><span>✓</span> <strong>Ateliers illimités</strong> chaque mois</li>
+              <li><span>✓</span> <strong>0% de commission</strong> sur leurs ventes</li>
+              <li><span>✓</span> Calendrier interactif et gestion des jauges</li>
+              <li><span>✓</span> Notifications SMS & email aux participants</li>
+              <li><span>✓</span> Support et modèles d'ateliers par Lynda</li>
+            </ul>
+            <button class="btn btn-primary" onclick="copierLienAbonnement('49')">
+              🔗 Copier lien d'adhésion
+            </button>
+          </div>
+
+          <!-- Formule 3 -->
+          <div class="pricing-card">
+            <div class="pricing-name">Pack Sérénité & Mentorat</div>
+            <div style="font-size: 12px; color: var(--text-muted);">Accompagnement thématique par Lynda</div>
+            <div class="pricing-price">89 € <span>/ mois</span></div>
+            <ul class="pricing-features">
+              <li><span>✓</span> Tout le contenu de la Licence Pro</li>
+              <li><span>✓</span> 1 session coaching thématique / mois avec Lynda</li>
+              <li><span>✓</span> Fiches recettes et supports de cours fournis</li>
+              <li><span>✓</span> Mise en avant sur les réseaux de Lynda</li>
+            </ul>
+            <button class="btn btn-outline" onclick="copierLienAbonnement('89')">
+              🔗 Copier lien d'adhésion
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ================================================================= -->
+    <!-- SECTION 2 : VUE COMMERÇANT AUTONOME (MODE ACTIF) -->
+    <!-- ================================================================= -->
+    <div id="vue-magasin-actif" class="view-section">
+      
+      <!-- En-tête Magasin Autonome -->
+      <div class="top-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <span class="badge badge-success">🟢 Licence Boutique Active</span>
+            <span style="font-size: 12px; color: var(--text-muted);">Prochain renouvellement : 01/10/2026</span>
+          </div>
+          <h1 class="brand-title">Espace Ateliers — L'Atelier Harmonie & Thés</h1>
+          <p class="brand-subtitle">Gérant : Alexandre M. (Lyon) • Vous organisez vos ateliers en autonomie totale.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-primary" onclick="document.getElementById('formNouvelAtelier').scrollIntoView({behavior: 'smooth'})">
+            ➕ Créer un nouvel atelier
+          </button>
+          <a href="client.html?magasin=mag-02" target="_blank" class="btn btn-outline">
+            📱 Voir ma page de réservation
+          </a>
+        </div>
+      </div>
+
+      <!-- Bandeau Compte d'encaissement direct -->
+      <div style="background: #EBF3EE; border: 1px solid #C4DEC8; border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 24px;">💳</span>
+          <div>
+            <strong style="color: var(--primary-dark); font-size: 14px;">Compte d'Encaissement Direct Connecté</strong>
+            <div style="font-size: 12px; color: var(--text-muted);">
+              Les réservations de vos clients sont versées directement sur votre compte bancaire (IBAN FR76 •••• 4892).
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" style="background: white;" onclick="alert('Paramètres de virement Stripe du magasin configurés.')">
+          ⚙️ Gérer mes coordonnées bancaires
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+        
+        <!-- Colonne Gauche : Créateur d'Atelier -->
+        <div class="content-card" id="formNouvelAtelier">
+          <h2 class="card-title">📅 Programmer un Atelier dans ma Boutique</h2>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 18px;">
+            Dès validation, l'atelier apparaîtra sur votre page de réservation et sur vos affiches QR code.
+          </p>
+
+          <form onsubmit="creerAtelierMagasin(event)">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Titre de votre Atelier</label>
+              <input type="text" id="magAtelierTitre" class="form-input" placeholder="Ex: Initiation à l'Herboristerie & Dégustation" required value="Dégustation Thés Rares & Méditation sensorielle">
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Date & Heure</label>
+                <input type="text" id="magAtelierDate" class="form-input" value="Samedi 26 Septembre 2026 • 15h00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tarif par participant (€)</label>
+                <input type="number" id="magAtelierTarif" class="form-input" value="35" min="10">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Nombre maximum de places</label>
+                <input type="number" id="magAtelierPlaces" class="form-input" value="8" min="2" max="30">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Intervenant / Animateur</label>
+                <input type="text" class="form-input" value="Alexandre (Gérant)">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 18px;">
+              <label class="form-label">Description pour vos clients</label>
+              <textarea class="form-textarea" rows="3">Un moment de calme et de découverte au cœur de notre boutique lyonnaise. Dégustation de 4 grands crus et exercices de respiration.</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 14px;">
+              🚀 Enregistrer et ouvrir les inscriptions
+            </button>
+          </form>
+        </div>
+
+        <!-- Colonne Droite : Affiche A4 & Inscriptions en direct -->
+        <div>
+          <!-- Carte Affiche A4 Express -->
+          <div class="content-card" style="margin-bottom: 24px;">
+            <h2 class="card-title">🖨️ Mon Affiche A4 Prête à Imprimer</h2>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px;">
+              Imprimez-la en 1 clic pour la poser sur votre comptoir ou dans votre vitrine.
+            </p>
+            <div style="background: var(--surface-soft); border-radius: var(--radius-sm); padding: 16px; display: flex; align-items: center; gap: 16px;">
+              <div style="font-size: 40px;">📄</div>
+              <div style="flex-grow: 1;">
+                <strong style="font-size: 13.5px;">Affiche_Atelier_Harmonie_Lyon.pdf</strong>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Contient votre QR code de réservation direct</div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="alert('Impression de l\'affiche A4 lancée !')">
+                🖨️ Imprimer
+              </button>
+            </div>
+          </div>
+
+          <!-- Suivi des Inscriptions & Recettes -->
+          <div class="content-card">
+            <div class="card-header-flex" style="margin-bottom: 12px; padding-bottom: 8px;">
+              <h2 class="card-title">👥 Participants Inscrits (6 / 8)</h2>
+              <span style="font-weight: 800; color: var(--primary); font-size: 16px;">210,00 € encaissés</span>
+            </div>
+            
+            <div style="margin-bottom: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span>Remplissage de la session</span>
+                <strong>75% (Plus que 2 places !)</strong>
+              </div>
+              <div style="height: 8px; background: #E5DED6; border-radius: 4px; overflow: hidden;">
+                <div style="width: 75%; height: 100%; background: var(--primary);"></div>
+              </div>
+            </div>
+
+            <div style="font-size: 12px; display: flex; flex-direction: column; gap: 8px;">
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                <span>👤 Claire D. (claire.d@gmail.com)</span>
+                <span style="color: var(--success); font-weight: 700;">Payé 35€</span>
+              </div>
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                <span>👤 Marc V. (06 45 •• •• 12)</span>
+                <span style="color: var(--success); font-weight: 700;">Payé 35€</span>
+              </div>
+              <div style="padding: 6px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                <span>👤 Élodie T. (elodie.t@orange.fr)</span>
+                <span style="color: var(--success); font-weight: 700;">Payé 35€</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================================================================= -->
+    <!-- SECTION 3 : VUE COMMERÇANT (ABONNEMENT SUSPENDU / EXPIRÉ) -->
+    <!-- ================================================================= -->
+    <div id="vue-magasin-suspendu" class="view-section">
+      
+      <div class="top-header">
+        <div>
+          <span class="badge badge-danger" style="margin-bottom: 6px;">🔴 Espace en pause</span>
+          <h1 class="brand-title">Espace Ateliers — Nature & Sens (Grenoble)</h1>
+          <p class="brand-subtitle">Gérant : Thomas B. • Votre licence d'ateliers est actuellement suspendue.</p>
+        </div>
+      </div>
+
+      <div class="locked-card">
+        <div class="locked-icon">⏸️</div>
+        <h2 class="locked-title">Votre Espace Atelier est Momentanément en Pause</h2>
+        <p class="locked-desc">
+          Votre abonnement mensuel à la plateforme s'est terminé le <strong>31 Août 2026</strong>.<br/>
+          Pour préserver votre organisation, vos formulaires de réservation en ligne et l'accès aux votes de vos clients ont été mis en pause.
+        </p>
+
+        <div style="background: white; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px; text-align: left; font-size: 13.5px;">
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 8px;">
+            🔒 Vos données sont précieuses et conservées intactes :
+          </div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px; color: var(--text-muted);">
+            <li>✓ Tous vos thèmes et historiques d'ateliers restent sauvegardés.</li>
+            <li>✓ Les coordonnées de vos participants sont conservées en lieu sûr.</li>
+            <li>✓ Réactivation instantanée dès que votre abonnement est renouvelé.</li>
+          </ul>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" style="padding: 12px 20px; font-size: 14px;" onclick="alert('Simulation : Redirection vers la page de paiement sécurisée Stripe (49€/mois). Dès validation, l\'espace est réactivé en 1 seconde !')">
+            💳 Réactiver mon abonnement (49 € / mois)
+          </button>
+          <button class="btn btn-outline" style="padding: 12px 20px; font-size: 14px;" onclick="alert('Message envoyé à Lynda pour demander une prolongation d\'essai ou un arrangement !')">
+            💬 Contacter Lynda sur WhatsApp
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function basculerVue(nomVue) {
+      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.simu-btn').forEach(btn => btn.classList.remove('active'));
+
+      const target = document.getElementById(`vue-${nomVue}`);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      const buttons = document.querySelectorAll('.simu-btn');
+      if (nomVue === 'lynda') buttons[0]?.classList.add('active');
+      if (nomVue === 'magasin-actif') buttons[1]?.classList.add('active');
+      if (nomVue === 'magasin-suspendu') buttons[2]?.classList.add('active');
+    }
+
+    function changerStatut(selectElem, shopId) {
+      const val = selectElem.value;
+      if (val === 'suspendu') {
+        selectElem.style.background = '#FEE2E2';
+        selectElem.style.color = '#DC2626';
+        alert(`🔴 La boutique ${shopId} a été mise en pause !\n\nSon espace atelier et ses réservations publiques sont désormais bloqués jusqu'au prochain règlement.`);
+      } else if (val === 'actif') {
+        selectElem.style.background = '#E6F6ED';
+        selectElem.style.color = '#1E824C';
+        alert(`🟢 La boutique ${shopId} est désormais ACTIF !\n\nSon gérant peut créer ses ateliers et ses clients peuvent réserver.`);
+      } else {
+        selectElem.style.background = '#FEF3C7';
+        selectElem.style.color = '#D97706';
+        alert(`🟠 La boutique ${shopId} est en période d'essai (14 jours gratuits).`);
+      }
+    }
+
+    function simulerAjoutBoutique() {
+      const nom = prompt("Nom de la nouvelle boutique partenaire :");
+      if (!nom) return;
+      const ville = prompt("Ville du magasin :");
+      const resp = prompt("Nom du responsable :");
+      
+      const tbody = document.getElementById('tableBoutiquesAbonnements');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <strong>${nom}</strong><br/>
+          <span style="font-size: 11px; color: var(--text-muted);">${ville || 'France'} • Nouvelle</span>
+        </td>
+        <td>${resp || 'Gérant'}</td>
+        <td><span class="badge badge-primary">Licence Pro Autonome</span></td>
+        <td><strong>49,00 €</strong></td>
+        <td>
+          <select class="form-select" style="padding: 4px 8px; font-size: 12px; font-weight: 600; background: #FEF3C7; color: #D97706;" onchange="changerStatut(this, 'nouveau')">
+            <option value="actif">🟢 Actif</option>
+            <option value="essai" selected>🟠 Essai (14j)</option>
+            <option value="suspendu">🔴 Suspendu</option>
+          </select>
+        </td>
+        <td>Dans 14 jours</td>
+        <td style="text-align: right;">
+          <button class="btn btn-outline btn-sm" onclick="basculerVue('magasin-actif')">
+            👁️ Voir son espace
+          </button>
+        </td>
+      `;
+      tbody.prepend(tr);
+      alert(`✅ La boutique ${nom} a été ajoutée avec succès en période d'essai 14 jours !`);
+    }
+
+    function copierLienAbonnement(tarif) {
+      const lien = `https://collaboration-therapie.vercel.app/souscription?plan=${tarif}`;
+      navigator.clipboard.writeText(lien).then(() => {
+        alert(`✅ Lien de souscription pour l'offre à ${tarif}€/mois copié !\n\nEnvoyez-le par WhatsApp ou email au magasin pour qu'il active son abonnement en 2 minutes.`);
+      }).catch(() => {
+        prompt("Lien de souscription :", lien);
+      });
+    }
+
+    function creerAtelierMagasin(e) {
+      e.preventDefault();
+      const titre = document.getElementById('magAtelierTitre').value;
+      const date = document.getElementById('magAtelierDate').value;
+      const tarif = document.getElementById('magAtelierTarif').value;
+      const places = document.getElementById('magAtelierPlaces').value;
+
+      alert(`🎉 Félicitations ! Votre atelier :\n\n« ${titre} »\n📅 ${date}\n💰 ${tarif} € / personne (jauge max : ${places} pers.)\n\nest officiellement publié !\n\nVotre QR code et votre lien de réservation sont immédiatement à jour.`);
+    }
+  </script>
+</body>
+</html>
