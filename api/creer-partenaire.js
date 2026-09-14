@@ -131,12 +131,17 @@ export default async function handler(req, res) {
       ok: true,
       idMagasin: nextId,
       nomMagasin: nomMagasin,
+      prenom: prenom,
       responsable: prenom,
       adresse: adresse,
+      ville: adresse,
       capacite: capacite,
       identifiant: username,
+      username: username,
       motDePasse: motDePasse,
+      password: motDePasse,
       lienPartenaire: lienPartenaire,
+      lienPrive: lienPartenaire,
       lienClient: lienClient,
       message: `Boutique ${nomMagasin} créée avec succès dans votre Google Sheet !`
     });

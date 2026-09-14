@@ -2178,16 +2178,17 @@
           dernierNouveauPartenaire = data;
 
           // Remplir les informations de l'écran de succès
-          document.getElementById('succesNomMagasin').textContent = data.nomMagasin;
-          document.getElementById('succesIdMagasin').textContent = data.idMagasin;
-          document.getElementById('succesGerant').textContent = data.prenom;
-          document.getElementById('succesUser').textContent = data.username;
-          document.getElementById('succesPass').textContent = data.password;
+          document.getElementById('succesNomMagasin').textContent = data.nomMagasin || nom;
+          document.getElementById('succesIdMagasin').textContent = data.idMagasin || '-';
+          document.getElementById('succesGerant').textContent = data.prenom || data.responsable || prenom;
+          document.getElementById('succesUser').textContent = data.username || data.identifiant || '-';
+          document.getElementById('succesPass').textContent = data.password || data.motDePasse || pass;
           
+          const lienPrive = data.lienPrive || data.lienPartenaire || `${window.location.origin}/?magasin=${encodeURIComponent(data.idMagasin)}`;
           const lien = document.getElementById('succesLienPrive');
           if (lien) {
-            lien.href = data.lienPrive;
-            lien.textContent = data.lienPrive;
+            lien.href = lienPrive;
+            lien.textContent = lienPrive;
           }
 
           // Basculer l'affichage
