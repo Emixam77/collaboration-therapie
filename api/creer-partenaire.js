@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     const prenom = String(body.prenom || '').trim();
     const adresse = String(body.adresse || body.ville || '').trim();
     const capacite = parseInt(body.capacite, 10) || 10;
-    const motDePasse = String(body.motDePasse || '').trim();
+    const motDePasse = String(body.motDePasse || body.password || '').trim();
 
     if (!nomMagasin || !prenom || !adresse || !motDePasse) {
       return res.status(400).json({
