@@ -760,7 +760,12 @@
       </span>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 10px;">
+      <!-- LIEN DIRECT AGENDA LYNDA (VISIBLE PAR LES COLLABORATEURS ET ADMIN) -->
+      <a id="topBarAgendaLink" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ00R2HqQkasoAgi7GUffpt1-7_jgt9farOncVUdqix2vDNQAJfCGCzHwZChCmjRRjb1xWQ0z_E9" target="_blank" style="display: none; align-items: center; gap: 6px; background: #FFFFFF; border: 1.5px solid var(--primary); color: var(--primary); padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow-soft);">
+        <span>🗓️</span>
+        <span>Agenda Rendez-vous Lynda ↗</span>
+      </a>
+
       <!-- STATUT UTILISATEUR CONNECTÉ -->
       <div id="authStatusBlock" style="display: none; align-items: center; gap: 8px;">
         <span id="userConnectedBadge" style="font-size: 12px; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 5px 12px; border-radius: var(--radius-pill);">
@@ -787,132 +792,166 @@
   <main class="container">
 
     <!-- PANNEAU EXCLUSIF LINDA : GESTION MULTI-MAGASINS VIA GOOGLE SHEETS -->
-    <section id="lyndaAdminSection" class="lynda-admin-box">
-      <div class="admin-header">
+    <!-- PANNEAU EXCLUSIF LYNDA : GESTION DES BOUTIQUES PARTENAIRES (ÉPURÉ) -->
+    <section id="lyndaAdminSection" class="lynda-admin-box" style="padding: 24px; background: #FFFFFF; border-radius: 20px; box-shadow: var(--shadow-soft); margin-bottom: 24px;">
+      <div class="admin-header" style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border-soft);">
         <div>
           <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); font-weight: 700;">
-            Tableau de Bord Privé Lynda
+            Espace Super-Admin Lynda
           </span>
-          <h2 style="font-size: 26px; margin-top: 4px;">Carnet des Boutiques Partenaires</h2>
-          <p style="font-size: 13px; color: var(--text-muted);">
-            Seule Lynda a accès à cette vue d'ensemble. Les magasins et leurs identifiants sont synchronisés en direct depuis son fichier Google Sheet.
+          <h2 style="font-size: 24px; margin-top: 4px; color: var(--text-main);">Carnet des Collaborateurs & Boutiques</h2>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+            Sélectionnez un collaborateur pour afficher sa fiche d'atelier et personnaliser ses tarifs et ses thèmes.
           </p>
         </div>
 
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <button onclick="ouvrirModalNouveauPartenaire()" style="display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #FFFFFF; border: none; padding: 8px 18px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(44,94,67,0.28); transition: transform 0.15s ease;">
+          <button onclick="ouvrirModalNouveauPartenaire()" style="display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #FFFFFF; border: none; padding: 8px 18px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(44,94,67,0.25);">
             <span>➕</span>
             <span>Ajouter une boutique</span>
           </button>
-          <button onclick="syncDepuisGoogleSheet(true)" id="btnRefreshSheet" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid var(--border-soft); color: var(--text-main); padding: 7px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; cursor: pointer;">
+          <button onclick="syncDepuisGoogleSheet(true)" id="btnRefreshSheet" style="display: inline-flex; align-items: center; gap: 6px; background: #FAF9F6; border: 1px solid var(--border-soft); color: var(--text-main); padding: 7px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; cursor: pointer;">
             <span id="refreshIcon">🔄</span> Actualiser Google Sheet
           </button>
-          <a href="maquette-abonnement.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #182820; color: #FFFFFF; padding: 7px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-            <span>✨</span>
-            <span>Mode Sous-Location & Abonnements ↗</span>
-          </a>
-          <a href="audit.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); color: var(--accent); padding: 7px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none;">
-            <span>📋</span>
-            <span>Outil d'Audit Bilan (Axe 2) ↗</span>
-          </a>
           <a href="https://docs.google.com/spreadsheets/d/1TprsCw9JAqZjLwCYvo7c4QQ1FsLv5lVSwZLsvmcNSwQ/edit#gid=0" target="_blank" class="sheet-sync-pill">
             <span>📊</span>
-            <span>Ouvrir ma base Google Sheets ↗</span>
+            <span>Google Sheet ↗</span>
           </a>
         </div>
       </div>
 
-      <div id="liveSyncAlert" style="font-size: 12px; color: #137333; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #137333;"></span>
-        <span>Synchronisation en direct avec l'onglet <strong>Système Atelier</strong> de votre Google Sheet</span>
-      </div>
+      <!-- ENCART DE SÉLECTION DU COLLABORATEUR (MIS EN MAJESTÉ) -->
+      <div style="background: #FBF9F5; border: 1.5px solid var(--border-soft); border-radius: 16px; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+          <label for="selectCollaborateurAdmin" style="font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+            <span>🌿</span>
+            <span>Sélectionner un collaborateur :</span>
+          </label>
+          <span id="nbCollaborateursCount" style="font-size: 11px; color: var(--primary); background: var(--primary-light); padding: 3px 10px; border-radius: 12px; font-weight: 700;">
+            Chargement...
+          </span>
+        </div>
 
-      <!-- INDICATEURS FINANCIERS SOUS-LOCATION / ABONNEMENTS -->
-      <div class="sub-kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 18px;">
-        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid var(--accent); border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
-          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Revenus Récurrents (MRR)</div>
-          <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;" id="kpiMrrValeur">98 € / mois</div>
-          <div style="font-size: 11px; color: #137333; font-weight: 600;">✨ Sous-locations actives</div>
-        </div>
-        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid var(--primary); border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
-          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Licences Magasins Actives</div>
-          <div style="font-size: 22px; font-weight: 800; color: var(--text-main); margin: 4px 0;" id="kpiLicencesActives">2 boutiques</div>
-          <div style="font-size: 11px; color: var(--text-muted);">49€ / mois par boutique</div>
-        </div>
-        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid #D97706; border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
-          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Périodes d'essai 14j</div>
-          <div style="font-size: 22px; font-weight: 800; color: #D97706; margin: 4px 0;" id="kpiEssais">1 boutique</div>
-          <div style="font-size: 11px; color: var(--text-muted);">En phase de découverte</div>
-        </div>
-        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-top: 3px solid #DC2626; border-radius: 12px; padding: 12px 16px; box-shadow: var(--shadow-soft);">
-          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Abonnements en pause</div>
-          <div style="font-size: 22px; font-weight: 800; color: #DC2626; margin: 4px 0;" id="kpiSuspendus">1 boutique</div>
-          <div style="font-size: 11px; color: var(--text-muted);">Accès protégé / suspendu</div>
+        <select id="selectCollaborateurAdmin" onchange="selectionnerCollaborateurAdmin(this.value)" style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--primary); border-radius: 12px; font-size: 14px; font-weight: 600; background: #FFFFFF; color: var(--text-main); cursor: pointer; box-shadow: var(--shadow-soft);">
+          <option value="">— Cliquez pour choisir un collaborateur —</option>
+        </select>
+
+        <!-- TUILLES RAPIDES POUR SÉLECTIONNER EN 1 CLIC -->
+        <div id="collaborateursChips" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;">
+          <!-- Injecté dynamiquement depuis les données Google Sheets -->
         </div>
       </div>
 
-      <table class="shop-table">
-        <thead>
-          <tr>
-            <th>Magasin Partenaire</th>
-            <th>Responsable</th>
-            <th>Statut Atelier</th>
-            <th>Formule & Abonnement</th>
-            <th>Tarif fixé (€)</th>
-            <th>Inscrits / Jauge</th>
-            <th>Accès Partenaire (Google Sheet)</th>
-            <th>Actions & Lien</th>
-          </tr>
-        </thead>
-        <tbody id="shopTableBody">
-          <!-- Chargé dynamiquement depuis Google Sheets -->
-          <tr>
-            <td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">
-              ⏳ Chargement en direct depuis votre Google Sheet...
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- CONTENEUR DES CARTES SUR SMARTPHONE (VERSION MOBILE) -->
-      <div id="shopCardsMobile" class="shop-cards-mobile">
-        <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
-          ⏳ Chargement de vos boutiques...
-        </div>
+      <!-- ÉCRAN D'ATTENTE LORSQU'AUCUN COLLABORATEUR N'EST ENCORE SÉLECTIONNÉ -->
+      <div id="adminPlaceholderNoShop" style="text-align: center; padding: 48px 20px; background: #FAF9F6; border: 1.5px dashed var(--border-soft); border-radius: 16px; margin-top: 20px;">
+        <div style="font-size: 38px; margin-bottom: 8px;">👆</div>
+        <h3 style="font-size: 17px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Veuillez choisir un collaborateur ci-dessus</h3>
+        <p style="font-size: 13px; color: var(--text-muted); max-width: 480px; margin: 0 auto; line-height: 1.5;">
+          Dès que vous sélectionnez une boutique, sa fiche d'atelier apparaît à l'écran et vous pourrez remplir ses prix, ses thèmes et d'autres détails.
+        </p>
       </div>
     </section>
 
     <!-- ESPACE PARTENAIRE D'UN MAGASIN (SYNCHRONISÉ DYNAMIQUEMENT) -->
-    <div id="shopSpaceContainer">
+    <div id="shopSpaceContainer" style="display: none;">
 
-      <!-- ECRAN SUSPENDU EN CAS DE LICENCE EN PAUSE -->
-      <div id="shopSuspendedCard" style="display: none; background: #FFFDF9; border: 2px dashed #E2B93B; border-radius: 20px; padding: 40px 24px; text-align: center; max-width: 680px; margin: 30px auto; box-shadow: var(--shadow-soft);">
-        <div style="font-size: 48px; margin-bottom: 14px;">⏸️</div>
-        <h2 style="font-size: 22px; font-weight: 800; color: #92400E; margin-bottom: 8px;">Votre Espace Atelier est Momentanément en Pause</h2>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;" id="shopSuspendedMsg">
-          Votre licence mensuelle à la plateforme est arrivée à échéance le <strong>31 Août 2026</strong>.<br/>
-          Vos réservations publiques sont momentanément désactivées pour protéger votre organisation.
-        </p>
-        <div style="background: white; border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: left; font-size: 13px;">
-          <strong style="color: var(--text-main);">🔒 Vos données restent précieusement conservées :</strong>
-          <div style="color: var(--text-muted); margin-top: 6px; line-height: 1.6;">
-            ✓ L'historique de vos ateliers et vos thèmes restent sauvegardés.<br/>
-            ✓ Les coordonnées de vos participants sont conservées en sécurité.<br/>
-            ✓ Réactivation instantanée dès le renouvellement.
+      <!-- CONTENU NORMAL DU MAGASIN -->
+      <div id="shopNormalContent">
+
+      <!-- ENCADRÉ D'ÉDITION ADMIN (VISIBLE EXCLUSIVEMENT POUR LYNDA SUPER-ADMIN LORSQU'UN COLLABORATEUR EST SÉLECTIONNÉ) -->
+      <div id="adminEditorBox" style="display: none; background: #FFFFFF; border: 2px solid var(--primary); border-radius: 18px; padding: 22px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(44,94,67,0.12);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); font-weight: 700;">
+              👑 Contrôle Super-Admin Lynda
+            </span>
+            <h3 style="font-size: 20px; color: var(--text-main); margin-top: 2px;">
+              ✏️ Personnaliser la fiche de <span id="adminEditorShopName" style="color: var(--primary);">cette boutique</span>
+            </h3>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">
+              Remplissez les prix, thèmes et dates. Dès que vous enregistrez, votre Google Sheet se met à jour immédiatement.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button type="button" onclick="sauvegarderModificationsAdmin()" id="btnSaveAdminSheet" class="btn-zen-primary" style="padding: 9px 20px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;">
+              <span>💾</span>
+              <span id="btnSaveAdminSheetText">Enregistrer dans Google Sheet</span>
+            </button>
+            <button type="button" onclick="deselectionnerCollaborateurAdmin()" class="btn-zen-secondary" style="padding: 9px 14px; font-size: 12px;" title="Fermer la fiche">
+              ✖ Fermer la fiche
+            </button>
           </div>
         </div>
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-          <button class="btn-copy-url" style="background: var(--primary); color: white; border-color: var(--primary); padding: 12px 20px; font-size: 14px;" onclick="alert('Simulation : Redirection vers le paiement sécurisé Stripe pour régulariser votre abonnement (49 € / mois). Dès confirmation, votre espace est réactivé instantanément !')">
-            💳 Réactiver ma licence (49 € / mois)
-          </button>
-          <a href="https://wa.me/?text=Bonjour%20Lynda%2C%20je%20souhaite%20renouveler%20ma%20licence%20d%27ateliers." target="_blank" class="btn-copy-url" style="background: white; border-color: var(--border-soft); padding: 12px 20px; font-size: 14px; text-decoration: none;">
-            💬 Écrire à Lynda sur WhatsApp
-          </a>
+
+        <div id="adminSaveFeedback" style="display: none; background: #DEF7EC; color: #0E9F6E; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 14px;">
+          ✅ Fiche mise à jour en direct dans votre Google Sheet !
+        </div>
+
+        <!-- GRILLE DE CONFIGURATION GENERALE (TARIF, CAPACITÉ, DATE, STATUT) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 18px; background: #FAF9F6; padding: 16px; border-radius: 12px; border: 1px solid var(--border-soft);">
+          <div>
+            <label style="font-size: 11.5px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Tarif de la séance (€)</label>
+            <input type="number" id="adminInputTarif" min="5" max="300" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-soft); border-radius: 8px; font-size: 14px; background: #FFFFFF; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label style="font-size: 11.5px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Capacité salle (places)</label>
+            <input type="number" id="adminInputCapacite" min="1" max="100" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-soft); border-radius: 8px; font-size: 14px; background: #FFFFFF; box-sizing: border-box;" />
+          </div>
+          <div>
+            <label style="font-size: 11.5px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Statut de l'Atelier</label>
+            <select id="adminInputStatut" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-soft); border-radius: 8px; font-size: 13px; background: #FFFFFF; box-sizing: border-box;">
+              <option value="Phase de Vote">Phase de Vote</option>
+              <option value="Date Validée">Date Validée</option>
+              <option value="Inscriptions Ouvertes">Inscriptions Ouvertes</option>
+              <option value="Complet">Complet</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 11.5px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Date & Heure retenue</label>
+            <input type="text" id="adminInputDate" placeholder="ex: Samedi 26 Septembre • 14h30" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-soft); border-radius: 8px; font-size: 13px; background: #FFFFFF; box-sizing: border-box;" />
+          </div>
+        </div>
+
+        <!-- CONFIGURATION DES 3 THEMES SOUMIS AU VOTE -->
+        <div style="margin-bottom: 8px;">
+          <strong style="font-size: 13px; color: var(--text-main);">🌿 Personnaliser les 3 Thèmes d'Atelier pour cette boutique :</strong>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
+          <!-- THEME 1 -->
+          <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Thème 1 (Prioritaire)</div>
+            <input type="text" id="adminInputTheme1Titre" placeholder="Titre Thème 1" style="width: 100%; padding: 7px 10px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; box-sizing: border-box;" />
+            <textarea id="adminInputTheme1Desc" rows="2" placeholder="Description courte..." style="width: 100%; padding: 7px 10px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12px; margin-bottom: 6px; resize: vertical; box-sizing: border-box;"></textarea>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; color: var(--text-muted);">Tarif Thème 1 (€) :</span>
+              <input type="number" id="adminInputTheme1Tarif" style="width: 80px; padding: 5px 8px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12px; box-sizing: border-box;" />
+            </div>
+          </div>
+
+          <!-- THEME 2 -->
+          <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Thème 2</div>
+            <input type="text" id="adminInputTheme2Titre" placeholder="Titre Thème 2" style="width: 100%; padding: 7px 10px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; box-sizing: border-box;" />
+            <textarea id="adminInputTheme2Desc" rows="2" placeholder="Description courte..." style="width: 100%; padding: 7px 10px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12px; margin-bottom: 6px; resize: vertical; box-sizing: border-box;"></textarea>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; color: var(--text-muted);">Tarif Thème 2 (€) :</span>
+              <input type="number" id="adminInputTheme2Tarif" style="width: 80px; padding: 5px 8px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12px; box-sizing: border-box;" />
+            </div>
+          </div>
+
+          <!-- THEME 3 -->
+          <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Thème 3</div>
+            <input type="text" id="adminInputTheme3Titre" placeholder="Titre Thème 3" style="width: 100%; padding: 7px 10px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; box-sizing: border-box;" />
+            <textarea id="adminInputTheme3Desc" rows="2" placeholder="Description courte..." style="width: 100%; padding: 7px 10px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12px; margin-bottom: 6px; resize: vertical; box-sizing: border-box;"></textarea>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 11px; color: var(--text-muted);">Tarif Thème 3 (€) :</span>
+              <input type="number" id="adminInputTheme3Tarif" style="width: 80px; padding: 5px 8px; border: 1px solid var(--border-soft); border-radius: 6px; font-size: 12px; box-sizing: border-box;" />
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- CONTENU NORMAL DU MAGASIN (SI ACTIF OU ESSAI) -->
-      <div id="shopNormalContent">
 
       <!-- BANNIERE MAGASIN -->
       <section class="hero-zen">
@@ -957,70 +996,11 @@
         </div>
       </section>
 
-      <!-- BANDEAU SOUS-LOCATION / ENCAISSEMENT DIRECT POUR BOUTIQUES AUTONOMES -->
-      <div id="shopAutonomousBanner" style="display: none; background: #EBF3EE; border: 1px solid #C4DEC8; border-radius: 14px; padding: 16px 20px; margin-bottom: 24px; box-shadow: var(--shadow-soft);">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 28px;">💳</span>
-            <div>
-              <strong style="color: var(--primary); font-size: 15px;" id="shopAutoTitreAbo">Licence Magasin Active (49 € / mois)</strong>
-              <div style="font-size: 12.5px; color: var(--text-muted);" id="shopAutoDescAbo">
-                Vos recettes d'ateliers sont versées directement sur votre compte bancaire (IBAN FR76 •••• 4892) — 0% de commission.
-              </div>
-            </div>
-          </div>
-          <button class="btn-copy-url" style="background: white; border-color: var(--primary); color: var(--primary); padding: 8px 14px; font-size: 12px;" onclick="document.getElementById('shopAutoCreatorBox').scrollIntoView({ behavior: 'smooth' })">
-            ➕ Créer / Programmer un atelier
-          </button>
-        </div>
-      </div>
-
       <!-- GRILLE CONTENU -->
       <div class="grid-duo">
 
         <!-- COLONNE GAUCHE : THEMES ET CALENDRIER -->
         <div style="display: flex; flex-direction: column; gap: 24px;">
-
-          <!-- CREATEUR D'ATELIER EN AUTONOMIE (POUR MAGASINS AUTONOMES) -->
-          <div class="card-zen" id="shopAutoCreatorBox" style="display: none; border-color: var(--primary); background: #FCFAF7;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center;">
-              <div>
-                <h3 class="card-title"><span>✨</span> Programmer un Atelier dans ma Boutique</h3>
-                <p class="card-desc">Vous organisez votre atelier en toute autonomie. Dès validation, vos affiches et réservations se mettent à jour.</p>
-              </div>
-              <span class="badge-status badge-valide">Mode Autonome</span>
-            </div>
-
-            <form onsubmit="enregistrerAtelierAutonome(event)" style="display: flex; flex-direction: column; gap: 12px;">
-              <div>
-                <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Intitulé de votre atelier</label>
-                <input type="text" id="autoInputTitre" class="auth-input" style="background: white;" value="Dégustation Thés Rares & Méditation sensorielle" required />
-              </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div>
-                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Date & Heure</label>
-                  <input type="text" id="autoInputDate" class="auth-input" style="background: white;" value="Samedi 26 Septembre 2026 • 15h00" required />
-                </div>
-                <div>
-                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Tarif / place (€)</label>
-                  <input type="number" id="autoInputTarif" class="auth-input" style="background: white;" value="35" min="5" required />
-                </div>
-              </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div>
-                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Nombre de places (Jauge)</label>
-                  <input type="number" id="autoInputPlaces" class="auth-input" style="background: white;" value="8" min="2" max="50" required />
-                </div>
-                <div>
-                  <label style="font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 4px;">Intervenant</label>
-                  <input type="text" id="autoInputAnimateur" class="auth-input" style="background: white;" value="Équipe Magasin" />
-                </div>
-              </div>
-              <button type="submit" class="btn-submit-auth" style="margin-top: 4px; padding: 11px;">
-                🚀 Publier l'atelier dans mon calendrier et sur mes affiches
-              </button>
-            </form>
-          </div>
 
           <!-- LES VOTES CLIENTS / THEMES -->
           <div class="card-zen">
@@ -1040,42 +1020,55 @@
             </div>
           </div>
 
-          <!-- CALENDRIER GOOGLE SYNCHRO -->
-          <div class="card-zen">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+          <!-- CALENDRIER GOOGLE SYNCHRO DE LYNDA -->
+          <div class="card-zen" style="border-top: 3px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
               <div>
                 <h3 class="card-title"><span>🗓️</span> Calendrier Google de Lynda</h3>
-                <p class="card-desc">Disponibilités synchronisées en temps réel.</p>
+                <p class="card-desc">Disponibilités synchronisées en direct. Choisissez votre créneau avec Lynda.</p>
               </div>
-              <span class="badge-status badge-valide" id="shopCalendarBadge">● Synchro active</span>
+              <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ00R2HqQkasoAgi7GUffpt1-7_jgt9farOncVUdqix2vDNQAJfCGCzHwZChCmjRRjb1xWQ0z_E9" target="_blank" class="btn-zen-primary" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 12px; font-weight: 700; text-decoration: none; border-radius: var(--radius-pill); box-shadow: 0 2px 8px rgba(44,94,67,0.2);">
+                <span>📅</span>
+                <span>Prendre RDV sur l'Agenda ↗</span>
+              </a>
             </div>
 
-            <div style="background: var(--primary-light); padding: 16px; border-radius: 14px; border: 1px solid var(--border-soft);">
-              <div style="font-size: 12px; text-transform: uppercase; color: var(--primary); font-weight: 700; margin-bottom: 4px;" id="shopCreneauLabel">
-                Créneau de l'atelier :
+            <div style="background: var(--primary-light); padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border-soft); margin-bottom: 14px;">
+              <div style="font-size: 11.5px; text-transform: uppercase; color: var(--primary); font-weight: 700; margin-bottom: 2px;" id="shopCreneauLabel">
+                Créneau validé pour votre boutique :
               </div>
-              <div style="font-size: 17px; font-weight: 700; color: var(--text-main);" id="shopCreneauTexte">
+              <div style="font-size: 16px; font-weight: 700; color: var(--text-main);" id="shopCreneauTexte">
                 Samedi 26 Septembre 2026 • 14h30 - 16h00
               </div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="shopLieuTexte">
-                Lieu : Espace Soins, Herboristerie des Alpages
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;" id="shopLieuTexte">
+                Lieu : En magasin
               </div>
             </div>
 
             <!-- ENCADRÉ TARIF GOOGLE SHEET -->
-            <div style="display: flex; align-items: center; justify-content: space-between; background: #FFFFFF; border: 1.5px dashed var(--border-soft); border-radius: 12px; padding: 12px 16px; margin-top: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #FFFFFF; border: 1.5px dashed var(--border-soft); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;">
               <div>
                 <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
                   Tarif de la séance (Fixé par Lynda)
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted);">
-                  Défini directement dans le Google Sheet maître de Lynda.
+                  Synchronisé en temps réel avec votre carnet Google Sheet.
                 </div>
               </div>
               <div style="text-align: right;">
                 <span style="font-size: 20px; font-weight: 800; color: var(--primary);" id="shopTarifValeur">35,00 €</span>
                 <div style="font-size: 10px; color: var(--text-muted);">par participant</div>
               </div>
+            </div>
+
+            <!-- IFRAME INTÉGRÉE DU PLANNING GOOGLE APPOINTMENTS DE LYNDA -->
+            <div style="border-radius: 12px; overflow: hidden; border: 1px solid var(--border-soft); box-shadow: var(--shadow-soft); background: #FFFFFF;">
+              <iframe 
+                src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ00R2HqQkasoAgi7GUffpt1-7_jgt9farOncVUdqix2vDNQAJfCGCzHwZChCmjRRjb1xWQ0z_E9" 
+                style="width: 100%; height: 500px; border: 0;" 
+                frameborder="0"
+                loading="lazy">
+              </iframe>
             </div>
           </div>
 
@@ -1459,15 +1452,24 @@
       const userBadge = document.getElementById('userConnectedBadge');
       const adminSwitcher = document.getElementById('adminRoleSwitcher');
       const adminSec = document.getElementById('lyndaAdminSection');
+      const topAgenda = document.getElementById('topBarAgendaLink');
 
       if (statusBlock) statusBlock.style.display = 'flex';
+      if (topAgenda) topAgenda.style.display = 'inline-flex';
 
       if (session.role === 'admin') {
-        // Mode Super-Admin Lynda
+        // Mode Super-Admin Lynda (Épuré)
         if (userBadge) userBadge.innerHTML = `👑 Lynda (Super-Admin)`;
         if (adminSwitcher) adminSwitcher.style.display = 'flex';
         if (adminSec) adminSec.style.display = 'block';
         switchRole('lynda');
+
+        // Initialisation : aucun collaborateur tant que Lynda n'a pas sélectionné
+        if (!boutiqueActive) {
+          deselectionnerCollaborateurAdmin();
+        } else {
+          selectionnerCollaborateurAdmin(boutiqueActive.id);
+        }
 
         // Détection automatique du lien cliqué dans Google Sheet
         const urlParams = new URLSearchParams(window.location.search);
@@ -1481,6 +1483,15 @@
         if (userBadge) userBadge.innerHTML = `🔒 ${session.shopNom} (${session.responsable})`;
         if (adminSwitcher) adminSwitcher.style.display = 'none';
         if (adminSec) adminSec.style.display = 'none';
+
+        const editorBox = document.getElementById('adminEditorBox');
+        if (editorBox) editorBox.style.display = 'none';
+
+        const placeholder = document.getElementById('adminPlaceholderNoShop');
+        if (placeholder) placeholder.style.display = 'none';
+
+        const cont = document.getElementById('shopSpaceContainer');
+        if (cont) cont.style.display = 'block';
 
         const mag = boutiquesEnLigne.find(b => b.id === session.shopId) || {
           id: session.shopId,
@@ -1497,9 +1508,14 @@
       if (confirm("Voulez-vous vraiment vous déconnecter de votre espace ?")) {
         sessionStorage.removeItem('lynda_collab_session');
         sessionUtilisateur = null;
+        boutiqueActive = null;
         document.getElementById('authStatusBlock').style.display = 'none';
+        document.getElementById('topBarAgendaLink').style.display = 'none';
         document.getElementById('adminRoleSwitcher').style.display = 'none';
         document.getElementById('lyndaAdminSection').style.display = 'none';
+        document.getElementById('shopSpaceContainer').style.display = 'none';
+        const editorBox = document.getElementById('adminEditorBox');
+        if (editorBox) editorBox.style.display = 'none';
         document.getElementById('authInputPass').value = '';
         const errBox = document.getElementById('authErrorMsg');
         if (errBox) errBox.style.display = 'none';
@@ -1617,26 +1633,26 @@
           })
           .filter(Boolean);
 
-        // Calcul des KPIs d'abonnements en direct
-        const nbActifs = boutiquesEnLigne.filter(b => (b.formule || '').includes('Autonome') && (b.statutAbonnement || '').toLowerCase().includes('actif')).length;
-        const nbEssais = boutiquesEnLigne.filter(b => (b.statutAbonnement || '').toLowerCase().includes('essai')).length;
-        const nbSuspendus = boutiquesEnLigne.filter(b => (b.statutAbonnement || '').toLowerCase().includes('suspendu')).length;
-        const mrr = nbActifs * 49;
+        rendreSelecteurAdmin(boutiquesEnLigne);
 
-        const elMrr = document.getElementById('kpiMrrValeur');
-        if (elMrr) elMrr.textContent = `${mrr} € / mois`;
-        const elActifs = document.getElementById('kpiLicencesActives');
-        if (elActifs) elActifs.textContent = `${nbActifs} boutique${nbActifs > 1 ? 's' : ''}`;
-        const elEssais = document.getElementById('kpiEssais');
-        if (elEssais) elEssais.textContent = `${nbEssais} boutique${nbEssais > 1 ? 's' : ''}`;
-        const elSusp = document.getElementById('kpiSuspendus');
-        if (elSusp) elSusp.textContent = `${nbSuspendus} boutique${nbSuspendus > 1 ? 's' : ''}`;
-
-        rendreTableauAdmin(boutiquesEnLigne);
-
-        if (!boutiqueActive && boutiquesEnLigne.length > 0) {
-          boutiqueActive = boutiquesEnLigne[0];
-          afficherBoutique(boutiqueActive);
+        // Si session magasin active, charger sa boutique
+        if (sessionUtilisateur && sessionUtilisateur.role === 'shop') {
+          const mag = boutiquesEnLigne.find(b => b.id === sessionUtilisateur.shopId);
+          if (mag) {
+            boutiqueActive = mag;
+            afficherBoutique(boutiqueActive);
+          }
+        } else if (sessionUtilisateur && sessionUtilisateur.role === 'admin') {
+          // Si Super-Admin Lynda : si elle avait déjà sélectionné une boutique, actualiser sa fiche
+          if (boutiqueActive) {
+            const fresh = boutiquesEnLigne.find(b => b.id === boutiqueActive.id);
+            if (fresh) {
+              boutiqueActive = fresh;
+              selectionnerCollaborateurAdmin(boutiqueActive.id);
+            }
+          } else {
+            deselectionnerCollaborateurAdmin();
+          }
         }
 
         // Vérification de la session
@@ -1647,13 +1663,6 @@
         }
       } catch (err) {
         console.error('Erreur chargement Google Sheet :', err);
-        const tbody = document.getElementById('shopTableBody');
-        if (tbody) {
-          tbody.innerHTML = `
-            <tr><td colspan="7" style="text-align: center; color: #B35E3B; padding: 18px;">
-              ⚠️ Impossible de lire Google Sheet en direct. Vérifiez votre connexion.
-            </td></tr>`;
-        }
       } finally {
         if (btn) btn.style.opacity = '1';
       }
@@ -1662,66 +1671,21 @@
     function afficherBoutique(m, scroller = false) {
       boutiqueActive = m;
 
-      // 0. Vérification du statut d'abonnement (Suspendu vs Actif)
-      const suspCard = document.getElementById('shopSuspendedCard');
-      const normCont = document.getElementById('shopNormalContent');
-      const autoBanner = document.getElementById('shopAutonomousBanner');
-      const autoCreator = document.getElementById('shopAutoCreatorBox');
-
-      const statutAbo = (m.statutAbonnement || '').toLowerCase();
-      const estSuspendu = statutAbo.includes('suspendu');
-      const estAutonome = (m.formule || '').toLowerCase().includes('autonome');
-
-      if (estSuspendu) {
-        if (suspCard) {
-          suspCard.style.display = 'block';
-          const msg = document.getElementById('shopSuspendedMsg');
-          if (msg) {
-            msg.innerHTML = `L'abonnement de la boutique <strong>${m.nom}</strong> s'est terminé le <strong>${m.dateEcheance || '31 Août 2026'}</strong>.<br/>Vos réservations publiques sont momentanément désactivées pour protéger votre organisation.`;
-          }
-        }
-        if (normCont) normCont.style.display = 'none';
-        if (scroller) document.getElementById('shopSpaceContainer')?.scrollIntoView({ behavior: 'smooth' });
-        return;
-      } else {
-        if (suspCard) suspCard.style.display = 'none';
-        if (normCont) normCont.style.display = 'block';
-      }
-
-      // Mode Autonome vs Standard Lynda
-      if (estAutonome) {
-        if (autoBanner) {
-          autoBanner.style.display = 'block';
-          const tit = document.getElementById('shopAutoTitreAbo');
-          if (tit) tit.textContent = `🟢 ${m.formule} (${m.statutAbonnement || 'Actif'}) • Prochaine facture : ${m.dateEcheance}`;
-          const desc = document.getElementById('shopAutoDescAbo');
-          if (desc) desc.textContent = `Compte de versement : ${m.compteEncaissement || 'Stripe Magasin'} — 0% de commission sur vos ateliers.`;
-        }
-        if (autoCreator) autoCreator.style.display = 'block';
-      } else {
-        if (autoBanner) autoBanner.style.display = 'none';
-        if (autoCreator) autoCreator.style.display = 'none';
-      }
-
       // 1. En-tête & Bannière
       const breadcrumb = document.getElementById('breadcrumbShop');
       if (breadcrumb) {
-        breadcrumb.innerHTML = `▸ <strong>Espace Privé Partenaire :</strong> ${m.nom} (${m.responsable})`;
+        breadcrumb.innerHTML = `▸ <strong>Espace Partenaire :</strong> ${m.nom} (${m.responsable})`;
       }
 
       const tagNom = document.getElementById('shopTagNom');
       if (tagNom) tagNom.textContent = `${m.nom} • ${m.ville}`;
 
       const heroTitle = document.getElementById('shopHeroTitle');
-      if (heroTitle) heroTitle.textContent = estAutonome ? `Espace Ateliers Autonomes • ${m.nom}` : `Atelier Bien-être & Thérapie • ${m.nom}`;
+      if (heroTitle) heroTitle.textContent = `Atelier Bien-être & Thérapie • ${m.nom}`;
 
       const heroDesc = document.getElementById('shopHeroDesc');
       if (heroDesc) {
-        if (estAutonome) {
-          heroDesc.innerHTML = `Espace Atelier Autonome géré par <strong>${m.responsable} (Gérant·e)</strong>. Vous organisez vos sessions en toute indépendance et encaissez directement les réservations de vos clients.`;
-        } else {
-          heroDesc.innerHTML = `Espace partagé entre <strong>${m.responsable} (Gérant·e)</strong> et <strong>Lynda (Thérapeute)</strong>. Vous pouvez suivre les votes de vos clients, choisir la date dans le calendrier et imprimer votre kit événement.`;
-        }
+        heroDesc.innerHTML = `Espace partagé entre <strong>${m.responsable} (Gérant·e)</strong> et <strong>Lynda (Thérapeute)</strong>. Vous pouvez suivre les votes de vos clients, choisir la date dans le calendrier et imprimer votre kit événement.`;
       }
 
       // 2. Stepper dynamique
@@ -1871,168 +1835,209 @@
       }
     }
 
-    function rendreTableauAdmin(magasins) {
-      const tbody = document.getElementById('shopTableBody');
-      if (!tbody) return;
+    function rendreSelecteurAdmin(magasins) {
+      const select = document.getElementById('selectCollaborateurAdmin');
+      const chipsContainer = document.getElementById('collaborateursChips');
+      const countEl = document.getElementById('nbCollaborateursCount');
 
-      if (magasins.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align: center; padding: 28px; color: var(--text-muted);">
-              📭 Aucune boutique active dans votre Google Sheet.<br/>
-              <span style="font-size: 11px;">Ajoutez une ligne dans l'onglet <strong>Système Atelier</strong> pour faire apparaître un partenaire.</span>
-            </td>
-          </tr>`;
-        return;
+      if (countEl) {
+        countEl.textContent = `${magasins.length} boutique${magasins.length > 1 ? 's' : ''}`;
       }
 
-      tbody.innerHTML = magasins.map(m => {
-        const estValide = m.statut.toLowerCase().includes('planifié') || m.statut.toLowerCase().includes('valide');
-        const badgeClass = estValide ? 'badge-valide' : 'badge-encours';
-
-        const statutAbo = (m.statutAbonnement || 'Actif').toLowerCase();
-        let aboBadge = '<span class="badge-status badge-valide">🟢 Actif</span>';
-        if (statutAbo.includes('suspendu')) {
-          aboBadge = '<span class="badge-status" style="background:#FEE2E2; color:#DC2626; font-weight:700;">🔴 Suspendu</span>';
-        } else if (statutAbo.includes('essai')) {
-          aboBadge = '<span class="badge-status badge-encours">🟠 Essai 14j</span>';
-        } else if ((m.formule || '').includes('Standard')) {
-          aboBadge = '<span class="badge-status badge-valide">🌿 Standard Lynda</span>';
-        }
-
-        const echeanceInfo = m.dateEcheance && m.dateEcheance !== '-'
-          ? `<div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">Échéance : <strong>${m.dateEcheance}</strong></div>`
-          : '';
-
-        return `
-          <tr>
-            <td>
-              <strong>🌿 ${m.nom}</strong><br/>
-              <span style="font-size: 11px; color: var(--text-muted);">${m.ville} • ID : <code>${m.id}</code></span>
-            </td>
-            <td>${m.responsable}</td>
-            <td>
-              <span class="badge-status ${badgeClass}">${m.statut}</span>
-            </td>
-            <td>
-              ${aboBadge}
-              <div style="font-size: 11.5px; font-weight: 600; color: var(--text-main); margin-top: 2px;">${m.formule || 'Atelier Lynda'}</div>
-              ${echeanceInfo}
-            </td>
-            <td>
-              <strong style="color: var(--primary); font-size: 14px;">${m.tarif} €</strong>
-            </td>
-            <td><strong>${m.places}</strong></td>
-            <td>
-              <div style="font-size: 12px; margin-bottom: 4px;">
-                👤 Identifiant : <strong><code>${m.username || 'Non défini'}</code></strong><br/>
-                🔑 Mot de passe : <strong><code>${m.password || '••••••••'}</code></strong>
-              </div>
-              <button class="btn-copy-url" style="background: #FFFFFF; font-size: 10.5px; padding: 4px 8px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}', '${m.formule}')">
-                ✉️ Copier message WhatsApp / SMS
-              </button>
-            </td>
-            <td>
-              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <button class="btn-copy-url" onclick="copierLienMagasin('${m.id}', '${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}')">
-                  🔗 Copier lien
-                </button>
-                <button class="btn-copy-url" style="background: #FFFFFF; border-color: var(--primary); color: var(--primary);" onclick="afficherBoutiqueParId('${m.id}', true)">
-                  👁️ Voir l'espace
-                </button>
-              </div>
-            </td>
-          </tr>
+      if (select) {
+        const valActuelle = boutiqueActive ? boutiqueActive.id : '';
+        select.innerHTML = `
+          <option value="">— Cliquez pour choisir un collaborateur (${magasins.length}) —</option>
+          ${magasins.map(m => `
+            <option value="${m.id}" ${m.id === valActuelle ? 'selected' : ''}>
+              ${m.nom} — ${m.responsable} (${m.ville})
+            </option>
+          `).join('')}
         `;
-      }).join('');
+      }
 
-      // 2. Rendu des cartes tactiles pour smartphone
-      const cardsMobile = document.getElementById('shopCardsMobile');
-      if (cardsMobile) {
-        cardsMobile.innerHTML = magasins.map(m => {
-          const estValide = m.statut.toLowerCase().includes('planifié') || m.statut.toLowerCase().includes('valide');
-          const badgeClass = estValide ? 'badge-valide' : 'badge-encours';
-
-          const statutAbo = (m.statutAbonnement || 'Actif').toLowerCase();
-          let aboBadge = '<span class="badge-status badge-valide">🟢 Actif</span>';
-          if (statutAbo.includes('suspendu')) {
-            aboBadge = '<span class="badge-status" style="background:#FEE2E2; color:#DC2626; font-weight:700;">🔴 Suspendu</span>';
-          } else if (statutAbo.includes('essai')) {
-            aboBadge = '<span class="badge-status badge-encours">🟠 Essai 14j</span>';
-          } else if ((m.formule || '').includes('Standard')) {
-            aboBadge = '<span class="badge-status badge-valide">🌿 Standard Lynda</span>';
-          }
-
+      if (chipsContainer) {
+        chipsContainer.innerHTML = magasins.map(m => {
+          const isActif = boutiqueActive && boutiqueActive.id === m.id;
+          const bg = isActif ? 'var(--primary)' : '#FFFFFF';
+          const col = isActif ? '#FFFFFF' : 'var(--text-main)';
+          const border = isActif ? 'var(--primary)' : 'var(--border-soft)';
           return `
-            <div class="shop-mobile-card">
-              <div class="shop-mobile-top">
-                <div>
-                  <strong style="font-size: 16px; color: var(--text-main);">🌿 ${m.nom}</strong>
-                  <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
-                    📍 ${m.ville} • Responsable : <strong>${m.responsable}</strong>
-                  </div>
-                </div>
-                <span class="badge-status ${badgeClass}">${m.statut}</span>
-              </div>
-
-              <div style="display: flex; justify-content: space-between; align-items: center; background: #FAF8F5; border-radius: 8px; padding: 6px 10px; margin: 6px 0; font-size: 11.5px;">
-                <span>Licence : <strong>${m.formule || 'Atelier Lynda'}</strong></span>
-                ${aboBadge}
-              </div>
-
-              <div class="shop-mobile-metrics">
-                <div>
-                  <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Tarif Magasin</span><br/>
-                  <strong style="color: var(--primary); font-size: 16px;">${m.tarif} €</strong>
-                </div>
-                <div>
-                  <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Inscriptions</span><br/>
-                  <strong style="font-size: 16px; color: var(--text-main);">${m.places}</strong>
-                </div>
-              </div>
-
-              <div style="background: #FFFFFF; border: 1px dashed var(--border-soft); border-radius: 10px; padding: 8px 10px; margin: 8px 0; font-size: 12px;">
-                👤 User : <strong><code>${m.username || 'Non défini'}</code></strong> • 🔑 Pass : <strong><code>${m.password || '••••••'}</code></strong>
-              </div>
-
-              <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
-                <button class="btn-copy-url" style="flex: 1; justify-content: center; padding: 10px; font-size: 11.5px;" onclick="copierMessageAcces('${m.nom.replace(/'/g, "\\'")}', '${m.responsable.replace(/'/g, "\\'")}', '${m.username}', '${m.password}', '${m.formule}')">
-                  ✉️ Copier accès (SMS/WhatsApp)
-                </button>
-                <button class="btn-copy-url" style="background: white; border-color: var(--primary); color: var(--primary); padding: 10px; font-size: 11.5px;" onclick="afficherBoutiqueParId('${m.id}', true)">
-                  👁️ Voir
-                </button>
-                <a href="client.html?magasin=${encodeURIComponent(m.id)}" target="_blank" class="btn-copy-url" style="background: var(--primary-light); border-color: var(--primary); color: var(--primary); padding: 10px; text-decoration: none; font-size: 11.5px;">
-                  📱 Client
-                </a>
-              </div>
-            </div>
+            <button type="button" onclick="selectionnerCollaborateurAdmin('${m.id}')" style="display: inline-flex; align-items: center; gap: 6px; background: ${bg}; color: ${col}; border: 1.5px solid ${border}; padding: 8px 14px; border-radius: var(--radius-pill); font-size: 12.5px; font-weight: 600; cursor: pointer; transition: all 0.15s ease; box-shadow: var(--shadow-soft);">
+              <span>🌿</span>
+              <span><strong>${m.nom}</strong> • ${m.responsable} <span style="opacity: 0.75;">(${m.ville})</span></span>
+            </button>
           `;
         }).join('');
       }
     }
 
-    function enregistrerAtelierAutonome(e) {
-      e.preventDefault();
-      const tit = document.getElementById('autoInputTitre').value;
-      const date = document.getElementById('autoInputDate').value;
-      const tarif = document.getElementById('autoInputTarif').value;
-      const places = document.getElementById('autoInputPlaces').value;
-
-      if (boutiqueActive) {
-        boutiqueActive.theme1Titre = tit;
-        boutiqueActive.dateHeure = date;
-        boutiqueActive.tarif = tarif;
-        boutiqueActive.places = `0 / ${places}`;
-        afficherBoutique(boutiqueActive);
+    function selectionnerCollaborateurAdmin(id) {
+      if (!id) {
+        deselectionnerCollaborateurAdmin();
+        return;
       }
-      alert(`🎉 Félicitations !\n\nVotre atelier autonome :\n« ${tit} »\n📅 ${date}\n💰 ${tarif} € / place (jauge : ${places} pers.)\n\nest enregistré et prêt à accueillir des inscriptions !`);
+
+      const mag = boutiquesEnLigne.find(b => b.id === id);
+      if (!mag) return;
+
+      boutiqueActive = mag;
+
+      // Mettre à jour le select et les puces
+      const select = document.getElementById('selectCollaborateurAdmin');
+      if (select) select.value = id;
+      rendreSelecteurAdmin(boutiquesEnLigne);
+
+      // Remplir le formulaire d'édition pour Lynda
+      const nameEl = document.getElementById('adminEditorShopName');
+      if (nameEl) nameEl.textContent = `${mag.nom} (${mag.responsable} • ${mag.ville})`;
+
+      const inTarif = document.getElementById('adminInputTarif');
+      if (inTarif) inTarif.value = mag.tarif || 35;
+
+      const inCap = document.getElementById('adminInputCapacite');
+      if (inCap) inCap.value = mag.capacite || 10;
+
+      const inStatut = document.getElementById('adminInputStatut');
+      if (inStatut) inStatut.value = mag.statut || 'Phase de Vote';
+
+      const inDate = document.getElementById('adminInputDate');
+      if (inDate) inDate.value = mag.dateHeure || '';
+
+      const inT1T = document.getElementById('adminInputTheme1Titre');
+      if (inT1T) inT1T.value = mag.theme1Titre || '';
+      const inT1D = document.getElementById('adminInputTheme1Desc');
+      if (inT1D) inT1D.value = mag.theme1Desc || '';
+      const inT1P = document.getElementById('adminInputTheme1Tarif');
+      if (inT1P) inT1P.value = mag.theme1Tarif || mag.tarif || 35;
+
+      const inT2T = document.getElementById('adminInputTheme2Titre');
+      if (inT2T) inT2T.value = mag.theme2Titre || '';
+      const inT2D = document.getElementById('adminInputTheme2Desc');
+      if (inT2D) inT2D.value = mag.theme2Desc || '';
+      const inT2P = document.getElementById('adminInputTheme2Tarif');
+      if (inT2P) inT2P.value = mag.theme2Tarif || mag.tarif || 35;
+
+      const inT3T = document.getElementById('adminInputTheme3Titre');
+      if (inT3T) inT3T.value = mag.theme3Titre || '';
+      const inT3D = document.getElementById('adminInputTheme3Desc');
+      if (inT3D) inT3D.value = mag.theme3Desc || '';
+      const inT3P = document.getElementById('adminInputTheme3Tarif');
+      if (inT3P) inT3P.value = mag.theme3Tarif || mag.tarif || 35;
+
+      // Afficher le conteneur de la boutique et la boîte d'édition
+      const editorBox = document.getElementById('adminEditorBox');
+      if (editorBox) editorBox.style.display = 'block';
+
+      const container = document.getElementById('shopSpaceContainer');
+      if (container) container.style.display = 'block';
+
+      const placeholder = document.getElementById('adminPlaceholderNoShop');
+      if (placeholder) placeholder.style.display = 'none';
+
+      afficherBoutique(mag, true);
     }
 
-    function afficherBoutiqueParId(id, scroller = false) {
-      const mag = boutiquesEnLigne.find(b => b.id === id);
-      if (mag) {
-        afficherBoutique(mag, scroller);
+    function deselectionnerCollaborateurAdmin() {
+      boutiqueActive = null;
+      const select = document.getElementById('selectCollaborateurAdmin');
+      if (select) select.value = '';
+      rendreSelecteurAdmin(boutiquesEnLigne);
+
+      const editorBox = document.getElementById('adminEditorBox');
+      if (editorBox) editorBox.style.display = 'none';
+
+      const container = document.getElementById('shopSpaceContainer');
+      if (container) container.style.display = 'none';
+
+      const placeholder = document.getElementById('adminPlaceholderNoShop');
+      if (placeholder) placeholder.style.display = 'block';
+    }
+
+    async function sauvegarderModificationsAdmin() {
+      if (!boutiqueActive) return;
+
+      const btn = document.getElementById('btnSaveAdminSheet');
+      const btnTxt = document.getElementById('btnSaveAdminSheetText');
+      const feedback = document.getElementById('adminSaveFeedback');
+
+      const tarif = Number(document.getElementById('adminInputTarif')?.value || 35);
+      const capacite = Number(document.getElementById('adminInputCapacite')?.value || 10);
+      const statut = document.getElementById('adminInputStatut')?.value || 'Phase de Vote';
+      const dateHeure = document.getElementById('adminInputDate')?.value || '';
+
+      const theme1Titre = document.getElementById('adminInputTheme1Titre')?.value || '';
+      const theme1Desc = document.getElementById('adminInputTheme1Desc')?.value || '';
+      const theme1Tarif = Number(document.getElementById('adminInputTheme1Tarif')?.value || tarif);
+
+      const theme2Titre = document.getElementById('adminInputTheme2Titre')?.value || '';
+      const theme2Desc = document.getElementById('adminInputTheme2Desc')?.value || '';
+      const theme2Tarif = Number(document.getElementById('adminInputTheme2Tarif')?.value || tarif);
+
+      const theme3Titre = document.getElementById('adminInputTheme3Titre')?.value || '';
+      const theme3Desc = document.getElementById('adminInputTheme3Desc')?.value || '';
+      const theme3Tarif = Number(document.getElementById('adminInputTheme3Tarif')?.value || tarif);
+
+      if (btnTxt) btnTxt.textContent = "Sauvegarde en direct...";
+      if (btn) btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/maj-partenaire', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idMagasin: boutiqueActive.id,
+            tarif,
+            capacite,
+            statut,
+            dateHeure,
+            theme1Titre,
+            theme1Desc,
+            theme1Tarif,
+            theme2Titre,
+            theme2Desc,
+            theme2Tarif,
+            theme3Titre,
+            theme3Desc,
+            theme3Tarif
+          })
+        });
+
+        const data = await res.json();
+        if (data.ok) {
+          // Mettre à jour l'objet localement
+          boutiqueActive.tarif = tarif;
+          boutiqueActive.capacite = capacite;
+          boutiqueActive.statut = statut;
+          boutiqueActive.dateHeure = dateHeure;
+          boutiqueActive.theme1Titre = theme1Titre;
+          boutiqueActive.theme1Desc = theme1Desc;
+          boutiqueActive.theme1Tarif = theme1Tarif;
+          boutiqueActive.theme2Titre = theme2Titre;
+          boutiqueActive.theme2Desc = theme2Desc;
+          boutiqueActive.theme2Tarif = theme2Tarif;
+          boutiqueActive.theme3Titre = theme3Titre;
+          boutiqueActive.theme3Desc = theme3Desc;
+          boutiqueActive.theme3Tarif = theme3Tarif;
+
+          // Rafraîchir l'aperçu dynamique de la boutique
+          afficherBoutique(boutiqueActive);
+
+          if (feedback) {
+            feedback.style.display = 'block';
+            setTimeout(() => {
+              feedback.style.display = 'none';
+            }, 3500);
+          }
+        } else {
+          alert("⚠️ Erreur : " + (data.error || "Impossible d'enregistrer dans Google Sheet"));
+        }
+      } catch (err) {
+        console.error("Erreur enregistrement admin :", err);
+        alert("⚠️ Erreur de communication avec Google Sheets.");
+      } finally {
+        if (btnTxt) btnTxt.textContent = "Enregistrer dans Google Sheet";
+        if (btn) btn.disabled = false;
       }
     }
 

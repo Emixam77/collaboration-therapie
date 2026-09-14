@@ -68,3 +68,29 @@ export async function appendSpreadsheetValues(range, values) {
 
   return await res.json();
 }
+
+export async function updateSpreadsheetValues(range, values) {
+  const token = await getGoogleAccessToken();
+  const encodedRange = encodeURIComponent(range);
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodedRange}?valueInputOption=USER_ENTERED`;
+
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      range: range,
+      majorDimension: 'ROWS',
+      values: values
+    })
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Erreur update Google Sheets (${res.status}): ${errText}`);
+  }
+
+  return await res.json();
+}

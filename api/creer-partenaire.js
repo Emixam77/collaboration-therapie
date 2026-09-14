@@ -105,10 +105,10 @@ export default async function handler(req, res) {
       `https://collaboration-therapie.vercel.app/?magasin=${nextId}`,       // T: Lien Privé Magasin
       username,                                                            // U: Identifiant Magasin
       motDePasse,                                                          // V: Mot de passe
-      "Magasin Autonome (49€/m)",                                          // W: Formule / Mode
-      "Actif",                                                             // X: Statut Abonnement
+      "Atelier Partenaire (Standard)",                                     // W: Formule / Mode
+      "Actif",                                                             // X: Statut Partenaire
       echeanceStr,                                                         // Y: Date Échéance
-      "Stripe Magasin"                                                     // Z: Compte Encaissement Magasin
+      "Standard"                                                           // Z: Mode de fonctionnement
     ];
 
     // 5. Ligne pour "Accès Admin" (Identifiant, Mot de passe, Rôle, ID Magasin, Nom Magasin)
