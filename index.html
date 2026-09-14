@@ -799,15 +799,19 @@
           </p>
         </div>
 
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <button onclick="syncDepuisGoogleSheet(true)" id="btnRefreshSheet" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid var(--border-soft); color: var(--text-main); padding: 6px 12px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; cursor: pointer;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button onclick="ouvrirModalNouveauPartenaire()" style="display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #FFFFFF; border: none; padding: 8px 18px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(44,94,67,0.28); transition: transform 0.15s ease;">
+            <span>➕</span>
+            <span>Ajouter une boutique</span>
+          </button>
+          <button onclick="syncDepuisGoogleSheet(true)" id="btnRefreshSheet" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid var(--border-soft); color: var(--text-main); padding: 7px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; cursor: pointer;">
             <span id="refreshIcon">🔄</span> Actualiser Google Sheet
           </button>
-          <a href="maquette-abonnement.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #182820; color: #FFFFFF; padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+          <a href="maquette-abonnement.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #182820; color: #FFFFFF; padding: 7px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
             <span>✨</span>
             <span>Mode Sous-Location & Abonnements ↗</span>
           </a>
-          <a href="audit.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); color: var(--accent); padding: 6px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none;">
+          <a href="audit.html" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); color: var(--accent); padding: 7px 14px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700; text-decoration: none;">
             <span>📋</span>
             <span>Outil d'Audit Bilan (Axe 2) ↗</span>
           </a>
@@ -1175,6 +1179,150 @@
     </div>
   </div>
 
+  <!-- MODAL ENREGISTRER UNE NOUVELLE BOUTIQUE PARTENAIRE (LYNDA) -->
+  <div class="modal-overlay" id="modalNouveauPartenaire" style="z-index: 1001;">
+    <div class="modal-sheet" style="max-width: 620px; padding: 28px;">
+      <!-- EN-TÊTE DU MODAL -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+        <div>
+          <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); font-weight: 700;">
+            Espace Super-Admin Lynda
+          </span>
+          <h3 style="font-size: 22px; margin-top: 4px; color: var(--text-main);">➕ Enregistrer une nouvelle boutique</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">
+            Renseignez ces 5 éléments. L'identifiant sécurisé, le lien privé et l'inscription dans votre Google Sheet sont gérés automatiquement.
+          </p>
+        </div>
+        <button onclick="fermerModalNouveauPartenaire()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-muted); line-height: 1; padding: 4px;">&times;</button>
+      </div>
+
+      <!-- FORMULAIRE DE SAISIE -->
+      <form id="formNouveauPartenaire" onsubmit="soumettreNouveauPartenaire(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <!-- 1. NOM DU MAGASIN -->
+          <div style="grid-column: span 2;">
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
+              1. Nom du magasin <span style="color: #B35E3B;">*</span>
+            </label>
+            <input type="text" id="nouveauNomMagasin" required placeholder="ex: L'Échoppe Zen, Univers Minéral..." 
+              oninput="actualiserApercuIdentifiant()"
+              style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border-soft); border-radius: 10px; font-size: 14px; background: #FAF9F6; box-sizing: border-box;" />
+          </div>
+
+          <!-- 2. PRÉNOM DU GÉRANT -->
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
+              2. Prénom du / de la gérant(e) <span style="color: #B35E3B;">*</span>
+            </label>
+            <input type="text" id="nouveauPrenom" required placeholder="ex: Marion, Sophie, David..." 
+              oninput="actualiserApercuIdentifiant()"
+              style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border-soft); border-radius: 10px; font-size: 14px; background: #FAF9F6; box-sizing: border-box;" />
+          </div>
+
+          <!-- 3. VILLE / ADRESSE -->
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
+              3. Ville / Adresse du magasin <span style="color: #B35E3B;">*</span>
+            </label>
+            <input type="text" id="nouveauVille" required placeholder="ex: Annecy (74), Lyon..." 
+              style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border-soft); border-radius: 10px; font-size: 14px; background: #FAF9F6; box-sizing: border-box;" />
+          </div>
+
+          <!-- 4. CAPACITÉ SALLE -->
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
+              4. Capacité de la salle (places) <span style="color: #B35E3B;">*</span>
+            </label>
+            <input type="number" id="nouveauCapacite" required min="1" max="100" value="10" 
+              style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border-soft); border-radius: 10px; font-size: 14px; background: #FAF9F6; box-sizing: border-box;" />
+          </div>
+
+          <!-- 5. MOT DE PASSE -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="font-size: 12px; font-weight: 700; color: var(--text-main);">
+                5. Mot de passe attribué <span style="color: #B35E3B;">*</span>
+              </label>
+              <button type="button" onclick="genererPassAleatoire()" style="background: none; border: none; color: var(--primary); font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: underline;">
+                🎲 Suggérer
+              </button>
+            </div>
+            <input type="text" id="nouveauPassword" required placeholder="ex: Sauge2026!" 
+              style="width: 100%; padding: 10px 14px; border: 1.5px solid var(--border-soft); border-radius: 10px; font-size: 14px; background: #FAF9F6; box-sizing: border-box; font-family: monospace;" />
+          </div>
+        </div>
+
+        <!-- ENCADRÉ APERÇU EN TEMPS RÉEL -->
+        <div style="background: #F4F7F5; border: 1.5px dashed var(--primary); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">
+            <span>⚡ Généré automatiquement sans risque d'erreur :</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px;">
+            <div>
+              <span style="color: var(--text-muted);">Identifiant de connexion :</span><br/>
+              <code id="apercuIdentifiant" style="font-size: 13px; font-weight: 700; color: #182820; background: #FFFFFF; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-soft);">...</code>
+              <span style="display: block; font-size: 10px; color: var(--text-muted); margin-top: 2px;">(Prénom + 3 premières lettres)</span>
+            </div>
+            <div>
+              <span style="color: var(--text-muted);">Identifiant boutique prévu :</span><br/>
+              <code id="apercuIdBoutique" style="font-size: 13px; font-weight: 700; color: #182820; background: #FFFFFF; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-soft);">...</code>
+              <span style="display: block; font-size: 10px; color: var(--text-muted); margin-top: 2px;">(Incrémenté automatiquement)</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="erreurNouveauPartenaire" style="display: none; background: #FDE8E8; color: #9B1C1C; padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-bottom: 14px;"></div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-zen-secondary" style="width: auto; padding: 10px 20px;" onclick="fermerModalNouveauPartenaire()">Annuler</button>
+          <button type="submit" id="btnValiderNouveauPartenaire" class="btn-zen-primary" style="width: auto; padding: 10px 24px; font-weight: 700;">
+            <span id="btnValiderText">Enregistrer dans Google Sheet ➔</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- ÉCRAN DE SUCCÈS (AFFICHÉ APRÈS ENREGISTREMENT) -->
+      <div id="succesNouveauPartenaire" style="display: none; text-align: center; padding: 10px 0;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: #DEF7EC; color: #0E9F6E; font-size: 28px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">✓</div>
+        <h4 style="font-size: 20px; color: var(--text-main); margin-bottom: 6px;">Boutique enregistrée avec succès !</h4>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">
+          Les informations sont inscrites dans <strong>Système Atelier</strong> et les accès dans <strong>Accès Admin</strong>.
+        </p>
+
+        <!-- CARTE RÉCAPITULATIVE -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-soft); border-radius: 14px; padding: 18px; text-align: left; margin-bottom: 18px; box-shadow: var(--shadow-soft);">
+          <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--primary); letter-spacing: 0.05em; margin-bottom: 8px;">Accès Partenaire Créés</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; margin-bottom: 12px;">
+            <div><strong>Boutique :</strong> <span id="succesNomMagasin">-</span> (<span id="succesIdMagasin">-</span>)</div>
+            <div><strong>Gérant(e) :</strong> <span id="succesGerant">-</span></div>
+            <div><strong>Identifiant :</strong> <code id="succesUser" style="background: #F4F7F5; padding: 2px 6px; border-radius: 4px; font-weight: 700;">-</code></div>
+            <div><strong>Mot de passe :</strong> <code id="succesPass" style="background: #F4F7F5; padding: 2px 6px; border-radius: 4px; font-weight: 700;">-</code></div>
+          </div>
+          <div style="font-size: 12px; padding-top: 10px; border-top: 1px dashed var(--border-soft);">
+            <strong style="color: var(--text-main);">Lien privé du partenaire :</strong><br/>
+            <a id="succesLienPrive" href="#" target="_blank" style="color: var(--primary); word-break: break-all; font-weight: 600;">-</a>
+          </div>
+        </div>
+
+        <!-- BOUTONS D'ACTIONS -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button onclick="copierMessageWhatsAppNouveau()" class="btn-zen-primary" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>💬</span>
+            <span>Copier le message d'accueil WhatsApp / SMS</span>
+          </button>
+          <div style="display: flex; gap: 10px;">
+            <button onclick="copierLienPriveNouveau()" class="btn-zen-secondary" style="flex: 1; padding: 10px; font-size: 13px;">
+              🔗 Copier le lien privé
+            </button>
+            <button onclick="terminerEtRafraichirNouveauPartenaire()" class="btn-zen-secondary" style="flex: 1; padding: 10px; font-size: 13px; background: #FFFFFF; font-weight: 700;">
+              ✨ Terminer & Fermer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     // SYNCHRONISATION EN DIRECT AVEC LE GOOGLE SHEET (ONGLET SYSTÈME ATELIER)
     const GOOGLE_SHEET_GVIZ_URL = "https://docs.google.com/spreadsheets/d/1TprsCw9JAqZjLwCYvo7c4QQ1FsLv5lVSwZLsvmcNSwQ/gviz/tq?tqx=out:json&sheet=Syst%C3%A8me%20Atelier";
@@ -1320,6 +1468,14 @@
         if (adminSwitcher) adminSwitcher.style.display = 'flex';
         if (adminSec) adminSec.style.display = 'block';
         switchRole('lynda');
+
+        // Détection automatique du lien cliqué dans Google Sheet
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('action') === 'nouveau-partenaire') {
+          setTimeout(() => {
+            ouvrirModalNouveauPartenaire();
+          }, 200);
+        }
       } else {
         // Mode Magasin Partenaire Privé (Cloisonnement strict)
         if (userBadge) userBadge.innerHTML = `🔒 ${session.shopNom} (${session.responsable})`;
@@ -1896,6 +2052,191 @@
       }).catch(() => {
         prompt(`Lien privé pour ${nomResp} (${nomMagasin}) :`, url);
       });
+    }
+
+    // ==========================================
+    // 4. ONBOARDING NOUVELLE BOUTIQUE (LYNDA)
+    // ==========================================
+
+    let dernierNouveauPartenaire = null;
+
+    function normaliserTexteClient(str) {
+      return (str || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '');
+    }
+
+    function genererIdentifiantClient(prenom, nomMagasin) {
+      const p = normaliserTexteClient(prenom);
+      let m = (nomMagasin || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/^(l'|le |la |les |l |magasin |boutique )+/i, '')
+        .replace(/[^a-z0-9]/g, '');
+      const racineMag = m.slice(0, 3) || 'mag';
+      return p ? `${p}-${racineMag}` : '...';
+    }
+
+    function calculerProchainMagIdClient() {
+      let maxNum = 0;
+      boutiquesEnLigne.forEach(b => {
+        const match = (b.id || '').match(/(\d+)/);
+        if (match) {
+          const n = parseInt(match[1], 10);
+          if (n > maxNum) maxNum = n;
+        }
+      });
+      const nextNum = maxNum + 1;
+      return `mag-${String(nextNum).padStart(2, '0')}`;
+    }
+
+    function actualiserApercuIdentifiant() {
+      const prenom = document.getElementById('nouveauPrenom')?.value || '';
+      const nom = document.getElementById('nouveauNomMagasin')?.value || '';
+      const idGen = genererIdentifiantClient(prenom, nom);
+      
+      const elUser = document.getElementById('apercuIdentifiant');
+      if (elUser) elUser.textContent = idGen;
+
+      const elMag = document.getElementById('apercuIdBoutique');
+      if (elMag) elMag.textContent = calculerProchainMagIdClient();
+    }
+
+    function genererPassAleatoire() {
+      const listMots = ['Zen', 'Sauge', 'Lavande', 'Ambre', 'Lotus', 'Cristal', 'Harmonie', 'Quartz'];
+      const annee = '2026!';
+      const mot = listMots[Math.floor(Math.random() * listMots.length)];
+      const pass = `${mot}${annee}`;
+      const input = document.getElementById('nouveauPassword');
+      if (input) {
+        input.value = pass;
+      }
+    }
+
+    function ouvrirModalNouveauPartenaire() {
+      const modal = document.getElementById('modalNouveauPartenaire');
+      if (!modal) return;
+
+      // Réinitialiser le formulaire
+      document.getElementById('formNouveauPartenaire').style.display = 'block';
+      document.getElementById('succesNouveauPartenaire').style.display = 'none';
+      const errBox = document.getElementById('erreurNouveauPartenaire');
+      if (errBox) errBox.style.display = 'none';
+      
+      const inputPass = document.getElementById('nouveauPassword');
+      if (inputPass && !inputPass.value) {
+        genererPassAleatoire();
+      }
+
+      actualiserApercuIdentifiant();
+      modal.classList.add('active');
+    }
+
+    function fermerModalNouveauPartenaire() {
+      const modal = document.getElementById('modalNouveauPartenaire');
+      if (modal) modal.classList.remove('active');
+    }
+
+    async function soumettreNouveauPartenaire(e) {
+      e.preventDefault();
+      const nom = document.getElementById('nouveauNomMagasin').value.trim();
+      const prenom = document.getElementById('nouveauPrenom').value.trim();
+      const ville = document.getElementById('nouveauVille').value.trim();
+      const capacite = document.getElementById('nouveauCapacite').value;
+      const pass = document.getElementById('nouveauPassword').value.trim();
+
+      const btn = document.getElementById('btnValiderNouveauPartenaire');
+      const btnTxt = document.getElementById('btnValiderText');
+      const errBox = document.getElementById('erreurNouveauPartenaire');
+
+      if (errBox) errBox.style.display = 'none';
+      if (btnTxt) btnTxt.textContent = "Inscription dans Google Sheet...";
+      if (btn) btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/creer-partenaire', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nomMagasin: nom,
+            prenom: prenom,
+            ville: ville,
+            capacite: capacite,
+            password: pass
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          dernierNouveauPartenaire = data;
+
+          // Remplir les informations de l'écran de succès
+          document.getElementById('succesNomMagasin').textContent = data.nomMagasin;
+          document.getElementById('succesIdMagasin').textContent = data.idMagasin;
+          document.getElementById('succesGerant').textContent = data.prenom;
+          document.getElementById('succesUser').textContent = data.username;
+          document.getElementById('succesPass').textContent = data.password;
+          
+          const lien = document.getElementById('succesLienPrive');
+          if (lien) {
+            lien.href = data.lienPrive;
+            lien.textContent = data.lienPrive;
+          }
+
+          // Basculer l'affichage
+          document.getElementById('formNouveauPartenaire').style.display = 'none';
+          document.getElementById('succesNouveauPartenaire').style.display = 'block';
+
+          // Actualiser la liste sans popup intrusive
+          syncDepuisGoogleSheet(false);
+        } else {
+          if (errBox) {
+            errBox.textContent = "⚠️ " + (data.error || "Une erreur est survenue lors de l'enregistrement.");
+            errBox.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        console.error('Erreur creation partenaire :', err);
+        if (errBox) {
+          errBox.textContent = "⚠️ Erreur de communication avec le serveur Google Sheets. Veuillez réessayer.";
+          errBox.style.display = 'block';
+        }
+      } finally {
+        if (btnTxt) btnTxt.textContent = "Enregistrer dans Google Sheet ➔";
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    function copierMessageWhatsAppNouveau() {
+      if (!dernierNouveauPartenaire) return;
+      const p = dernierNouveauPartenaire;
+      const msg = `Bonjour ${p.prenom} ! 🌿\nVoici vos accès personnels à l'espace partenaire de votre boutique ${p.nomMagasin} (Ateliers Bien-être & Thérapie avec Lynda) :\n\n👉 Votre lien direct : ${p.lienPrive}\n👤 Votre identifiant : ${p.username}\n🔑 Votre mot de passe : ${p.password}\n\nDepuis votre espace sécurisé, vous pouvez suivre les inscriptions de vos clients en direct, planifier vos dates et imprimer votre affiche A4 de comptoir avec QR Code.\n\nÀ très vite !\nLynda`;
+
+      navigator.clipboard.writeText(msg).then(() => {
+        alert(`✅ Message d'accueil WhatsApp / SMS copié !\n\nVous pouvez le coller directement dans votre conversation avec ${p.prenom} (${p.nomMagasin}).`);
+      }).catch(() => {
+        prompt(`Copiez ce message pour ${p.prenom} :`, msg);
+      });
+    }
+
+    function copierLienPriveNouveau() {
+      if (!dernierNouveauPartenaire) return;
+      navigator.clipboard.writeText(dernierNouveauPartenaire.lienPrive).then(() => {
+        alert(`✅ Lien privé copié :\n\n${dernierNouveauPartenaire.lienPrive}`);
+      }).catch(() => {
+        prompt("Lien privé :", dernierNouveauPartenaire.lienPrive);
+      });
+    }
+
+    function terminerEtRafraichirNouveauPartenaire() {
+      fermerModalNouveauPartenaire();
+      syncDepuisGoogleSheet(true);
     }
 
     // Démarrage automatique

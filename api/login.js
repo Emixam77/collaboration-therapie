@@ -40,20 +40,70 @@ export default async function handler(req, res) {
       for (const row of adminRows) {
         const u = String(row.c?.[0]?.v || '').trim().toLowerCase();
         const p = String(row.c?.[1]?.v || '').trim();
-        if (u && u !== 'identifiant admin' && u === username && p === password) {
-          return res.status(200).json({
-            ok: true,
-            role: 'admin',
-            nom: 'Lynda',
-            message: 'Connexion Super-Admin réussie'
-          });
+        const role = String(row.c?.[2]?.v || '').trim().toLowerCase();
+        const idMagasin = String(row.c?.[3]?.v || '').trim();
+
+        if (u && u !== 'identifiant admin' && u !== 'identifiant' && u === username && p === password) {
+          if (role.includes('admin') || u === 'lynda') {
+            return res.status(200).json({
+              ok: true,
+              role: 'admin',
+              nom: 'Lynda',
+              message: 'Connexion Super-Admin réussie'
+            });
+          }
+
+          // Si rôle collaboratrice avec un ID magasin associé
+          if (role.includes('collab') || idMagasin) {
+            // Récupérer les détails de sa boutique dans Système Atelier
+            const shopsUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=Syst%C3%A8me%20Atelier&_ts=${Date.now()}`;
+            const shopsRes = await fetch(shopsUrl);
+            const shopsText = await shopsRes.text();
+            const shopsJsonStr = shopsText.substring(shopsText.indexOf('{'), shopsText.lastIndexOf('}') + 1);
+            const shopsData = JSON.parse(shopsJsonStr);
+            const shopRows = shopsData.table?.rows || [];
+
+            for (let i = 0; i < shopRows.length; i++) {
+              const sRow = shopRows[i];
+              const getVal = idx => (sRow.c && sRow.c[idx] && sRow.c[idx].v !== undefined) ? sRow.c[idx].v : '';
+              const sId = String(getVal(0) || '');
+
+              if (sId.toLowerCase() === idMagasin.toLowerCase() || String(getVal(20) || '').toLowerCase() === username) {
+                const nom = String(getVal(1) || 'Magasin Partenaire');
+                const ville = String(getVal(2) || '');
+                const responsable = String(getVal(3) || 'Gérant·e');
+                const formule = String(getVal(22) || 'Magasin Autonome (49€/m)');
+                const statutAbonnement = String(getVal(23) || 'Actif');
+                const rawDate = getVal(24) || '-';
+                const dateMatch = String(rawDate).match(/Date\((\d+),(\d+),(\d+)\)/);
+                const dateEcheance = dateMatch
+                  ? `${String(dateMatch[3]).padStart(2, '0')}/${String(Number(dateMatch[2]) + 1).padStart(2, '0')}/${dateMatch[1]}`
+                  : String(rawDate);
+                const compteEncaissement = String(getVal(25) || 'Non configuré');
+
+                return res.status(200).json({
+                  ok: true,
+                  role: 'shop',
+                  shopId: sId || idMagasin,
+                  shopNom: nom,
+                  ville: ville,
+                  responsable: responsable,
+                  formule: formule,
+                  statutAbonnement: statutAbonnement,
+                  dateEcheance: dateEcheance,
+                  compteEncaissement: compteEncaissement,
+                  message: `Connexion réussie pour ${nom}`
+                });
+              }
+            }
+          }
         }
       }
     } catch (e) {
       console.error('Erreur vérification admin :', e);
     }
 
-    // 2. Vérification des comptes Magasins Partenaires
+    // 2. Vérification de secours dans Système Atelier (fallback)
     const shopsUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=Syst%C3%A8me%20Atelier&_ts=${Date.now()}`;
     const shopsRes = await fetch(shopsUrl);
     const shopsText = await shopsRes.text();
